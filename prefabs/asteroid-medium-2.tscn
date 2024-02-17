@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://b8b07kcxmxfw1"]
+[gd_scene load_steps=5 format=3 uid="uid://b8b07kcxmxfw1"]
 
 [ext_resource type="Script" path="res://components/asteroid.gd" id="1_it4vf"]
+[ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-death.tscn" id="2_4n6dv"]
 [ext_resource type="Texture2D" uid="uid://cao3ij7i6ac28" path="res://images/asteroid-medium-2.png" id="2_eat6m"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_uxoky"]
@@ -10,6 +11,8 @@ polygon = PackedVector2Array(-117, 485, 32, 490, 216, 470, 357, 430, 467, 355, 5
 collision_layer = 3
 mass = 50000.0
 script = ExtResource("1_it4vf")
+max_health = 500
+death = ExtResource("2_4n6dv")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_eat6m")

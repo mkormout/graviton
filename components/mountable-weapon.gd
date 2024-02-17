@@ -12,6 +12,7 @@ var shot_timer: Timer
 
 func _ready() -> void:
 	shot_timer = Timer.new()
+	shot_timer.wait_time = rate
 	shot_timer.one_shot = true
 	add_child(shot_timer)
 	pass

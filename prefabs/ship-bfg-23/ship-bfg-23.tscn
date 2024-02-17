@@ -50,6 +50,7 @@ mass = 2000.0
 linear_damp = 1.0
 angular_damp = 1.0
 script = ExtResource("1_1orqm")
+max_health = 10000
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708

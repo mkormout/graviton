@@ -1,5 +1,5 @@
 class_name MountableBody
-extends RigidBody2D
+extends Body
 
 func mount_weapon(what: MountableWeapon, where: String):
 	var mount1 = get_mount(where)
@@ -7,7 +7,7 @@ func mount_weapon(what: MountableWeapon, where: String):
 	
 	link(mount1, mount2)
 	
-	what.z_index = -127
+	pass
 	
 func link(point1: MountPoint, point2: MountPoint):
 	point1.unplug()

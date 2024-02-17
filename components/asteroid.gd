@@ -1,5 +1,6 @@
 class_name Asteroid
-extends RigidBody2D
+extends Body
 
 func _ready():
 	contact_monitor = true
+	super()

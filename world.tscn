@@ -1,14 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://cis3fbeacp7l1"]
+[gd_scene load_steps=3 format=3 uid="uid://cis3fbeacp7l1"]
 
-[ext_resource type="PackedScene" uid="uid://diqfcg5rnk5rq" path="res://prefabs/ship-bfg-23/ship-bfg-23.tscn" id="1_mdfo8"]
 [ext_resource type="Script" path="res://world.gd" id="1_pt5pr"]
-[ext_resource type="PackedScene" uid="uid://bsbom0yj1xcx2" path="res://prefabs/asteroid-medium-1.tscn" id="3_5lbjh"]
-[ext_resource type="PackedScene" uid="uid://chwvdyeaq44p4" path="res://prefabs/minigun/minigun.tscn" id="4_a3x8i"]
-[ext_resource type="PackedScene" uid="uid://bs6g3mnrmhoii" path="res://prefabs/asteroid-large-1.tscn" id="5_2whts"]
-[ext_resource type="PackedScene" uid="uid://bat6fby04jm0q" path="res://prefabs/asteroid-large-2.tscn" id="6_0fwt6"]
-[ext_resource type="PackedScene" uid="uid://b8b07kcxmxfw1" path="res://prefabs/asteroid-medium-2.tscn" id="7_pu8rm"]
-[ext_resource type="PackedScene" uid="uid://b3vjq05jtdfvv" path="res://prefabs/asteroid-small-1.tscn" id="8_nywap"]
-[ext_resource type="PackedScene" uid="uid://bgngk1qmeh8ed" path="res://prefabs/asteroid-small-2.tscn" id="9_yvw06"]
 
 [sub_resource type="Curve" id="Curve_51lj4"]
 bake_resolution = 1000
@@ -18,32 +10,15 @@ point_count = 3
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_pt5pr")
 
-[node name="Ship-bfg-23" parent="." instance=ExtResource("1_mdfo8")]
-position = Vector2(261, 371)
-
-[node name="Minigun" parent="." instance=ExtResource("4_a3x8i")]
-position = Vector2(732, 120)
-rate = 0.01
-
-[node name="Minigun2" parent="." node_paths=PackedStringArray("barrel") instance=ExtResource("4_a3x8i")]
-position = Vector2(798, -198)
-barrel = NodePath("../Minigun/Barrel")
-rate = 0.01
-
-[node name="Minigun3" parent="." node_paths=PackedStringArray("barrel") instance=ExtResource("4_a3x8i")]
-position = Vector2(971, 375)
-barrel = NodePath("../Minigun/Barrel")
-rate = 0.01
-
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
 z_index = -1
-amount = 15000
+amount = 30000
 lifetime = 200.0
 preprocess = 200.0
 speed_scale = 0.1
 fract_delta = false
 emission_shape = 3
-emission_rect_extents = Vector2(10000, 10000)
+emission_rect_extents = Vector2(20000, 20000)
 direction = Vector2(1, 1)
 spread = 180.0
 gravity = Vector2(0, 0)
@@ -56,10 +31,10 @@ z_index = -500
 z_as_relative = false
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_left = -14262.0
-offset_top = -11319.0
-offset_right = 14363.0
-offset_bottom = 12033.0
+offset_left = -24714.0
+offset_top = -24968.0
+offset_right = 25286.0
+offset_bottom = 25032.0
 grow_vertical = 2
 color = Color(0.172549, 0.172549, 0.172549, 1)
 
@@ -67,82 +42,3 @@ color = Color(0.172549, 0.172549, 0.172549, 1)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0.235294, 0.235294, 0.235294, 1)
-
-[node name="Asteroid-large-1" parent="." instance=ExtResource("5_2whts")]
-position = Vector2(3926, 2535)
-angular_velocity = 0.523599
-angular_damp_mode = 1
-
-[node name="Asteroid-large-2" parent="." instance=ExtResource("6_0fwt6")]
-position = Vector2(-725, -1714)
-angular_velocity = 0.349066
-angular_damp_mode = 1
-
-[node name="Asteroid-medium-5" parent="." instance=ExtResource("7_pu8rm")]
-position = Vector2(-2698, 2775)
-linear_velocity = Vector2(0, -10)
-angular_velocity = 0.174533
-angular_damp_mode = 1
-
-[node name="Asteroid-small-1" parent="." instance=ExtResource("8_nywap")]
-position = Vector2(-2874, 1699)
-
-[node name="Asteroid-small-2" parent="." instance=ExtResource("9_yvw06")]
-position = Vector2(-488, 3408)
-
-[node name="Asteroid-small-3" parent="." instance=ExtResource("8_nywap")]
-position = Vector2(3068, 200)
-
-[node name="Asteroid-small-4" parent="." instance=ExtResource("9_yvw06")]
-position = Vector2(973, 1753)
-
-[node name="Asteroid-small-5" parent="." instance=ExtResource("8_nywap")]
-position = Vector2(-1347, 1502)
-
-[node name="Asteroid-small-6" parent="." instance=ExtResource("9_yvw06")]
-position = Vector2(-1345, 2706)
-
-[node name="Asteroid-small-7" parent="." instance=ExtResource("8_nywap")]
-position = Vector2(-3662, 87)
-
-[node name="Asteroid-small-8" parent="." instance=ExtResource("8_nywap")]
-position = Vector2(-1562, -217)
-
-[node name="Asteroid-small-9" parent="." instance=ExtResource("9_yvw06")]
-position = Vector2(-3320, 847)
-
-[node name="Asteroid-small-10" parent="." instance=ExtResource("8_nywap")]
-position = Vector2(3379, -1357)
-
-[node name="Asteroid-small-11" parent="." instance=ExtResource("9_yvw06")]
-position = Vector2(1479, -1880)
-
-[node name="Asteroid-large-3" parent="." instance=ExtResource("5_2whts")]
-position = Vector2(-5116, -1509)
-
-[node name="Asteroid-medium-2" parent="." instance=ExtResource("7_pu8rm")]
-position = Vector2(4814, 505)
-
-[node name="Asteroid-medium-1" parent="." instance=ExtResource("3_5lbjh")]
-position = Vector2(4444, -1813)
-
-[node name="Asteroid-medium-3" parent="." instance=ExtResource("3_5lbjh")]
-position = Vector2(-2626, -759)
-
-[node name="Asteroid-medium-4" parent="." instance=ExtResource("3_5lbjh")]
-position = Vector2(776, 3879)
-
-[node name="Asteroid-small-12" parent="." instance=ExtResource("8_nywap")]
-position = Vector2(-2655, -2621)
-
-[node name="Asteroid-small-13" parent="." instance=ExtResource("9_yvw06")]
-position = Vector2(-659, -3429)
-
-[node name="Asteroid-small-14" parent="." instance=ExtResource("8_nywap")]
-position = Vector2(-4280, -2982)
-
-[node name="Asteroid-small-15" parent="." instance=ExtResource("9_yvw06")]
-position = Vector2(2695, -3087)
-
-[node name="Asteroid-small-16" parent="." instance=ExtResource("8_nywap")]
-position = Vector2(-5278, 1598)
