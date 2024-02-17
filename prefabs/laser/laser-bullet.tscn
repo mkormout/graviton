@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cm18d0dsljju"]
+[gd_scene load_steps=7 format=3 uid="uid://cm18d0dsljju"]
 
 [ext_resource type="Script" path="res://components/bullet.gd" id="1_pgpjq"]
 [ext_resource type="Texture2D" uid="uid://ncjba5q4ihas" path="res://images/laser-bullet.png" id="2_8kldn"]
@@ -6,6 +6,19 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_djo2k"]
 size = Vector2(20, 304)
+
+[sub_resource type="Gradient" id="Gradient_vpagk"]
+offsets = PackedFloat32Array(0, 0.281385, 0.701299)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.243137, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_05qyw"]
+gradient = SubResource("Gradient_vpagk")
+width = 300
+height = 300
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
 
 [node name="LaserBullet" type="RigidBody2D"]
 collision_layer = 2
@@ -22,3 +35,15 @@ texture = ExtResource("2_8kldn")
 position = Vector2(0, 3)
 rotation = 1.5708
 shape = SubResource("RectangleShape2D_djo2k")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+z_index = 10
+color = Color(0, 1, 0.588235, 1)
+energy = 1.1
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.905882)
+shadow_filter = 2
+shadow_filter_smooth = 1.7
+texture = SubResource("GradientTexture2D_05qyw")
+texture_scale = 2.0
+height = 100.0

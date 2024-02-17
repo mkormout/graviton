@@ -91,4 +91,4 @@ position = Vector2(-777, 384)
 barrel = NodePath("../Laser/Barrel")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.168627, 0.168627, 0.168627, 1)
+color = Color(0.235294, 0.235294, 0.235294, 1)

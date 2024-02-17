@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cn8cxmqc4klkd"]
+[gd_scene load_steps=7 format=3 uid="uid://cn8cxmqc4klkd"]
 
 [ext_resource type="Script" path="res://components/bullet.gd" id="1_ur8u5"]
 [ext_resource type="PackedScene" uid="uid://b8d4dssoxnkg2" path="res://prefabs/minigun/minigun-bullet-hit.tscn" id="2_f53pa"]
@@ -6,6 +6,19 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aamf1"]
 size = Vector2(12, 84)
+
+[sub_resource type="Gradient" id="Gradient_4dtcr"]
+offsets = PackedFloat32Array(0, 0.281385, 0.701299)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.243137, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_cojn7"]
+gradient = SubResource("Gradient_4dtcr")
+width = 300
+height = 300
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
 
 [node name="MinigunBullet" type="RigidBody2D"]
 collision_layer = 2
@@ -21,3 +34,15 @@ texture = ExtResource("3_qdyd7")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
 shape = SubResource("RectangleShape2D_aamf1")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+z_index = 10
+color = Color(1, 0.8, 0, 1)
+energy = 1.1
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.905882)
+shadow_filter = 2
+shadow_filter_smooth = 1.7
+texture = SubResource("GradientTexture2D_cojn7")
+texture_scale = 2.0
+height = 100.0

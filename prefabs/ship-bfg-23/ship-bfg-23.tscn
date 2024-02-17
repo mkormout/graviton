@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://diqfcg5rnk5rq"]
+[gd_scene load_steps=15 format=3 uid="uid://diqfcg5rnk5rq"]
 
 [ext_resource type="Script" path="res://components/mountable-body.gd" id="1_1orqm"]
 [ext_resource type="Texture2D" uid="uid://oeyjmpan7p6a" path="res://images/ship.png" id="1_2jagq"]
@@ -29,6 +29,19 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 1)
 
+[sub_resource type="Gradient" id="Gradient_m7bj7"]
+offsets = PackedFloat32Array(0, 0.281385, 0.701299)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.243137, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qitm1"]
+gradient = SubResource("Gradient_m7bj7")
+width = 300
+height = 300
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_23wga"]
 polygon = PackedVector2Array(-343, -42, -334, -77, -305, -92, -244, -179, -210, -344, -118, -354, -59, -170, 7, -111, 246, -81, 326, -46, 344, 0, 327, 47, 249, 80, 6, 111, -56, 168, -116, 353, -209, 345, -242, 181, -308, 88, -334, 79, -344, 39)
 
@@ -51,18 +64,20 @@ profile = ExtResource("3_vf8yn")
 action = &"ui_up"
 position = Vector2(-330, 2.08165e-12)
 
-[node name="PropellerLeft" type="Node" parent="." node_paths=PackedStringArray("body", "particles")]
+[node name="PropellerLeft" type="Node" parent="." node_paths=PackedStringArray("body", "particles", "light")]
 script = ExtResource("2_5nbxa")
 body = NodePath("..")
 particles = NodePath("../PropellerLeftEffect")
+light = NodePath("../PropellerLeftEffect/PropellerLeftEffectLight")
 profile = ExtResource("4_sg3ag")
 action = &"ui_right"
 position = Vector2(241, -76)
 
-[node name="PropellerRight" type="Node" parent="." node_paths=PackedStringArray("body", "particles")]
+[node name="PropellerRight" type="Node" parent="." node_paths=PackedStringArray("body", "particles", "light")]
 script = ExtResource("2_5nbxa")
 body = NodePath("..")
 particles = NodePath("../PropellerRightEffect")
+light = NodePath("../PropellerRightEffect/PropellerRightEffectLight")
 profile = ExtResource("5_5n741")
 action = &"ui_left"
 position = Vector2(241, 76)
@@ -87,15 +102,14 @@ color_ramp = SubResource("Gradient_c3pwc")
 z_index = 10
 position = Vector2(-44, -2.08165e-12)
 color = Color(0, 0.243137, 1, 1)
-energy = 1.1
-blend_mode = 2
+energy = 2.0
 shadow_enabled = true
 shadow_color = Color(0, 0, 0, 0.905882)
 shadow_filter = 2
 shadow_filter_smooth = 1.7
 shadow_item_cull_mask = 2
 texture = SubResource("GradientTexture2D_ysh2g")
-texture_scale = 50.0
+texture_scale = 20.0
 height = 100.0
 
 [node name="PropellerLeftEffect" type="CPUParticles2D" parent="."]
@@ -114,6 +128,18 @@ scale_amount_max = 25.0
 scale_amount_curve = SubResource("Curve_cbbmj")
 color_ramp = SubResource("Gradient_c3pwc")
 
+[node name="PropellerLeftEffectLight" type="PointLight2D" parent="PropellerLeftEffect"]
+z_index = 10
+color = Color(0, 0.243137, 1, 1)
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.905882)
+shadow_filter = 2
+shadow_filter_smooth = 1.7
+shadow_item_cull_mask = 2
+texture = SubResource("GradientTexture2D_qitm1")
+texture_scale = 20.0
+height = 100.0
+
 [node name="PropellerRightEffect" type="CPUParticles2D" parent="."]
 position = Vector2(241, 76)
 emitting = false
@@ -129,6 +155,18 @@ scale_amount_min = 10.0
 scale_amount_max = 25.0
 scale_amount_curve = SubResource("Curve_cbbmj")
 color_ramp = SubResource("Gradient_c3pwc")
+
+[node name="PropellerRightEffectLight" type="PointLight2D" parent="PropellerRightEffect"]
+z_index = 10
+color = Color(0, 0.243137, 1, 1)
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.905882)
+shadow_filter = 2
+shadow_filter_smooth = 1.7
+shadow_item_cull_mask = 2
+texture = SubResource("GradientTexture2D_qitm1")
+texture_scale = 20.0
+height = 100.0
 
 [node name="MountPointDefault" type="Node2D" parent="."]
 position = Vector2(187, 2.08165e-12)

@@ -10,12 +10,12 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.211215, 0.392523, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 0.827451, 0, 1, 1, 0.647059, 0, 1, 1, 0, 0, 1)
 
-[sub_resource type="Gradient" id="Gradient_4dtcr"]
+[sub_resource type="Gradient" id="Gradient_bm4df"]
 offsets = PackedFloat32Array(0, 0.281385, 0.701299)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.243137, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_daifg"]
-gradient = SubResource("Gradient_4dtcr")
+gradient = SubResource("Gradient_bm4df")
 width = 300
 height = 300
 use_hdr = true
@@ -45,10 +45,8 @@ color_ramp = SubResource("Gradient_stfm5")
 z_index = 10
 color = Color(1, 0.8, 0, 1)
 energy = 1.1
-blend_mode = 2
 shadow_color = Color(0, 0, 0, 0.905882)
 shadow_filter = 2
 shadow_filter_smooth = 1.7
 texture = SubResource("GradientTexture2D_daifg")
-texture_scale = 4.53
 height = 100.0
