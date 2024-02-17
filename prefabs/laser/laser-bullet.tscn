@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://cm18d0dsljju"]
+
+[ext_resource type="Script" path="res://components/bullet.gd" id="1_pgpjq"]
+[ext_resource type="Texture2D" uid="uid://ncjba5q4ihas" path="res://images/laser-bullet.png" id="2_8kldn"]
+[ext_resource type="PackedScene" uid="uid://bea8xntn1kx3l" path="res://prefabs/laser/bullet-hit.tscn" id="2_rs20m"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_djo2k"]
+size = Vector2(20, 304)
+
+[node name="Laser-bullet" type="RigidBody2D"]
+collision_layer = 2
+max_contacts_reported = 100
+contact_monitor = true
+script = ExtResource("1_pgpjq")
+effect = ExtResource("2_rs20m")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = 1.5708
+texture = ExtResource("2_8kldn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_djo2k")

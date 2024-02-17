@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://bea8xntn1kx3l"]
+
+[ext_resource type="Script" path="res://components/bullet-hit.gd" id="1_5ganj"]
+
+[sub_resource type="Curve" id="Curve_kqsga"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0901849), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_stfm5"]
+offsets = PackedFloat32Array(0, 0.211215, 0.392523, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0.501961, 1, 0, 0.545098, 0, 1)
+
+[node name="Bullet-hit" type="Node2D"]
+script = ExtResource("1_5ganj")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+scale = Vector2(10, 10)
+amount = 100
+lifetime = 0.6
+explosiveness = 0.66
+direction = Vector2(2.08165e-12, 2.08165e-12)
+spread = 180.0
+gravity = Vector2(2.08165e-12, 2.08165e-12)
+initial_velocity_min = 200.0
+initial_velocity_max = 200.0
+scale_amount_min = 20.0
+scale_amount_max = 20.0
+scale_amount_curve = SubResource("Curve_kqsga")
+color_ramp = SubResource("Gradient_stfm5")
