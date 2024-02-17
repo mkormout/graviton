@@ -7,6 +7,8 @@ func mount_weapon(what: MountableWeapon, where: String):
 	
 	link(mount1, mount2)
 	
+	what.z_index = -127
+	
 func link(point1: MountPoint, point2: MountPoint):
 	point1.unplug()
 	point2.unplug()
@@ -16,12 +18,13 @@ func link(point1: MountPoint, point2: MountPoint):
 	## set all necessary params to joint
 	joint.node_a = point1.get_parent().get_path()
 	joint.node_b = point2.get_parent().get_path()
+	add_child(joint)
 	
+	# just a fixing joint
 	var joint2 = PinJoint2D.new()
+	joint2.position = joint.position + Vector2(100, 100)
 	joint2.node_a = point1.get_parent().get_path()
 	joint2.node_b = point2.get_parent().get_path()
-	
-	add_child(joint)
 	add_child(joint2)
 
 func do(action: String, where: String):
