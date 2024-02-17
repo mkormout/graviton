@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://chwvdyeaq44p4"]
+
+[ext_resource type="Texture2D" uid="uid://d0mea2b5pdefi" path="res://images/minigun.png" id="1_acpa0"]
+[ext_resource type="Script" path="res://components/mountable-weapon.gd" id="1_f25lk"]
+[ext_resource type="PackedScene" uid="uid://cn8cxmqc4klkd" path="res://prefabs/minigun/bullet.tscn" id="2_72a78"]
+[ext_resource type="Script" path="res://components/mount-point.gd" id="2_uuclo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_apxb2"]
+size = Vector2(70, 346)
+
+[node name="Minigun" type="RigidBody2D" node_paths=PackedStringArray("barrel")]
+script = ExtResource("1_f25lk")
+ammo = ExtResource("2_72a78")
+barrel = NodePath("Barrel")
+rate = 1.0
+velocity = 10000.0
+spread = 0.05
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = 1.5708
+texture = ExtResource("1_acpa0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_apxb2")
+
+[node name="MountPoint" type="Node2D" parent="."]
+position = Vector2(-113, 2.08165e-12)
+script = ExtResource("2_uuclo")
+
+[node name="Barrel" type="Node2D" parent="."]
+position = Vector2(250, 2.08165e-12)

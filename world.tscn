@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://cis3fbeacp7l1"]
+
+[ext_resource type="PackedScene" uid="uid://diqfcg5rnk5rq" path="res://prefabs/ship-bfg-23/ship-bfg-23.tscn" id="1_mdfo8"]
+[ext_resource type="Script" path="res://world.gd" id="1_pt5pr"]
+[ext_resource type="PackedScene" uid="uid://cwp2sgwkhew6n" path="res://prefabs/asteroid-medium-1.tscn" id="3_5lbjh"]
+[ext_resource type="PackedScene" uid="uid://chwvdyeaq44p4" path="res://prefabs/minigun/minigun.tscn" id="4_a3x8i"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_pt5pr")
+
+[node name="Ship-bfg-23" parent="." instance=ExtResource("1_mdfo8")]
+position = Vector2(261, 371)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Asteroid-medium-2" parent="." instance=ExtResource("3_5lbjh")]
+position = Vector2(-950, -1292)
+mass = 1.0
+
+[node name="Asteroid-medium-3" parent="." instance=ExtResource("3_5lbjh")]
+position = Vector2(1867, -1313)
+mass = 1.0
+
+[node name="Asteroid-medium-4" parent="." instance=ExtResource("3_5lbjh")]
+position = Vector2(1710, 1044)
+mass = 1.0
+
+[node name="Minigun" parent="." instance=ExtResource("4_a3x8i")]
+position = Vector2(732, 120)
+rate = 0.01
+
+[node name="Minigun2" parent="." node_paths=PackedStringArray("barrel") instance=ExtResource("4_a3x8i")]
+position = Vector2(798, -198)
+barrel = NodePath("../Minigun/Barrel")
+rate = 0.01
+
+[node name="Minigun3" parent="." node_paths=PackedStringArray("barrel") instance=ExtResource("4_a3x8i")]
+position = Vector2(971, 375)
+barrel = NodePath("../Minigun/Barrel")
+rate = 0.01
