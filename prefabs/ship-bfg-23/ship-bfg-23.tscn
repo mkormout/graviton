@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://diqfcg5rnk5rq"]
+[gd_scene load_steps=13 format=3 uid="uid://diqfcg5rnk5rq"]
 
 [ext_resource type="Script" path="res://components/mountable-body.gd" id="1_1orqm"]
 [ext_resource type="Texture2D" uid="uid://oeyjmpan7p6a" path="res://images/ship.png" id="1_2jagq"]
@@ -16,6 +16,22 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.0696203, 0.139241, 0.560127, 1)
 colors = PackedColorArray(1, 0.894118, 1, 1, 0, 0.858824, 1, 1, 0, 0.359544, 1, 1, 0, 0.0784314, 1, 1, 0, 0, 1, 0)
 
+[sub_resource type="Gradient" id="Gradient_aalgs"]
+offsets = PackedFloat32Array(0, 0.281385, 0.701299)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.243137, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ysh2g"]
+gradient = SubResource("Gradient_aalgs")
+width = 300
+height = 300
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_23wga"]
+polygon = PackedVector2Array(-343, -42, -334, -77, -305, -92, -244, -179, -210, -344, -118, -354, -59, -170, 7, -111, 246, -81, 326, -46, 344, 0, 327, 47, 249, 80, 6, 111, -56, 168, -116, 353, -209, 345, -242, 181, -308, 88, -334, 79, -344, 39)
+
 [node name="ShipBFG23" type="RigidBody2D"]
 mass = 2000.0
 linear_damp = 1.0
@@ -26,10 +42,11 @@ script = ExtResource("1_1orqm")
 rotation = 1.5708
 texture = ExtResource("1_2jagq")
 
-[node name="PropellerMain" type="Node" parent="." node_paths=PackedStringArray("body", "particles")]
+[node name="PropellerMain" type="Node" parent="." node_paths=PackedStringArray("body", "particles", "light")]
 script = ExtResource("2_5nbxa")
 body = NodePath("..")
 particles = NodePath("../PropellerMainEffect")
+light = NodePath("../PropellerMainEffect/PropellerMainEffectLight")
 profile = ExtResource("3_vf8yn")
 action = &"ui_up"
 position = Vector2(-330, 2.08165e-12)
@@ -57,14 +74,29 @@ amount = 1000
 lifetime = 0.2
 lifetime_randomness = 1.0
 direction = Vector2(-1, 2.08165e-12)
-spread = 30.0
+spread = 25.0
 gravity = Vector2(2.08165e-12, 2.08165e-12)
-initial_velocity_min = 500.0
-initial_velocity_max = 5000.0
+initial_velocity_min = 800.0
+initial_velocity_max = 8000.0
 scale_amount_min = 20.0
 scale_amount_max = 40.0
 scale_amount_curve = SubResource("Curve_cbbmj")
 color_ramp = SubResource("Gradient_c3pwc")
+
+[node name="PropellerMainEffectLight" type="PointLight2D" parent="PropellerMainEffect"]
+z_index = 10
+position = Vector2(-44, -2.08165e-12)
+color = Color(0, 0.243137, 1, 1)
+energy = 1.1
+blend_mode = 2
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.905882)
+shadow_filter = 2
+shadow_filter_smooth = 1.7
+shadow_item_cull_mask = 2
+texture = SubResource("GradientTexture2D_ysh2g")
+texture_scale = 50.0
+height = 100.0
 
 [node name="PropellerLeftEffect" type="CPUParticles2D" parent="."]
 position = Vector2(241, -76)
@@ -114,3 +146,19 @@ tag = "right"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-116, 352, -56, 167, 8, 111, 250, 80, 326, 46, 344, 0, 326, -46, 250, -80, 6, -111, -58, -170, -116, -356, -209, -345, -242, -182, -308, -89, -334, -78, -334, 79, -307, 90, -242, 182, -208, 346)
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+z_index = 10
+energy = 1.1
+blend_mode = 2
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.905882)
+shadow_filter = 2
+shadow_filter_smooth = 1.7
+texture = SubResource("GradientTexture2D_ysh2g")
+texture_scale = 50.0
+height = 100.0
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_23wga")
+occluder_light_mask = 2

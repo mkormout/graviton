@@ -49,7 +49,7 @@ barrel = NodePath("../Minigun/Barrel")
 rate = 0.01
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
-z_index = -256
+z_index = -1
 amount = 15000
 lifetime = 200.0
 preprocess = 200.0
@@ -66,6 +66,7 @@ scale_amount_curve = SubResource("Curve_51lj4")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 z_index = -500
+z_as_relative = false
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = -15033.0
@@ -74,7 +75,7 @@ offset_right = 13592.0
 offset_bottom = 10519.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 1)
+color = Color(0.172549, 0.172549, 0.172549, 1)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
@@ -88,3 +89,6 @@ barrel = NodePath("../Laser/Barrel")
 [node name="Laser3" parent="." node_paths=PackedStringArray("barrel") instance=ExtResource("5_lmqhq")]
 position = Vector2(-777, 384)
 barrel = NodePath("../Laser/Barrel")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.168627, 0.168627, 0.168627, 1)

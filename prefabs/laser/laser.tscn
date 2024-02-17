@@ -9,10 +9,11 @@
 size = Vector2(112, 237)
 
 [node name="Laser" type="RigidBody2D" node_paths=PackedStringArray("barrel")]
+z_index = 1
 script = ExtResource("1_e5n1t")
 ammo = ExtResource("2_nvrsh")
 barrel = NodePath("Barrel")
-rate = 0.1
+rate = 0.2
 velocity = 15000.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

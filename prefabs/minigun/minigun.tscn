@@ -2,13 +2,14 @@
 
 [ext_resource type="Texture2D" uid="uid://d0mea2b5pdefi" path="res://images/minigun.png" id="1_acpa0"]
 [ext_resource type="Script" path="res://components/mountable-weapon.gd" id="1_f25lk"]
-[ext_resource type="PackedScene" uid="uid://cn8cxmqc4klkd" path="res://prefabs/minigun/bullet.tscn" id="2_72a78"]
+[ext_resource type="PackedScene" uid="uid://cn8cxmqc4klkd" path="res://prefabs/minigun/minigun-bullet.tscn" id="2_72a78"]
 [ext_resource type="Script" path="res://components/mount-point.gd" id="2_uuclo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_apxb2"]
 size = Vector2(70, 346)
 
 [node name="Minigun" type="RigidBody2D" node_paths=PackedStringArray("barrel")]
+z_index = 1
 script = ExtResource("1_f25lk")
 ammo = ExtResource("2_72a78")
 barrel = NodePath("Barrel")

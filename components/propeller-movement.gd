@@ -3,6 +3,7 @@ extends Node
 
 @export var body: RigidBody2D
 @export var particles: CPUParticles2D
+@export var light: PointLight2D
 @export var profile: PropellerMovementProfile
 @export var action: StringName
 @export var position: Vector2
@@ -12,6 +13,9 @@ func _physics_process(delta):
 	
 	if particles:
 		particles.emitting = active
+		
+	if light:
+		light.enabled = active
 		
 	if active:
 		body.apply_force(
