@@ -17,7 +17,7 @@ func _process(delta):
 	pass
 
 func mount_minigun():
-	$"Ship-bfg-23".mount_weapon($Minigun, "")
-	$"Ship-bfg-23".mount_weapon($Minigun2, "left")
-	$"Ship-bfg-23".mount_weapon($Minigun3, "right")
+	$"Ship-bfg-23".mount_weapon($Laser, "")
+	$"Ship-bfg-23".mount_weapon($Laser2, "left")
+	$"Ship-bfg-23".mount_weapon($Laser3, "right")
 

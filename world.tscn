@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://cis3fbeacp7l1"]
+[gd_scene load_steps=7 format=3 uid="uid://cis3fbeacp7l1"]
 
 [ext_resource type="PackedScene" uid="uid://diqfcg5rnk5rq" path="res://prefabs/ship-bfg-23/ship-bfg-23.tscn" id="1_mdfo8"]
 [ext_resource type="Script" path="res://world.gd" id="1_pt5pr"]
 [ext_resource type="PackedScene" uid="uid://cwp2sgwkhew6n" path="res://prefabs/asteroid-medium-1.tscn" id="3_5lbjh"]
 [ext_resource type="PackedScene" uid="uid://chwvdyeaq44p4" path="res://prefabs/minigun/minigun.tscn" id="4_a3x8i"]
+[ext_resource type="PackedScene" uid="uid://qgbjdoeg1ce2" path="res://prefabs/laser/laser.tscn" id="5_lmqhq"]
 
 [sub_resource type="Curve" id="Curve_51lj4"]
 bake_resolution = 1000
@@ -65,7 +66,7 @@ scale_amount_curve = SubResource("Curve_51lj4")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 z_index = -500
-anchors_preset = -1
+anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = -15033.0
 offset_top = -12833.0
@@ -76,3 +77,14 @@ grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Laser" parent="." instance=ExtResource("5_lmqhq")]
+position = Vector2(-777, 384)
+
+[node name="Laser2" parent="." node_paths=PackedStringArray("barrel") instance=ExtResource("5_lmqhq")]
+position = Vector2(-777, 384)
+barrel = NodePath("../Laser/Barrel")
+
+[node name="Laser3" parent="." node_paths=PackedStringArray("barrel") instance=ExtResource("5_lmqhq")]
+position = Vector2(-777, 384)
+barrel = NodePath("../Laser/Barrel")
