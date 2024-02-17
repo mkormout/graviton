@@ -188,11 +188,10 @@ polygon = PackedVector2Array(-116, 352, -56, 167, 8, 111, 250, 80, 326, 46, 344,
 [node name="PointLight2D" type="PointLight2D" parent="."]
 z_index = 10
 energy = 1.1
-blend_mode = 2
 shadow_enabled = true
-shadow_color = Color(0, 0, 0, 0.905882)
+shadow_color = Color(0.14902, 0.14902, 0.14902, 1)
 shadow_filter = 2
-shadow_filter_smooth = 1.7
+shadow_filter_smooth = 1.0
 texture = SubResource("GradientTexture2D_ysh2g")
 texture_scale = 50.0
 height = 100.0

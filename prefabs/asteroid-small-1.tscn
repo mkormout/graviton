@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://b3vjq05jtdfvv"]
+
+[ext_resource type="Script" path="res://components/asteroid.gd" id="1_rvqx0"]
+[ext_resource type="Texture2D" uid="uid://cj147elxy4bu0" path="res://images/asteroid-small-1.png" id="2_56l8v"]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_w77cl"]
+polygon = PackedVector2Array(-43, 158, 33, 169, 101, 161, 142, 137, 163, 94, 167, 19, 173, -66, 165, -130, 133, -161, 85, -172, 24, -166, -60, -149, -123, -108, -165, -57, -176, 9, -166, 70, -135, 121, -87, 147)
+
+[node name="Asteroid-small-1" type="RigidBody2D"]
+collision_layer = 3
+mass = 10000.0
+script = ExtResource("1_rvqx0")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_56l8v")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-68, 153, 5, 166, 79, 167, 128, 151, 158, 106, 166, 17, 174, -66, 167, -128, 134, -162, 71, -172, -49, -150, -122, -112, -164, -53, -172, 18, -161, 82, -117, 134)
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_w77cl")

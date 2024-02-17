@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://b8b07kcxmxfw1"]
+
+[ext_resource type="Script" path="res://components/asteroid.gd" id="1_it4vf"]
+[ext_resource type="Texture2D" uid="uid://cao3ij7i6ac28" path="res://images/asteroid-medium-2.png" id="2_eat6m"]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_uxoky"]
+polygon = PackedVector2Array(-117, 485, 32, 490, 216, 470, 357, 430, 467, 355, 525, 241, 542, 145, 536, -23, 515, -127, 459, -268, 386, -368, 284, -437, 161, -482, 32, -488, -49, -469, -126, -404, -186, -329, -268, -238, -358, -163, -474, -67, -525, 13, -541, 97, -534, 190, -495, 322, -438, 392, -382, 430, -306, 457, -211, 478)
+
+[node name="Asteroid-medium-2" type="RigidBody2D"]
+collision_layer = 3
+mass = 50000.0
+script = ExtResource("1_it4vf")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_eat6m")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_uxoky")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-144, 487, 78, 485, 249, 467, 393, 410, 489, 323, 540, 175, 536, -52, 471, -238, 362, -391, 195, -472, 71, -485, -21, -475, -82, -442, -147, -379, -247, -254, -375, -146, -481, -53, -538, 37, -535, 149, -516, 269, -448, 379, -354, 443, -249, 475)

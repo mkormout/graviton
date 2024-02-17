@@ -6,6 +6,7 @@ extends MountableBody
 @export var rate: float
 @export var velocity: float
 @export var spread: float
+@export var sound: AudioStreamPlayer2D
 
 var shot_timer: Timer
 
@@ -33,5 +34,7 @@ func fire():
 			) * velocity,
 		)
 		add_child(instance)
+		if sound:
+			sound.play()
 		shot_timer.start(rate)
 	pass
