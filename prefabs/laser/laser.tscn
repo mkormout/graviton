@@ -1,20 +1,22 @@
-[gd_scene load_steps=6 format=3 uid="uid://qgbjdoeg1ce2"]
+[gd_scene load_steps=7 format=3 uid="uid://qgbjdoeg1ce2"]
 
 [ext_resource type="Script" path="res://components/mountable-weapon.gd" id="1_e5n1t"]
 [ext_resource type="PackedScene" uid="uid://cm18d0dsljju" path="res://prefabs/laser/laser-bullet.tscn" id="2_nvrsh"]
 [ext_resource type="Texture2D" uid="uid://bphxb5bf2jimk" path="res://images/laser.png" id="3_27ca6"]
 [ext_resource type="Script" path="res://components/mount-point.gd" id="4_3iiwc"]
+[ext_resource type="AudioStream" uid="uid://bm2syhjfyh74q" path="res://sounds/laser.wav" id="5_toyk8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0ximw"]
 size = Vector2(112, 237)
 
-[node name="Laser" type="RigidBody2D" node_paths=PackedStringArray("barrel")]
+[node name="Laser" type="RigidBody2D" node_paths=PackedStringArray("barrel", "sound")]
 z_index = 1
 script = ExtResource("1_e5n1t")
 ammo = ExtResource("2_nvrsh")
 barrel = NodePath("Barrel")
 rate = 0.2
 velocity = 15000.0
+sound = NodePath("AudioStreamPlayer2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708
@@ -30,4 +32,9 @@ position = Vector2(-73, 26)
 script = ExtResource("4_3iiwc")
 
 [node name="Barrel" type="Node2D" parent="."]
-position = Vector2(198, 26)
+position = Vector2(292, 26)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_toyk8")
+volume_db = -20.0
+max_distance = 20000.0

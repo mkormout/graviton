@@ -2,7 +2,7 @@ extends Node2D
 
 var ship_model = preload("res://prefabs/ship-bfg-23/ship-bfg-23.tscn")
 var minigun_model = preload("res://prefabs/minigun/minigun.tscn")
-var laser_model = preload("res://prefabs/minigun/minigun.tscn")
+var laser_model = preload("res://prefabs/laser/laser.tscn")
 
 var asteroids_small_model = [
 	preload("res://prefabs/asteroid-small-1.tscn"),
@@ -29,9 +29,9 @@ func _ready():
 	ship.position = Vector2(0, 0)
 	add_child(ship)
 	
-	mount_weapon(ship, minigun_model, "")
-	mount_weapon(ship, minigun_model, "left")
-	mount_weapon(ship, minigun_model, "right")
+	mount_weapon(ship, laser_model, "")
+	mount_weapon(ship, laser_model, "left")
+	mount_weapon(ship, laser_model, "right")
 	
 	for x in range(40):
 		add_asteroid(asteroids_small_model.pick_random())
