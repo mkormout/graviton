@@ -10,12 +10,12 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.211215, 0.392523, 1)
 colors = PackedColorArray(1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0.501961, 1, 0, 0.545098, 0, 1)
 
-[sub_resource type="Gradient" id="Gradient_jli4k"]
+[sub_resource type="Gradient" id="Gradient_y837t"]
 offsets = PackedFloat32Array(0, 0.281385, 0.701299)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.243137, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_hn52j"]
-gradient = SubResource("Gradient_jli4k")
+gradient = SubResource("Gradient_y837t")
 width = 300
 height = 300
 use_hdr = true

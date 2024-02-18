@@ -16,7 +16,7 @@ func collision(body):
 	
 	var instance = effect.instantiate() as Node2D
 	instance.global_position = global_position
-	get_tree().get_root().add_child(instance)
+	get_tree().current_scene.add_child(instance)
 	die(0.1)
 
 func die(delay: float):

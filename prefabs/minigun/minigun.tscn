@@ -14,10 +14,11 @@ z_index = 1
 script = ExtResource("1_f25lk")
 ammo = ExtResource("2_72a78")
 barrel = NodePath("Barrel")
-rate = 0.05
+rate = 0.01
 velocity = 10000.0
 spread = 0.01
 sound = NodePath("AudioStreamPlayer2D")
+can_die = false
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708
@@ -36,6 +37,6 @@ position = Vector2(250, 2.08165e-12)
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_smrsu")
-volume_db = -20.0
+volume_db = -30.0
 max_distance = 50000.0
 max_polyphony = 6

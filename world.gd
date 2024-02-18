@@ -3,11 +3,18 @@ extends Node2D
 var ship_model = preload("res://prefabs/ship-bfg-23/ship-bfg-23.tscn")
 var minigun_model = preload("res://prefabs/minigun/minigun.tscn")
 var laser_model = preload("res://prefabs/minigun/minigun.tscn")
-var asteroids_model = [
+
+var asteroids_small_model = [
 	preload("res://prefabs/asteroid-small-1.tscn"),
 	preload("res://prefabs/asteroid-small-2.tscn"),
+]
+
+var asteroids_medium_model = [
 	preload("res://prefabs/asteroid-medium-1.tscn"),
 	preload("res://prefabs/asteroid-medium-2.tscn"),
+]
+
+var asteroids_large_model = [
 	preload("res://prefabs/asteroid-large-1.tscn"),
 	preload("res://prefabs/asteroid-large-2.tscn"),
 ]
@@ -26,8 +33,14 @@ func _ready():
 	mount_weapon(ship, minigun_model, "left")
 	mount_weapon(ship, minigun_model, "right")
 	
-	for x in range(20):
-		add_asteroid_random()
+	for x in range(40):
+		add_asteroid(asteroids_small_model.pick_random())
+
+	for x in range(10):
+		add_asteroid(asteroids_medium_model.pick_random())
+
+	for x in range(5):
+		add_asteroid(asteroids_large_model.pick_random())
 
 	pass # Replace with function body.
 
@@ -45,7 +58,12 @@ func mount_weapon(body: MountableBody, what: PackedScene, where: String):
 	add_child(weapon)
 	body.mount_weapon(weapon, where)
 
-func add_asteroid_random(radius: int = 8000):
-	var asteroid = asteroids_model.pick_random().instantiate()
+func add_asteroid(model: PackedScene, radius: int = 8000):
+	var asteroid = model.instantiate() as RigidBody2D
 	asteroid.position = Vector2(randi_range(-radius, radius), randi_range(-radius, radius))
+	asteroid.rotation = randi_range(0, 360)
+	asteroid.linear_velocity = Vector2(randi_range(-100, 100), randi_range(-100, 100))
+	asteroid.angular_velocity = randi_range(-1, 1)
+	asteroid.angular_damp = -1
+	asteroid.linear_damp = 0
 	add_child(asteroid)
