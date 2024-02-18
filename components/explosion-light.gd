@@ -3,5 +3,5 @@ extends PointLight2D
 
 @export var time: float
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	energy -= energy / (25 * time)

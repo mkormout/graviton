@@ -15,15 +15,13 @@ func _ready() -> void:
 	shot_timer.wait_time = rate
 	shot_timer.one_shot = true
 	add_child(shot_timer)
-	pass
-	
+
 func can_shoot() -> bool:
 	return shot_timer.is_stopped()
 
-func do(action: String, where: String):
+func do(action: String, _where: String):
 	if action == "fire":
 		fire()
-	pass
 
 func fire():
 	if can_shoot():

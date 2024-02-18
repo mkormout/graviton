@@ -9,13 +9,8 @@ extends RigidBody2D
 var health: int
 var dying = false
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	health = max_health
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
 
 func damage(attack: Damage):
 	if not can_die or not attack:

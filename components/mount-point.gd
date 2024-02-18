@@ -2,18 +2,13 @@ class_name MountPoint
 extends Node2D
 
 @export var connection: MountPoint
-@export var joint: Joint2D
 @export var tag: String
-var doing = false
 
-func _connection_tree_exiting():
-	unplug()
+var joint1: Joint2D
+var joint2: Joint2D
 
-func plug(other: MountPoint) -> Joint2D:
+func plug(other: MountPoint):
 	unplug()
-	
-	joint = PinJoint2D.new()
-	joint.position = position
 
 	var body1 = get_parent()
 	var body2 = other.get_parent()
@@ -23,34 +18,31 @@ func plug(other: MountPoint) -> Joint2D:
 	
 	connection = other
 	
-	if connection:
-		connection.connect("tree_exiting", _connection_tree_exiting)
+	joint1 = PinJoint2D.new()
+	joint1.position = position
+	joint1.node_a = body1.get_path()
+	joint1.node_b = body2.get_path()
+	body1.add_child(joint1)
 	
-	return joint 
+	joint2 = PinJoint2D.new()
+	joint2.position = position + Vector2(100, 100)
+	joint2.node_a = body1.get_path()
+	joint2.node_b = body2.get_path()
+	body1.add_child(joint2)
 
-func unplug():
-	if connection:
-		connection.disconnect("tree_exiting", _connection_tree_exiting)
-		connection.unplug()
-	
+func unplug():	
+	if joint1:
+		joint1.queue_free()
+	if joint2:
+		joint2.queue_free()
 	connection = null
-	
-	if joint:
-		joint.queue_free() 
 
 func do_body(action: String):
 	var body = get_parent() as MountableBody
 	body.do(action, "")
 
 func do(action: String):
-	if doing:
-		return
-	
-	doing = true
-	
 	if connection:
 		connection.do(action)
 	else:
 		do_body(action)
-	
-	doing = false
