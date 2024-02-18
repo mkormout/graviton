@@ -61,7 +61,6 @@ func _input(_ev):
 
 func mount_weapon(body: MountableBody, what: PackedScene, where: String):
 	var weapon = what.instantiate()
-	add_child(weapon)
 	body.mount_weapon(weapon, where)
 
 func add_asteroid(model: PackedScene, radius: int = 8000):
