@@ -11,7 +11,7 @@ func mount_weapon(what: MountableWeapon, where: String):
 	
 func link(point1: MountPoint, point2: MountPoint):
 	point1.unplug()
-	point2.unplug()
+	point2.unplug() 
 	
 	var joint = point1.plug(point2)
 	

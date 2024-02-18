@@ -25,13 +25,13 @@ var ship: MountableBody
 func _ready():
 	$Camera2D.zoom = Vector2(0.1, 0.1)
 	
-	ship = ship_model.instantiate()
+	ship = ship_model.instantiate() 
 	ship.position = Vector2(0, 0)
 	add_child(ship)
 	
 	mount_weapon(ship, laser_model, "")
-	mount_weapon(ship, laser_model, "left")
-	mount_weapon(ship, laser_model, "right")
+	mount_weapon(ship, minigun_model, "left")
+	mount_weapon(ship, minigun_model, "right")
 	
 	for x in range(40):
 		add_asteroid(asteroids_small_model.pick_random())
@@ -50,8 +50,14 @@ func _process(delta):
 		ship.do("fire", "")
 		ship.do("fire", "left")
 		ship.do("fire", "right")
-		
 	pass
+
+func _input(ev):
+	if Input.is_key_pressed(KEY_1):
+		mount_weapon(ship, laser_model, "")
+	
+	if Input.is_key_pressed(KEY_2):
+		mount_weapon(ship, minigun_model, "")
 
 func mount_weapon(body: MountableBody, what: PackedScene, where: String):
 	var weapon = what.instantiate()

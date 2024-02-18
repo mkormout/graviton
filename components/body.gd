@@ -36,9 +36,10 @@ func die():
 		var node = death.instantiate()
 		node.global_position = global_position
 		get_tree().current_scene.add_child(node)
-		
-	for i in range(3):
-		add_successor(successors.pick_random(), 200, 2000)
+	
+	if not successors.is_empty():
+		for i in range(3):
+			add_successor(successors.pick_random(), 200, 2000)
 		
 	queue_free()
 	pass

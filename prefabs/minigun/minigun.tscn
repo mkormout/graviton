@@ -18,7 +18,6 @@ rate = 0.05
 velocity = 10000.0
 spread = 0.01
 sound = NodePath("AudioStreamPlayer2D")
-can_die = false
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708
