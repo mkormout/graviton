@@ -12,7 +12,7 @@ func _ready():
 	joint1 = PinJoint2D.new()
 	joint1.position = position
 	joint2 = PinJoint2D.new()
-	joint2.position = position + Vector2(100, 100)
+	joint2.position = position + Vector2(500, 100)
 	add_child(joint1)
 	add_child(joint2)
 
@@ -22,13 +22,13 @@ func plug(other: MountPoint):
 	var body1 = get_parent() as Node2D
 	var body2 = other.get_parent() as Node2D
 
-	body1.add_child(body2)
-	body2.reparent(body1, false)
+	get_tree().current_scene.add_child(body2)
 	
-	print("body1.position", body1.position)
-	print("body2.position", body2.position)
+	print("body1.position", body1.position, "body2.position", body2.position)
 
-	body2.position = body1.position
+	body2.transform = body1.transform
+
+	body2.position = body1.position - other.position + position
 	body2.rotation = body1.rotation
 	
 	connection = other

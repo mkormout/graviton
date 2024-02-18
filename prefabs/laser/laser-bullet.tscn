@@ -13,12 +13,12 @@ kinetic = 0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_djo2k"]
 size = Vector2(20, 304)
 
-[sub_resource type="Gradient" id="Gradient_y837t"]
+[sub_resource type="Gradient" id="Gradient_v5rky"]
 offsets = PackedFloat32Array(0, 0.281385, 0.701299)
 colors = PackedColorArray(1, 1, 1, 0.533333, 1, 1, 1, 0.243137, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_chupn"]
-gradient = SubResource("Gradient_y837t")
+gradient = SubResource("Gradient_v5rky")
 width = 300
 height = 300
 use_hdr = true
