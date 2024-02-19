@@ -1,7 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bfgkui2lmglju"]
+[gd_scene load_steps=7 format=3 uid="uid://burphg2ey64t1"]
 
-[ext_resource type="Script" path="res://components/bullet-hit.gd" id="1_y5dfh"]
-[ext_resource type="Script" path="res://components/explosion-light.gd" id="2_yuge7"]
+[ext_resource type="Script" path="res://components/bullet-hit.gd" id="1_0hfeb"]
+[ext_resource type="Script" path="res://components/explosion-light.gd" id="2_lklyk"]
 
 [sub_resource type="Curve" id="Curve_mius0"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0511688), 0.0, 0.0, 0, 0]
@@ -25,7 +25,7 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 1)
 
 [node name="Gausscannon-bullet-hit" type="Node2D"]
-script = ExtResource("1_y5dfh")
+script = ExtResource("1_0hfeb")
 time = 1.0
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
@@ -53,5 +53,5 @@ shadow_filter_smooth = 1.7
 texture = SubResource("GradientTexture2D_a3xy6")
 texture_scale = 30.0
 height = 100.0
-script = ExtResource("2_yuge7")
+script = ExtResource("2_lklyk")
 time = 1.0

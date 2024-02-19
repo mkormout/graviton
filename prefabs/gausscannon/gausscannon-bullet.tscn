@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://bbbou6h5jmvbh"]
 
 [ext_resource type="Script" path="res://components/bullet.gd" id="1_vstys"]
-[ext_resource type="PackedScene" uid="uid://bfgkui2lmglju" path="res://prefabs/gausscannon/gausscannon-bullet-hit.tscn" id="2_jwvnp"]
+[ext_resource type="PackedScene" uid="uid://burphg2ey64t1" path="res://prefabs/gausscannon/gausscannon-bullet-hit.tscn" id="2_tvpv5"]
 [ext_resource type="Texture2D" uid="uid://rsyngcr8ff1t" path="res://images/gausscannon-bullet.png" id="2_woche"]
 [ext_resource type="Script" path="res://components/damage.gd" id="3_w2xbv"]
 
@@ -40,7 +40,7 @@ mass = 5000.0
 max_contacts_reported = 100
 contact_monitor = true
 script = ExtResource("1_vstys")
-effect = ExtResource("2_jwvnp")
+effect = ExtResource("2_tvpv5")
 attack = SubResource("Resource_bkfm0")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

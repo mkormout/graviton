@@ -3,6 +3,7 @@ extends Node2D
 var ship_model = preload("res://prefabs/ship-bfg-23/ship-bfg-23.tscn")
 var minigun_model = preload("res://prefabs/minigun/minigun.tscn")
 var gausscannon_model = preload("res://prefabs/gausscannon/gausscannon.tscn")
+var rpg_model = preload("res://prefabs/rpg/rpg.tscn")
 var laser_model = preload("res://prefabs/laser/laser.tscn")
 
 var asteroids_small_model = [
@@ -73,7 +74,12 @@ func _input(_ev):
 	if Input.is_key_pressed(KEY_3):
 		mount_weapon(ship, gausscannon_model, "")
 		mount_weapon(ship, gausscannon_model, "left")
-		mount_weapon(ship, gausscannon_model, "right")	
+		mount_weapon(ship, gausscannon_model, "right")
+	
+	if Input.is_key_pressed(KEY_4):
+		mount_weapon(ship, rpg_model, "")
+		mount_weapon(ship, rpg_model, "left")
+		mount_weapon(ship, rpg_model, "right")	
 		
 func mount_weapon(body: MountableBody, what: PackedScene, where: String):
 	var weapon = what.instantiate()

@@ -1,0 +1,85 @@
+[gd_scene load_steps=11 format=3 uid="uid://jjt7k5wvvkb2"]
+
+[ext_resource type="Script" path="res://components/bullet.gd" id="1_ffppr"]
+[ext_resource type="PackedScene" uid="uid://ddr43q6ia2xta" path="res://prefabs/rpg/rpg-bullet-hit.tscn" id="2_0eox3"]
+[ext_resource type="Script" path="res://components/damage.gd" id="3_qekjp"]
+[ext_resource type="Texture2D" uid="uid://c4l3lik4q5wya" path="res://images/rpg-bullet.png" id="4_rhu4k"]
+
+[sub_resource type="Resource" id="Resource_5lcxy"]
+script = ExtResource("3_qekjp")
+energy = 0
+kinetic = 5000
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lqxye"]
+size = Vector2(102.5, 446)
+
+[sub_resource type="Curve" id="Curve_t3a81"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.844512, 0.483377), -1.95058, -1.95058, 0, 0, Vector2(1, 0), -2.41003, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_ndfkl"]
+offsets = PackedFloat32Array(0, 0.222222, 0.344444, 0.733333, 1)
+colors = PackedColorArray(3, 3, 3, 1, 4.01176, 4.01176, 0, 1, 1, 0.643137, 0, 1, 1, 0.14376, 0, 1, 0.552941, 0, 0, 0)
+
+[sub_resource type="Gradient" id="Gradient_v5rky"]
+offsets = PackedFloat32Array(0, 0.281385, 0.701299)
+colors = PackedColorArray(1, 1, 1, 0.533333, 1, 1, 1, 0.243137, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_p5wgl"]
+gradient = SubResource("Gradient_v5rky")
+width = 300
+height = 300
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[node name="Rpg-bullet" type="RigidBody2D"]
+collision_layer = 3
+mass = 5000.0
+max_contacts_reported = 10
+contact_monitor = true
+script = ExtResource("1_ffppr")
+effect = ExtResource("2_0eox3")
+life = 5.0
+attack = SubResource("Resource_5lcxy")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 1
+rotation = 1.5708
+texture = ExtResource("4_rhu4k")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2.08165e-12, 2.08165e-12)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_lqxye")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+z_index = -1
+position = Vector2(-162, 0)
+amount = 5000
+lifetime = 2.0
+lifetime_randomness = 0.5
+emission_shape = 1
+emission_sphere_radius = 35.0
+direction = Vector2(-1, 2.08165e-12)
+spread = 5.0
+gravity = Vector2(2.08165e-12, 2.08165e-12)
+initial_velocity_min = 200.0
+initial_velocity_max = 3000.0
+angle_max = 30.0
+scale_amount_max = 30.0
+scale_amount_curve = SubResource("Curve_t3a81")
+color_ramp = SubResource("Gradient_ndfkl")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+z_index = 10
+position = Vector2(-300, 2.08165e-12)
+color = Color(1, 0.662745, 0, 1)
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.905882)
+shadow_filter = 2
+shadow_filter_smooth = 1.7
+texture = SubResource("GradientTexture2D_p5wgl")
+texture_scale = 20.0
+height = 100.0
