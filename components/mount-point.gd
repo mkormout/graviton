@@ -18,15 +18,13 @@ func _ready():
 func plug(other: MountPoint):
 	unplug()
 
-	var body1 = get_parent() as Node2D
-	var body2 = other.get_parent() as Node2D
+	var body1 = get_parent() as RigidBody2D
+	var body2 = other.get_parent() as RigidBody2D
 
-	get_tree().current_scene.add_child(body2)
-
-	body2.transform = body1.transform
-
-	body2.position = body1.position - other.position + position
 	body2.rotation = body1.rotation
+	body2.global_position = body1.global_position + body1.transform.basis_xform(position - other.position)
+	
+	get_tree().current_scene.add_child(body2)
 	
 	connection = other
 	other.connection = self
