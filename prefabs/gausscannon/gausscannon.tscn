@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3 uid="uid://cbco1xs1gleke"]
+
+[ext_resource type="Script" path="res://components/mountable-weapon.gd" id="1_iml48"]
+[ext_resource type="PackedScene" uid="uid://bbbou6h5jmvbh" path="res://prefabs/gausscannon/gausscannon-bullet.tscn" id="2_i52xv"]
+[ext_resource type="Texture2D" uid="uid://nu0w8gtlvc3" path="res://images/gausscannon.png" id="3_og6jl"]
+[ext_resource type="AudioStream" uid="uid://bbri5doimels0" path="res://sounds/gausscannon.mp3" id="4_33d08"]
+[ext_resource type="Script" path="res://components/mount-point.gd" id="5_sjve5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mhy0m"]
+size = Vector2(151, 463)
+
+[node name="Gausscannon" type="RigidBody2D" node_paths=PackedStringArray("barrel", "sound")]
+script = ExtResource("1_iml48")
+ammo = ExtResource("2_i52xv")
+barrel = NodePath("Barrel")
+rate = 0.5
+velocity = 40000.0
+sound = NodePath("AudioStreamPlayer2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = 1.5708
+texture = ExtResource("3_og6jl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, -1.5)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_mhy0m")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_33d08")
+volume_db = -20.0
+max_distance = 20000.0
+max_polyphony = 3
+
+[node name="Barrel" type="Node2D" parent="."]
+position = Vector2(456, 2.08165e-12)
+
+[node name="MountPoint" type="Node2D" parent="."]
+position = Vector2(-149, 2.08165e-12)
+script = ExtResource("5_sjve5")

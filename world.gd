@@ -30,9 +30,9 @@ func _ready():
 	ship.position = Vector2(0, 0)
 	add_child(ship)
 	
-	mount_weapon(ship, gausscannon_model, "")
-	mount_weapon(ship, gausscannon_model, "left")
-	mount_weapon(ship, gausscannon_model, "right")
+	mount_weapon(ship, minigun_model, "")
+	mount_weapon(ship, minigun_model, "left")
+	mount_weapon(ship, minigun_model, "right")
 	
 	for x in range(40):
 		add_asteroid(asteroids_small_model.pick_random())

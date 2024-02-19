@@ -45,7 +45,8 @@ shape = SubResource("RectangleShape2D_djo2k")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 z_index = 10
-color = Color(0, 2, 1, 1)
+color = Color(0, 2, 0.498039, 1)
+energy = 0.5
 shadow_enabled = true
 shadow_color = Color(0, 0, 0, 0.905882)
 shadow_filter = 2

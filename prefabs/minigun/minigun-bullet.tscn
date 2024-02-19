@@ -23,6 +23,7 @@ effect = ExtResource("2_f53pa")
 attack = SubResource("Resource_talgb")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(2, 1.5, 1, 1)
 rotation = 1.5708
 texture = ExtResource("3_qdyd7")
 

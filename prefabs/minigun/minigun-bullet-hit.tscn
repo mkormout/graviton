@@ -45,12 +45,13 @@ color_ramp = SubResource("Gradient_stfm5")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 z_index = 10
-color = Color(1, 0.8, 0, 1)
-energy = 1.1
+color = Color(1, 0.52549, 0, 1)
+energy = 0.5
 shadow_color = Color(0, 0, 0, 0.905882)
 shadow_filter = 2
 shadow_filter_smooth = 1.7
 texture = SubResource("GradientTexture2D_daifg")
+texture_scale = 5.0
 height = 100.0
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]

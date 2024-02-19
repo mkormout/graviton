@@ -1,0 +1,82 @@
+[gd_scene load_steps=11 format=3 uid="uid://bbbou6h5jmvbh"]
+
+[ext_resource type="Script" path="res://components/bullet.gd" id="1_vstys"]
+[ext_resource type="PackedScene" uid="uid://bfgkui2lmglju" path="res://prefabs/gausscannon/gausscannon-bullet-hit.tscn" id="2_jwvnp"]
+[ext_resource type="Texture2D" uid="uid://rsyngcr8ff1t" path="res://images/gausscannon-bullet.png" id="2_woche"]
+[ext_resource type="Script" path="res://components/damage.gd" id="3_w2xbv"]
+
+[sub_resource type="Resource" id="Resource_bkfm0"]
+script = ExtResource("3_w2xbv")
+energy = 200
+kinetic = 200
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uqvau"]
+size = Vector2(103, 442)
+
+[sub_resource type="Gradient" id="Gradient_y837t"]
+offsets = PackedFloat32Array(0, 0.281385, 0.701299)
+colors = PackedColorArray(1, 1, 1, 0.533333, 1, 1, 1, 0.243137, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4utc4"]
+gradient = SubResource("Gradient_y837t")
+width = 300
+height = 300
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="Curve" id="Curve_a5ike"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0901849), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_b0lmv"]
+offsets = PackedFloat32Array(0, 0.118519, 0.218519, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 1, 1, 1, 0, 0.811765, 1, 1, 0, 0.27451, 1, 1)
+
+[node name="Gausscannon-bullet" type="RigidBody2D"]
+collision_layer = 3
+mass = 5000.0
+max_contacts_reported = 100
+contact_monitor = true
+script = ExtResource("1_vstys")
+effect = ExtResource("2_jwvnp")
+attack = SubResource("Resource_bkfm0")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = 1.5708
+texture = ExtResource("2_woche")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1.5, -1)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_uqvau")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+z_index = 10
+color = Color(0, 0.890196, 1, 1)
+energy = 2.0
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.905882)
+shadow_filter = 2
+shadow_filter_smooth = 1.7
+texture = SubResource("GradientTexture2D_4utc4")
+texture_scale = 50.0
+height = 100.0
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+scale = Vector2(5, 5)
+amount = 100
+speed_scale = 2.0
+randomness = 1.0
+emission_shape = 1
+emission_sphere_radius = 128.0
+direction = Vector2(-1, 2.08165e-12)
+spread = 30.0
+gravity = Vector2(2.08165e-12, 2.08165e-12)
+initial_velocity_min = 10.0
+initial_velocity_max = 1000.0
+scale_amount_min = 20.0
+scale_amount_max = 60.0
+scale_amount_curve = SubResource("Curve_a5ike")
+color_ramp = SubResource("Gradient_b0lmv")
