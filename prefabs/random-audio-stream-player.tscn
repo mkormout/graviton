@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dri5e26pnxh5h"]
+
+[ext_resource type="Script" path="res://prefabs/random-audio-stream-player.gd" id="1_cnqbs"]
+
+[node name="RandomAudioStreamPlayer" type="Node2D" node_paths=PackedStringArray("audio")]
+script = ExtResource("1_cnqbs")
+audio = NodePath("")
