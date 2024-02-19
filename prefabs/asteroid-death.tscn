@@ -1,8 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://c31rv1yymd6gv"]
+[gd_scene load_steps=12 format=3 uid="uid://c31rv1yymd6gv"]
 
 [ext_resource type="Script" path="res://components/bullet-hit.gd" id="1_eu0fv"]
 [ext_resource type="AudioStream" uid="uid://7wuqk2kqrxs2" path="res://sounds/explosion-1.wav" id="2_itdx0"]
+[ext_resource type="Script" path="res://prefabs/random-audio-stream-player.gd" id="3_5gp2v"]
 [ext_resource type="Script" path="res://components/explosion-light.gd" id="3_6y1hc"]
+[ext_resource type="AudioStream" uid="uid://l6jfw80adfj8" path="res://sounds/explosion-2.wav" id="5_mqm0e"]
+[ext_resource type="AudioStream" uid="uid://c0o0nycma3ye1" path="res://sounds/explosion-3.wav" id="6_nw6yw"]
+[ext_resource type="AudioStream" uid="uid://dhpc7rcrllys1" path="res://sounds/explosion-4.wav" id="7_5q6fy"]
 
 [sub_resource type="Curve" id="Curve_nhauv"]
 _data = [Vector2(0, 1), 0.0, -3.99931, 0, 0, Vector2(0.161889, 0.524751), -1.38422, -1.38422, 0, 0, Vector2(1, 0.0901849), 0.0, 0.0, 0, 0]
@@ -50,12 +54,6 @@ scale_amount_max = 300.0
 scale_amount_curve = SubResource("Curve_nhauv")
 color_ramp = SubResource("Gradient_inhcr")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("2_itdx0")
-autoplay = true
-max_distance = 20000.0
-max_polyphony = 10
-
 [node name="PointLight2D" type="PointLight2D" parent="."]
 z_index = 10
 color = Color(1, 0.635294, 0, 1)
@@ -70,3 +68,11 @@ texture_scale = 40.0
 height = 100.0
 script = ExtResource("3_6y1hc")
 time = 2.0
+
+[node name="RandomAudioStreamPlayer2D" type="Node2D" parent="." node_paths=PackedStringArray("audio")]
+script = ExtResource("3_5gp2v")
+audio = NodePath("AudioStreamPlayer2D")
+resources = Array[AudioStream]([ExtResource("2_itdx0"), ExtResource("5_mqm0e"), ExtResource("6_nw6yw"), ExtResource("7_5q6fy")])
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="RandomAudioStreamPlayer2D"]
+max_distance = 20000.0
