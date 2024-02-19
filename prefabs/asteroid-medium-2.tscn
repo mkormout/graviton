@@ -16,6 +16,7 @@ script = ExtResource("1_it4vf")
 max_health = 500
 death = ExtResource("2_4n6dv")
 successors = Array[PackedScene]([ExtResource("2_fqc2e"), ExtResource("3_ufa5d")])
+successors_count = 6
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_eat6m")

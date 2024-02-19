@@ -34,13 +34,13 @@ func _ready():
 	mount_weapon(ship, minigun_model, "left")
 	mount_weapon(ship, minigun_model, "right")
 	
-	for x in range(40):
+	for x in range(50):
 		add_asteroid(asteroids_small_model.pick_random())
 
-	for x in range(10):
+	for x in range(30):
 		add_asteroid(asteroids_medium_model.pick_random())
 
-	for x in range(5):
+	for x in range(10):
 		add_asteroid(asteroids_large_model.pick_random())
 
 	pass # Replace with function body.
@@ -70,12 +70,17 @@ func mount_weapon(body: MountableBody, what: PackedScene, where: String):
 	var weapon = what.instantiate()
 	body.mount_weapon(weapon, where)
 
-func add_asteroid(model: PackedScene, radius: int = 8000):
+func add_asteroid(model: PackedScene):
+	const MIN_RANGE = 4000
+	const MAX_RANGE = 10000
+	const MAX_LINEAR_VELOCITY = 1000
+	const MAX_ANGULAR_VELOCITY = PI / 2
+	
 	var asteroid = model.instantiate() as RigidBody2D
-	asteroid.position = Vector2(randi_range(-radius, radius), randi_range(-radius, radius))
-	asteroid.rotation = randi_range(0, 360)
-	asteroid.linear_velocity = Vector2(randi_range(-100, 100), randi_range(-100, 100))
-	asteroid.angular_velocity = randi_range(-1, 1)
+	asteroid.position = Vector2.ZERO.from_angle(randf() * 2*PI) * randf_range(MIN_RANGE, MAX_RANGE)
+	asteroid.rotation = randi_range(0, 2*PI)
+	asteroid.linear_velocity = Vector2.ZERO.from_angle(randf() * 2*PI) * randi_range(-MAX_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY)
+	asteroid.angular_velocity = MAX_ANGULAR_VELOCITY * randi_range(-1, 1)
 	asteroid.angular_damp = -1
 	asteroid.linear_damp = 0
 	add_child(asteroid)

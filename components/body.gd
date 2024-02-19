@@ -6,6 +6,8 @@ extends RigidBody2D
 @export var defense: Damage
 @export var death: PackedScene
 @export var successors: Array[PackedScene]
+@export var successors_count: int = 3
+
 var health: int
 var dying = false
 
@@ -33,7 +35,7 @@ func die():
 		get_tree().current_scene.add_child(node)
 	
 	if not successors.is_empty():
-		for i in range(3):
+		for i in range(successors_count):
 			add_successor(successors.pick_random(), 200, 2000)
 		
 	queue_free()

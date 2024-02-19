@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://cis3fbeacp7l1"]
+[gd_scene load_steps=6 format=3 uid="uid://cis3fbeacp7l1"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_pt5pr"]
 
@@ -6,6 +6,16 @@
 bake_resolution = 1000
 _data = [Vector2(0, 0.868571), 0.0, -4.63029, 0, 0, Vector2(0.226415, 0.28017), -1.19561, -1.19561, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_e8tuq"]
+colors = PackedColorArray(1, 1, 1, 0.721569, 3, 3, 3, 1)
+
+[sub_resource type="Gradient" id="Gradient_0iis8"]
+offsets = PackedFloat32Array(0, 0.467626, 0.723022, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0.8806, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wr6eu"]
+gradient = SubResource("Gradient_0iis8")
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_pt5pr")
@@ -22,9 +32,10 @@ emission_rect_extents = Vector2(20000, 20000)
 direction = Vector2(1, 1)
 spread = 180.0
 gravity = Vector2(0, 0)
-scale_amount_min = 20.0
-scale_amount_max = 20.0
+scale_amount_min = 10.0
+scale_amount_max = 60.0
 scale_amount_curve = SubResource("Curve_51lj4")
+color_ramp = SubResource("Gradient_e8tuq")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 z_index = -500
@@ -41,4 +52,13 @@ color = Color(0.172549, 0.172549, 0.172549, 1)
 [node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.235294, 0.235294, 0.235294, 1)
+color = Color(0.223529, 0.223529, 0.223529, 1)
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(375.52, 938.805)
+rotation = 4.71239
+scale = Vector2(15.9066, 15.0852)
+blend_mode = 2
+shadow_item_cull_mask = 3
+texture = SubResource("GradientTexture2D_wr6eu")
+texture_scale = 50.0

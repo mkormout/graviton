@@ -11,7 +11,7 @@ polygon = PackedVector2Array(-250, 808, 42, 853, 412, 854, 667, 803, 814, 721, 9
 
 [node name="Asteroid-large-1" type="RigidBody2D"]
 collision_layer = 3
-mass = 100000.0
+mass = 150000.0
 script = ExtResource("1_sf3na")
 max_health = 1000
 death = ExtResource("2_e4fop")
