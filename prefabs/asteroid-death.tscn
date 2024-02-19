@@ -31,14 +31,14 @@ fill_to = Vector2(1, 1)
 
 [node name="Asteroid-death" type="Node2D"]
 script = ExtResource("1_eu0fv")
-time = 1.0
+time = 3.0
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
-z_index = 256
+z_index = -1
 scale = Vector2(10, 10)
-amount = 200
-lifetime = 2.0
-preprocess = 2.0
+amount = 100
+lifetime = 4.0
+preprocess = 4.0
 explosiveness = 1.0
 lifetime_randomness = 1.0
 direction = Vector2(2.08165e-12, 2.08165e-12)
@@ -67,7 +67,7 @@ texture = SubResource("GradientTexture2D_sva77")
 texture_scale = 40.0
 height = 100.0
 script = ExtResource("3_6y1hc")
-time = 2.0
+time = 3.0
 
 [node name="RandomAudioStreamPlayer2D" type="Node2D" parent="." node_paths=PackedStringArray("audio")]
 script = ExtResource("3_5gp2v")
