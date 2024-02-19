@@ -65,7 +65,7 @@ func _input(_ev):
 	
 	if Input.is_key_pressed(KEY_2):
 		mount_weapon(ship, minigun_model, "")
-
+		
 func mount_weapon(body: MountableBody, what: PackedScene, where: String):
 	var weapon = what.instantiate()
 	body.mount_weapon(weapon, where)
@@ -77,9 +77,9 @@ func add_asteroid(model: PackedScene):
 	const MAX_ANGULAR_VELOCITY = PI / 2
 	
 	var asteroid = model.instantiate() as RigidBody2D
-	asteroid.position = Vector2.ZERO.from_angle(randf() * 2*PI) * randf_range(MIN_RANGE, MAX_RANGE)
-	asteroid.rotation = randi_range(0, 2*PI)
-	asteroid.linear_velocity = Vector2.ZERO.from_angle(randf() * 2*PI) * randi_range(-MAX_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY)
+	asteroid.position = Vector2.from_angle(randf() * 2*PI) * randf_range(MIN_RANGE, MAX_RANGE)
+	asteroid.rotation = randf_range(0, 2*PI)
+	asteroid.linear_velocity = Vector2.from_angle(randf() * 2*PI) * randi_range(-MAX_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY)
 	asteroid.angular_velocity = MAX_ANGULAR_VELOCITY * randi_range(-1, 1)
 	asteroid.angular_damp = -1
 	asteroid.linear_damp = 0

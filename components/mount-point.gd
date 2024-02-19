@@ -22,8 +22,6 @@ func plug(other: MountPoint):
 	var body2 = other.get_parent() as Node2D
 
 	get_tree().current_scene.add_child(body2)
-	
-	print("body1.position", body1.position, "body2.position", body2.position)
 
 	body2.transform = body1.transform
 

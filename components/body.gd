@@ -51,4 +51,5 @@ func add_successor(model: PackedScene, radius: int = 200, speed: int = 1000):
 	successor.angular_velocity = randi_range(-5, 5)
 	successor.angular_damp = -1
 	successor.linear_damp = 0
-	get_tree().current_scene.add_child(successor)
+	
+	get_tree().current_scene.call_deferred("add_child", successor)

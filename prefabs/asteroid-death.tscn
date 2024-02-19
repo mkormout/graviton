@@ -30,6 +30,7 @@ script = ExtResource("1_eu0fv")
 time = 3.0
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+z_index = 256
 scale = Vector2(10, 10)
 amount = 200
 lifetime = 4.0
@@ -40,7 +41,7 @@ direction = Vector2(2.08165e-12, 2.08165e-12)
 spread = 180.0
 gravity = Vector2(2.08165e-12, 2.08165e-12)
 initial_velocity_min = 100.0
-initial_velocity_max = 250.0
+initial_velocity_max = 400.0
 angular_velocity_max = 100.0
 damping_min = 1.0
 damping_max = 30000.0

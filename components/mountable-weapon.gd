@@ -20,7 +20,7 @@ func _ready() -> void:
 func can_shoot() -> bool:
 	return shot_timer.is_stopped()
 
-func do(sender: Node2D, action: String, _where: String, _meta = null):
+func do(_sender: Node2D, action: String, _where: String, _meta = null):
 	if action == "fire":
 		fire()
 
