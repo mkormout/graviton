@@ -10,12 +10,13 @@
 size = Vector2(112, 237)
 
 [node name="Laser" type="RigidBody2D" node_paths=PackedStringArray("barrel", "sound")]
-z_index = 1
+z_index = -1
 script = ExtResource("1_e5n1t")
 ammo = ExtResource("2_nvrsh")
 barrel = NodePath("Barrel")
 rate = 0.2
 velocity = 20000.0
+recoil = 1.0
 sound = NodePath("AudioStreamPlayer2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

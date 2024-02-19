@@ -6,7 +6,6 @@ extends Node2D
 
 var joint1: Joint2D
 var joint2: Joint2D
-var doing: bool = false
 
 func _ready():
 	joint1 = PinJoint2D.new()
@@ -32,6 +31,7 @@ func plug(other: MountPoint):
 	body2.rotation = body1.rotation
 	
 	connection = other
+	other.connection = self
 	
 	connection.connect("tree_exiting", _connection_tree_exiting)
 	
@@ -51,22 +51,20 @@ func unplug():
 	
 	connection = null
 
-func do_body(action: String):
-	var body = get_parent() as MountableBody
-	body.do(action, "")
+func get_body_self() -> MountableBody:
+	return get_parent() as MountableBody
 
-func do(action: String):
-	if doing:
+func get_body_opposite() -> MountableBody:
+	return connection.get_parent() as MountableBody if connection else null
+
+func do(sender: MountableBody, action: String, meta = null):
+	if sender == get_body_self() and connection:
+		connection.do(sender, action, meta)
 		return
-		
-	doing = true
-		
-	if connection:
-		connection.do(action)
-	else:
-		do_body(action)
-		
-	doing = false
+	
+	if sender == get_body_opposite():
+		get_body_self().do(sender, action, "", meta)
+		return
 
 func _connection_tree_exiting():
 	unplug()

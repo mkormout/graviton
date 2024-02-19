@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cbco1xs1gleke"]
+[gd_scene load_steps=10 format=3 uid="uid://cbco1xs1gleke"]
 
 [ext_resource type="Script" path="res://components/mountable-weapon.gd" id="1_iml48"]
 [ext_resource type="PackedScene" uid="uid://bbbou6h5jmvbh" path="res://prefabs/gausscannon/gausscannon-bullet.tscn" id="2_i52xv"]
@@ -6,16 +6,37 @@
 [ext_resource type="AudioStream" uid="uid://bbri5doimels0" path="res://sounds/gausscannon.mp3" id="4_33d08"]
 [ext_resource type="Script" path="res://components/mount-point.gd" id="5_sjve5"]
 
+[sub_resource type="Gradient" id="Gradient_3hseg"]
+colors = PackedColorArray(10, 0, 0, 0.498, 1, 1, 1, 0)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_k8745"]
+frequency = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ntq75"]
+width = 10000
+height = 10
+seamless = true
+noise = SubResource("FastNoiseLite_k8745")
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mhy0m"]
 size = Vector2(151, 463)
 
 [node name="Gausscannon" type="RigidBody2D" node_paths=PackedStringArray("barrel", "sound")]
+z_index = -1
 script = ExtResource("1_iml48")
 ammo = ExtResource("2_i52xv")
 barrel = NodePath("Barrel")
 rate = 0.5
 velocity = 40000.0
+recoil = 500000.0
 sound = NodePath("AudioStreamPlayer2D")
+
+[node name="Line2D" type="Line2D" parent="."]
+points = PackedVector2Array(0, 0, 10000, 0)
+closed = true
+gradient = SubResource("Gradient_3hseg")
+texture = SubResource("NoiseTexture2D_ntq75")
+texture_mode = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708

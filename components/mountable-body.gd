@@ -7,10 +7,19 @@ func mount_weapon(what: MountableWeapon, where: String):
 	
 	mount1.plug(mount2)
 
-func do(action: String, where: String):
-	var mount = get_mount(where)
-	if mount:
-		mount.do(action)
+func do(sender: MountableBody, action: String, where: String, meta = null):
+	if not sender:
+		sender = self
+	
+	if action == "recoil":
+		var vector = -Vector2.from_angle(sender.rotation) * meta
+		var place = sender.position / 100
+		apply_impulse(vector, place)
+	
+	if sender == self:
+		var mount = get_mount(where)
+		if mount:
+			mount.do(sender, action, meta)
 
 func get_mounts():
 	return find_children("*", "MountPoint")	

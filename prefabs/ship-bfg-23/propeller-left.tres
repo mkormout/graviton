@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_mg1i7")
-thrust = 1000000
+thrust = 700000
 vector = Vector2(2.08165e-12, 1)

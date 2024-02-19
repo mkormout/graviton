@@ -48,9 +48,15 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if Input.is_key_pressed(KEY_SPACE):
-		ship.do("fire", "")
-		ship.do("fire", "left")
-		ship.do("fire", "right")
+		ship.do(null, "fire", "")
+		ship.do(null, "fire", "left")
+		ship.do(null, "fire", "right")
+	if Input.is_key_pressed(KEY_Q):
+		ship.do(null, "fire", "left")
+	if Input.is_key_pressed(KEY_W):
+		ship.do(null, "fire", "")
+	if Input.is_key_pressed(KEY_E):
+		ship.do(null, "fire", "right")
 	pass
 
 func _input(_ev):

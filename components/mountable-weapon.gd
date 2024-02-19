@@ -6,6 +6,7 @@ extends MountableBody
 @export var rate: float
 @export var velocity: float
 @export var spread: float
+@export var recoil: float
 @export var sound: AudioStreamPlayer2D
 
 var shot_timer: Timer
@@ -19,7 +20,7 @@ func _ready() -> void:
 func can_shoot() -> bool:
 	return shot_timer.is_stopped()
 
-func do(action: String, _where: String):
+func do(sender: Node2D, action: String, _where: String, _meta = null):
 	if action == "fire":
 		fire()
 
@@ -36,4 +37,7 @@ func fire():
 		if sound:
 			sound.play()
 		shot_timer.start(rate)
+		
+		var mount = get_mount("")
+		mount.do(self, "recoil", recoil)
 	pass
