@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://components/explosion.gd" id="1_u1ua1"]
 [ext_resource type="Script" path="res://components/damage.gd" id="2_wl3iw"]
 [ext_resource type="AudioStream" uid="uid://7wuqk2kqrxs2" path="res://sounds/explosion-1.wav" id="3_ir072"]
-[ext_resource type="Script" path="res://prefabs/random-audio-stream-player.gd" id="3_oh8l8"]
+[ext_resource type="Script" path="res://components/random-audio-player.gd" id="3_uevfx"]
 [ext_resource type="AudioStream" uid="uid://l6jfw80adfj8" path="res://sounds/explosion-2.wav" id="5_grer4"]
 [ext_resource type="AudioStream" uid="uid://c0o0nycma3ye1" path="res://sounds/explosion-3.wav" id="6_7qmum"]
 [ext_resource type="AudioStream" uid="uid://dhpc7rcrllys1" path="res://sounds/explosion-4.wav" id="7_1p8p1"]
@@ -39,8 +39,8 @@ script = ExtResource("1_u1ua1")
 radius = 3000.0
 particles = NodePath("CPUParticles2D")
 light = NodePath("PointLight2D")
-audio = NodePath("RandomAudioStreamPlayer2D")
-time = 3.0
+audio = NodePath("RandomAudioPlayer")
+time = 2.0
 power = 30000
 attack = SubResource("Resource_7ipax")
 
@@ -48,7 +48,7 @@ attack = SubResource("Resource_7ipax")
 scale = Vector2(10, 10)
 emitting = false
 amount = 500
-lifetime = 3.0
+lifetime = 2.0
 one_shot = true
 explosiveness = 1.0
 lifetime_randomness = 1.0
@@ -74,12 +74,7 @@ texture = SubResource("GradientTexture2D_k5rlm")
 texture_scale = 50.0
 height = 100.0
 
-[node name="RandomAudioStreamPlayer2D" type="Node2D" parent="." node_paths=PackedStringArray("audio")]
-script = ExtResource("3_oh8l8")
+[node name="RandomAudioPlayer" type="Node2D" parent="."]
+script = ExtResource("3_uevfx")
 autoplay = false
-audio = NodePath("AudioStreamPlayer2D")
 resources = Array[AudioStream]([ExtResource("3_ir072"), ExtResource("5_grer4"), ExtResource("6_7qmum"), ExtResource("7_1p8p1")])
-
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="RandomAudioStreamPlayer2D"]
-max_distance = 20000.0
-max_polyphony = 3

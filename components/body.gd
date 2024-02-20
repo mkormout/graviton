@@ -27,9 +27,12 @@ func damage(attack: Damage):
 	if health <= 0:
 		die()
 
-func die():
+func die(delay: float = 0.0):
 	if dying:
 		return
+		
+	if delay:
+		await get_tree().create_timer(delay).timeout 
 	
 	dying = true
 	
@@ -43,7 +46,6 @@ func die():
 			add_successor(successors.pick_random(), 200, 2000)
 		
 	queue_free()
-	pass
 
 func add_successor(model: PackedScene, radius: int = 200, speed: int = 1000):
 	if not model:

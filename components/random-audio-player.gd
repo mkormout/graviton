@@ -1,11 +1,18 @@
-class_name RandomAudioStreamPlayer2D
+class_name RandomAudioPlayer
 extends Node2D
 
 @export var autoplay: bool = true
-@export var audio: AudioStreamPlayer2D
 @export var resources: Array[AudioStream]
 
+var audio: AudioStreamPlayer2D
+
 func _ready():
+	audio = AudioStreamPlayer2D.new()
+	audio.max_distance = 30000
+	audio.max_polyphony = 3
+	audio.volume_db = -20
+	add_child(audio)
+	
 	if autoplay:
 		play()
 

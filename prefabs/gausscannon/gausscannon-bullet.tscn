@@ -41,8 +41,8 @@ mass = 5000.0
 max_contacts_reported = 100
 contact_monitor = true
 script = ExtResource("1_vstys")
-effect = ExtResource("2_tvpv5")
 attack = SubResource("Resource_bkfm0")
+death = ExtResource("2_tvpv5")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708

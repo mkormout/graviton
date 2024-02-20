@@ -20,8 +20,8 @@ mass = 50.0
 max_contacts_reported = 100
 contact_monitor = true
 script = ExtResource("1_ur8u5")
-effect = ExtResource("2_dp72j")
 attack = SubResource("Resource_talgb")
+death = ExtResource("2_dp72j")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(2, 1.5, 1, 1)

@@ -41,9 +41,9 @@ mass = 5000.0
 max_contacts_reported = 10
 contact_monitor = true
 script = ExtResource("1_ffppr")
-effect = ExtResource("2_3ec0n")
 life = 5.0
 attack = SubResource("Resource_5lcxy")
+death = ExtResource("2_3ec0n")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 1

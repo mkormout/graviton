@@ -4,7 +4,7 @@ extends Node2D
 @export var radius: float
 @export var particles: CPUParticles2D
 @export var light: Light2D
-@export var audio: RandomAudioStreamPlayer2D
+@export var audio: RandomAudioPlayer
 @export var time: float = 1
 @export var power: int = 0
 @export var attack: Damage

@@ -3,7 +3,7 @@ extends Node2D
 
 @export var connection: MountPoint
 @export var tag: String
-@export var throw_force: int = 10000
+@export var throw_force: int = 1000
 
 var joint1: Joint2D
 var joint2: Joint2D
@@ -53,7 +53,7 @@ func unplug():
 	if connection:
 		# throw away the body
 		body_opposite.apply_central_impulse(
-			Vector2.from_angle(rotation) * throw_force
+			Vector2.from_angle(body_opposite.rotation) * throw_force
 		)
 		# free
 		connection.disconnect("tree_exiting", _connection_tree_exiting)
