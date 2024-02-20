@@ -22,6 +22,7 @@ var asteroids_large_model = [
 ]
 
 var ship: MountableBody
+var godmode: bool = false
 
 # PHYSICAL LAYERS DESCRIPTION:
 # 1. Ship
@@ -81,6 +82,9 @@ func _input(_ev):
 	
 	if Input.is_key_pressed(KEY_ENTER):
 		spawn_asteroids(10)
+	
+	if Input.is_key_pressed(KEY_G):
+		godmode = true
 
 func spawn_asteroids(count: int):
 	for x in range(count * 0.5):
@@ -94,6 +98,8 @@ func spawn_asteroids(count: int):
 
 func mount_weapon(body: MountableBody, what: PackedScene, where: String):
 	var weapon = what.instantiate()
+	if godmode:
+		(weapon as MountableWeapon).rate = 0.01
 	body.mount_weapon(weapon, where)
 
 func add_asteroid(model: PackedScene):
