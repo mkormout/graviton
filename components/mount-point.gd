@@ -3,31 +3,39 @@ extends Node2D
 
 @export var connection: MountPoint
 @export var tag: String
+@export var throw_force: int = 10000
 
 var joint1: Joint2D
 var joint2: Joint2D
 
+var body_opposite: MountableBody:
+	get: return get_body_opposite()
+var body_self: MountableBody:
+	get: return get_body_self()
+	
 func _ready():
 	joint1 = PinJoint2D.new()
 	joint1.position = position
+	
 	joint2 = PinJoint2D.new()
-	joint2.position = position + Vector2(500, 100)
+	joint2.position = position + Vector2(200, 200)
+	
 	add_child(joint1)
 	add_child(joint2)
 
 func plug(other: MountPoint):
 	unplug()
+	
+	connection = other
+	other.connection = self
 
-	var body1 = get_parent() as RigidBody2D
-	var body2 = other.get_parent() as RigidBody2D
+	var body1 = body_self
+	var body2 = body_opposite
 
 	body2.rotation = body1.rotation
 	body2.global_position = body1.global_position + body1.transform.basis_xform(position - other.position)
 	
 	get_tree().current_scene.add_child(body2)
-	
-	connection = other
-	other.connection = self
 	
 	connection.connect("tree_exiting", _connection_tree_exiting)
 	
@@ -43,6 +51,11 @@ func unplug():
 	joint2.node_b = ""
 	
 	if connection:
+		# throw away the body
+		body_opposite.apply_central_impulse(
+			Vector2.from_angle(rotation) * throw_force
+		)
+		# free
 		connection.disconnect("tree_exiting", _connection_tree_exiting)
 	
 	connection = null
@@ -54,12 +67,12 @@ func get_body_opposite() -> MountableBody:
 	return connection.get_parent() as MountableBody if connection else null
 
 func do(sender: MountableBody, action: String, meta = null):
-	if sender == get_body_self() and connection:
+	if sender == body_self and connection:
 		connection.do(sender, action, meta)
 		return
 	
-	if sender == get_body_opposite():
-		get_body_self().do(sender, action, "", meta)
+	if sender == body_opposite:
+		body_self.do(sender, action, "", meta)
 		return
 
 func _connection_tree_exiting():

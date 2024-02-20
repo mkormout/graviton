@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://components/asteroid.gd" id="1_2vbdd"]
 [ext_resource type="Texture2D" uid="uid://c8yfvagmfbcxl" path="res://images/asteroid-medium-1.png" id="1_jdx2l"]
-[ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-death.tscn" id="2_m4xrr"]
+[ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-explosion.tscn" id="2_m4xrr"]
 [ext_resource type="PackedScene" uid="uid://b3vjq05jtdfvv" path="res://prefabs/asteroid-small-1.tscn" id="2_wrhex"]
 [ext_resource type="PackedScene" uid="uid://bgngk1qmeh8ed" path="res://prefabs/asteroid-small-2.tscn" id="3_72q8u"]
 
@@ -10,7 +10,11 @@
 polygon = PackedVector2Array(-11, 510, 112, 510, 215, 485, 330, 420, 406, 286, 444, 117, 449, -147, 425, -338, 357, -448, 230, -503, 84, -513, -74, -498, -243, -431, -355, -321, -415, -186, -446, 5, -446, 187, -414, 315, -349, 409, -230, 480, -116, 507)
 
 [node name="Asteroid-medium-1" type="RigidBody2D"]
+collision_layer = 8
+collision_mask = 8
 mass = 50000.0
+max_contacts_reported = 10
+contact_monitor = true
 script = ExtResource("1_2vbdd")
 max_health = 500
 death = ExtResource("2_m4xrr")

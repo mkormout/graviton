@@ -45,11 +45,13 @@ fill_to = Vector2(1, 1)
 polygon = PackedVector2Array(-343, -42, -334, -77, -305, -92, -244, -179, -210, -344, -118, -354, -59, -170, 7, -111, 246, -81, 326, -46, 344, 0, 327, 47, 249, 80, 6, 111, -56, 168, -116, 353, -209, 345, -242, 181, -308, 88, -334, 79, -344, 39)
 
 [node name="ShipBFG23" type="RigidBody2D"]
+collision_mask = 4
 mass = 2000.0
 linear_damp = 1.0
 angular_damp = 1.0
 script = ExtResource("1_1orqm")
 max_health = 10000
+can_die = false
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708

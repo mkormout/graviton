@@ -1,12 +1,17 @@
-[gd_scene load_steps=12 format=3 uid="uid://c31rv1yymd6gv"]
+[gd_scene load_steps=13 format=3 uid="uid://c31rv1yymd6gv"]
 
-[ext_resource type="Script" path="res://components/bullet-hit.gd" id="1_eu0fv"]
-[ext_resource type="AudioStream" uid="uid://7wuqk2kqrxs2" path="res://sounds/explosion-1.wav" id="2_itdx0"]
-[ext_resource type="Script" path="res://prefabs/random-audio-stream-player.gd" id="3_5gp2v"]
-[ext_resource type="Script" path="res://components/explosion-light.gd" id="3_6y1hc"]
-[ext_resource type="AudioStream" uid="uid://l6jfw80adfj8" path="res://sounds/explosion-2.wav" id="5_mqm0e"]
-[ext_resource type="AudioStream" uid="uid://c0o0nycma3ye1" path="res://sounds/explosion-3.wav" id="6_nw6yw"]
-[ext_resource type="AudioStream" uid="uid://dhpc7rcrllys1" path="res://sounds/explosion-4.wav" id="7_5q6fy"]
+[ext_resource type="Script" path="res://components/explosion.gd" id="1_p4wyu"]
+[ext_resource type="Script" path="res://components/damage.gd" id="2_3yu73"]
+[ext_resource type="Script" path="res://prefabs/random-audio-stream-player.gd" id="3_aijbv"]
+[ext_resource type="AudioStream" uid="uid://7wuqk2kqrxs2" path="res://sounds/explosion-1.wav" id="4_gte2r"]
+[ext_resource type="AudioStream" uid="uid://l6jfw80adfj8" path="res://sounds/explosion-2.wav" id="5_c884h"]
+[ext_resource type="AudioStream" uid="uid://c0o0nycma3ye1" path="res://sounds/explosion-3.wav" id="6_voyeu"]
+[ext_resource type="AudioStream" uid="uid://dhpc7rcrllys1" path="res://sounds/explosion-4.wav" id="7_44b0n"]
+
+[sub_resource type="Resource" id="Resource_062r6"]
+script = ExtResource("2_3yu73")
+energy = 0.0
+kinetic = 50.0
 
 [sub_resource type="Curve" id="Curve_nhauv"]
 _data = [Vector2(0, 1), 0.0, -3.99931, 0, 0, Vector2(0.161889, 0.524751), -1.38422, -1.38422, 0, 0, Vector2(1, 0.0901849), 0.0, 0.0, 0, 0]
@@ -29,16 +34,23 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 1)
 
-[node name="Asteroid-death" type="Node2D"]
-script = ExtResource("1_eu0fv")
+[node name="Asteroid-death" type="Node2D" node_paths=PackedStringArray("particles", "light", "audio")]
+script = ExtResource("1_p4wyu")
+radius = 1000.0
+particles = NodePath("CPUParticles2D")
+light = NodePath("PointLight2D")
+audio = NodePath("RandomAudioStreamPlayer2D")
 time = 3.0
+power = 1000
+attack = SubResource("Resource_062r6")
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
 z_index = -1
 scale = Vector2(10, 10)
+emitting = false
 amount = 100
 lifetime = 4.0
-preprocess = 4.0
+one_shot = true
 explosiveness = 1.0
 lifetime_randomness = 1.0
 direction = Vector2(2.08165e-12, 2.08165e-12)
@@ -66,13 +78,12 @@ shadow_item_cull_mask = 3
 texture = SubResource("GradientTexture2D_sva77")
 texture_scale = 40.0
 height = 100.0
-script = ExtResource("3_6y1hc")
-time = 3.0
 
 [node name="RandomAudioStreamPlayer2D" type="Node2D" parent="." node_paths=PackedStringArray("audio")]
-script = ExtResource("3_5gp2v")
+script = ExtResource("3_aijbv")
+autoplay = false
 audio = NodePath("AudioStreamPlayer2D")
-resources = Array[AudioStream]([ExtResource("2_itdx0"), ExtResource("5_mqm0e"), ExtResource("6_nw6yw"), ExtResource("7_5q6fy")])
+resources = Array[AudioStream]([ExtResource("4_gte2r"), ExtResource("5_c884h"), ExtResource("6_voyeu"), ExtResource("7_44b0n")])
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="RandomAudioStreamPlayer2D"]
 max_distance = 20000.0

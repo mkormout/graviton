@@ -23,6 +23,8 @@ size = Vector2(151, 463)
 
 [node name="Gausscannon" type="RigidBody2D" node_paths=PackedStringArray("barrel", "sound")]
 z_index = -1
+collision_layer = 2
+collision_mask = 8
 script = ExtResource("1_iml48")
 ammo = ExtResource("2_i52xv")
 barrel = NodePath("Barrel")
@@ -30,6 +32,7 @@ rate = 0.5
 velocity = 40000.0
 recoil = 500000.0
 sound = NodePath("AudioStreamPlayer2D")
+can_die = false
 
 [node name="Line2D" type="Line2D" parent="."]
 points = PackedVector2Array(0, 0, 10000, 0)

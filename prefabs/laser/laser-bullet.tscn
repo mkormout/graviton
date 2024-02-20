@@ -2,13 +2,13 @@
 
 [ext_resource type="Script" path="res://components/bullet.gd" id="1_pgpjq"]
 [ext_resource type="Texture2D" uid="uid://ncjba5q4ihas" path="res://images/laser-bullet.png" id="2_8kldn"]
-[ext_resource type="PackedScene" uid="uid://bea8xntn1kx3l" path="res://prefabs/laser/laser-bullet-hit.tscn" id="2_rs20m"]
+[ext_resource type="PackedScene" uid="uid://bea8xntn1kx3l" path="res://prefabs/laser/laser-bullet-explosion.tscn" id="2_rs20m"]
 [ext_resource type="Script" path="res://components/damage.gd" id="3_a2nh5"]
 
 [sub_resource type="Resource" id="Resource_cs8mi"]
 script = ExtResource("3_a2nh5")
 energy = 50
-kinetic = 0
+kinetic = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_djo2k"]
 size = Vector2(20, 304)
@@ -27,7 +27,8 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 1)
 
 [node name="LaserBullet" type="RigidBody2D"]
-collision_layer = 2
+collision_layer = 4
+collision_mask = 8
 max_contacts_reported = 100
 contact_monitor = true
 script = ExtResource("1_pgpjq")

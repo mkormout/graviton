@@ -11,6 +11,8 @@ size = Vector2(112, 237)
 
 [node name="Laser" type="RigidBody2D" node_paths=PackedStringArray("barrel", "sound")]
 z_index = -1
+collision_layer = 2
+collision_mask = 8
 script = ExtResource("1_e5n1t")
 ammo = ExtResource("2_nvrsh")
 barrel = NodePath("Barrel")
@@ -18,6 +20,7 @@ rate = 0.1
 velocity = 20000.0
 recoil = 1.0
 sound = NodePath("AudioStreamPlayer2D")
+can_die = false
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708

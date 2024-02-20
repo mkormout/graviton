@@ -23,6 +23,13 @@ var asteroids_large_model = [
 
 var ship: MountableBody
 
+# PHYSICAL LAYERS DESCRIPTION:
+# 1. Ship
+# 2. Weapons
+# 3. Bullets
+# 4. Asteroids
+# 5. Explosions
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$Camera2D.zoom = Vector2(0.1, 0.1)

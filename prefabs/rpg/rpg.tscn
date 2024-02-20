@@ -10,6 +10,8 @@
 size = Vector2(153, 502)
 
 [node name="Rpg" type="RigidBody2D" node_paths=PackedStringArray("barrel", "sound")]
+collision_layer = 2
+collision_mask = 8
 script = ExtResource("1_tahed")
 ammo = ExtResource("2_qs2qy")
 barrel = NodePath("Barrel")
@@ -18,6 +20,7 @@ velocity = 8000.0
 spread = 0.05
 recoil = 10000.0
 sound = NodePath("AudioStreamPlayer2D")
+can_die = false
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708

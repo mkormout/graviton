@@ -1,8 +1,8 @@
 class_name Damage
 extends Resource
 
-@export var energy: int
-@export var kinetic: int
+@export var energy: float
+@export var kinetic: float
 
 func calculate(damage: Damage, bonus = false):
 	var result = - (energy + kinetic)

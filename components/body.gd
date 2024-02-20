@@ -1,7 +1,7 @@
 class_name Body
 extends RigidBody2D
 
-@export var max_health: int
+@export var max_health: int = 1
 @export var can_die = true
 @export var defense: Damage
 @export var death: PackedScene
@@ -17,9 +17,13 @@ func _ready():
 func damage(attack: Damage):
 	if not can_die or not attack:
 		return
+		
+	var total = attack.calculate(defense)
+		
+	health += total
 	
-	health += attack.calculate(defense)
-	
+	# print("damage: ", total, "; health: ", health)
+
 	if health <= 0:
 		die()
 

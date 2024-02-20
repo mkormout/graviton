@@ -1,0 +1,85 @@
+[gd_scene load_steps=13 format=3 uid="uid://dkaulya5g8mnu"]
+
+[ext_resource type="Script" path="res://components/explosion.gd" id="1_u1ua1"]
+[ext_resource type="Script" path="res://components/damage.gd" id="2_wl3iw"]
+[ext_resource type="AudioStream" uid="uid://7wuqk2kqrxs2" path="res://sounds/explosion-1.wav" id="3_ir072"]
+[ext_resource type="Script" path="res://prefabs/random-audio-stream-player.gd" id="3_oh8l8"]
+[ext_resource type="AudioStream" uid="uid://l6jfw80adfj8" path="res://sounds/explosion-2.wav" id="5_grer4"]
+[ext_resource type="AudioStream" uid="uid://c0o0nycma3ye1" path="res://sounds/explosion-3.wav" id="6_7qmum"]
+[ext_resource type="AudioStream" uid="uid://dhpc7rcrllys1" path="res://sounds/explosion-4.wav" id="7_1p8p1"]
+
+[sub_resource type="Resource" id="Resource_7ipax"]
+script = ExtResource("2_wl3iw")
+energy = 0.0
+kinetic = 3000.0
+
+[sub_resource type="Curve" id="Curve_77gpu"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0511688), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_kvegs"]
+offsets = PackedFloat32Array(0, 0.222222, 0.344444, 0.725926, 1)
+colors = PackedColorArray(3, 3, 3, 1, 4.01176, 4.01176, 0, 1, 1, 0.643137, 0, 1, 1, 0.14376, 0, 1, 0.552941, 0, 0, 0)
+
+[sub_resource type="Gradient" id="Gradient_44rer"]
+offsets = PackedFloat32Array(0, 0.281385, 0.701299)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.243137, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_k5rlm"]
+gradient = SubResource("Gradient_44rer")
+width = 300
+height = 300
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[node name="Rpg-bullet-explosion" type="Node2D" node_paths=PackedStringArray("particles", "light", "audio")]
+script = ExtResource("1_u1ua1")
+radius = 3000.0
+particles = NodePath("CPUParticles2D")
+light = NodePath("PointLight2D")
+audio = NodePath("RandomAudioStreamPlayer2D")
+time = 3.0
+power = 30000
+attack = SubResource("Resource_7ipax")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+scale = Vector2(10, 10)
+emitting = false
+amount = 500
+lifetime = 3.0
+one_shot = true
+explosiveness = 1.0
+lifetime_randomness = 1.0
+direction = Vector2(2.08165e-12, 2.08165e-12)
+spread = 180.0
+gravity = Vector2(2.08165e-12, 2.08165e-12)
+initial_velocity_max = 1000.0
+damping_min = 5000.0
+damping_max = 20000.0
+scale_amount_min = 20.0
+scale_amount_max = 300.0
+scale_amount_curve = SubResource("Curve_77gpu")
+color_ramp = SubResource("Gradient_kvegs")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+z_index = 10
+color = Color(1, 0.768627, 0, 1)
+energy = 2.0
+shadow_color = Color(0, 0, 0, 0.905882)
+shadow_filter = 2
+shadow_filter_smooth = 1.7
+texture = SubResource("GradientTexture2D_k5rlm")
+texture_scale = 50.0
+height = 100.0
+
+[node name="RandomAudioStreamPlayer2D" type="Node2D" parent="." node_paths=PackedStringArray("audio")]
+script = ExtResource("3_oh8l8")
+autoplay = false
+audio = NodePath("AudioStreamPlayer2D")
+resources = Array[AudioStream]([ExtResource("3_ir072"), ExtResource("5_grer4"), ExtResource("6_7qmum"), ExtResource("7_1p8p1")])
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="RandomAudioStreamPlayer2D"]
+max_distance = 20000.0
+max_polyphony = 3
