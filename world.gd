@@ -42,16 +42,7 @@ func _ready():
 	mount_weapon(ship, minigun_model, "left")
 	mount_weapon(ship, minigun_model, "right")
 	
-	for x in range(50):
-		add_asteroid(asteroids_small_model.pick_random())
-
-	for x in range(30):
-		add_asteroid(asteroids_medium_model.pick_random())
-
-	for x in range(10):
-		add_asteroid(asteroids_large_model.pick_random())
-
-	pass # Replace with function body.
+	spawn_asteroids(100)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
@@ -86,8 +77,21 @@ func _input(_ev):
 	if Input.is_key_pressed(KEY_4):
 		mount_weapon(ship, rpg_model, "")
 		mount_weapon(ship, rpg_model, "left")
-		mount_weapon(ship, rpg_model, "right")	
-		
+		mount_weapon(ship, rpg_model, "right")
+	
+	if Input.is_key_pressed(KEY_ENTER):
+		spawn_asteroids(10)
+
+func spawn_asteroids(count: int):
+	for x in range(count * 0.5):
+		add_asteroid(asteroids_small_model.pick_random())
+
+	for x in range(count * 0.4):
+		add_asteroid(asteroids_medium_model.pick_random())
+
+	for x in range(count * 0.1):
+		add_asteroid(asteroids_large_model.pick_random())
+
 func mount_weapon(body: MountableBody, what: PackedScene, where: String):
 	var weapon = what.instantiate()
 	body.mount_weapon(weapon, where)
