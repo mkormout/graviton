@@ -1,26 +1,33 @@
-[gd_scene load_steps=7 format=3 uid="uid://nre36orqecmk"]
+[gd_scene load_steps=9 format=3 uid="uid://nre36orqecmk"]
 
 [ext_resource type="Script" path="res://components/mountable-weapon.gd" id="1_tahed"]
 [ext_resource type="PackedScene" uid="uid://jjt7k5wvvkb2" path="res://prefabs/rpg/rpg-bullet.tscn" id="2_qs2qy"]
+[ext_resource type="PackedScene" uid="uid://c5w67ija55whr" path="res://prefabs/weapon-explosion.tscn" id="3_p2qcm"]
 [ext_resource type="Texture2D" uid="uid://c10jfqxr0dyp6" path="res://images/rpg.png" id="3_wc8p2"]
 [ext_resource type="Script" path="res://components/mount-point.gd" id="4_8h4gc"]
 [ext_resource type="AudioStream" uid="uid://db533dluo1xbd" path="res://sounds/rocket.mp3" id="5_10nbp"]
+[ext_resource type="AudioStream" uid="uid://ch8rnjocy08u1" path="res://sounds/reload_clip.wav" id="7_ub65c"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nph6b"]
 size = Vector2(153, 502)
 
-[node name="Rpg" type="RigidBody2D" node_paths=PackedStringArray("barrel", "sound")]
+[node name="Rpg" type="RigidBody2D" node_paths=PackedStringArray("barrel", "sound", "reload_sound")]
 collision_layer = 2
 collision_mask = 8
 script = ExtResource("1_tahed")
 ammo = ExtResource("2_qs2qy")
 barrel = NodePath("Barrel")
+sound = NodePath("FireSound")
+reload_sound = NodePath("ReloadSound")
 rate = 2.0
 velocity = 8000.0
 spread = 0.05
 recoil = 10000.0
-sound = NodePath("AudioStreamPlayer2D")
+magazine_max = 3
+ammo_max = 10
+reload_time = 1.0
 can_die = false
+death = ExtResource("3_p2qcm")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708
@@ -38,8 +45,15 @@ script = ExtResource("4_8h4gc")
 [node name="Barrel" type="Node2D" parent="."]
 position = Vector2(792, 0)
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="FireSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_10nbp")
+volume_db = -20.0
+pitch_scale = 1.2
+max_distance = 20000.0
+max_polyphony = 3
+
+[node name="ReloadSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_ub65c")
 volume_db = -20.0
 pitch_scale = 1.2
 max_distance = 20000.0

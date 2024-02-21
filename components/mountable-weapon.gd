@@ -1,42 +1,93 @@
 class_name MountableWeapon
 extends MountableBody
 
+@export_group("Resources")
 @export var ammo: PackedScene
 @export var barrel: Node2D
+@export var sound: AudioStreamPlayer2D
+@export var reload_sound: AudioStreamPlayer2D
+@export_group("Firing")
 @export var rate: float
 @export var velocity: float
 @export var spread: float
 @export var recoil: float
-@export var sound: AudioStreamPlayer2D
+@export_group("Ammo")
+@export var magazine_max: int
+@export var ammo_max: int
+@export var reload_time: float
+@export_group("God Mode")
+@export var use_ammo: bool = true
+@export var use_rate: bool = true
 
+var reload_timer: Timer
 var shot_timer: Timer
+var magazine_current: int
+var ammo_current: int
 
 func _ready() -> void:
 	shot_timer = Timer.new()
 	shot_timer.wait_time = rate
 	shot_timer.one_shot = true
 	add_child(shot_timer)
+	
+	reload_timer = Timer.new()
+	reload_timer.wait_time = reload_time
+	reload_timer.one_shot = true
+	add_child(reload_timer)
+	
+	magazine_current = magazine_max
+	ammo_current = ammo_max
 
 func can_shoot() -> bool:
-	return shot_timer.is_stopped()
+	return shot_timer.is_stopped() and reload_timer.is_stopped() and magazine_current > 0
+
+func reload() -> void:
+	reload_timer.start()
+	reload_timer.connect("timeout", reloaded)
+	if reload_sound:
+		reload_sound.play()
+
+func reloaded():
+	magazine_current = min(magazine_max, ammo_current)
+	ammo_current -= magazine_current
 
 func do(_sender: Node2D, action: String, _where: String, _meta = null):
 	if action == "fire":
 		fire()
-
+		
+	if action == "reload":
+		reload()
+	
+	if action == "godmode":
+		use_ammo = false
+		use_rate = false
+	
+	if action == "use_ammo":
+		use_ammo = false
+		
+	if action == "use_rate":
+		use_rate = false
+		
 func fire():
 	if can_shoot():
 		var instance = ammo.instantiate() as RigidBody2D
-		instance.position = barrel.position
+		instance.position = barrel.global_position
+		instance.rotation = global_rotation
 		instance.apply_central_impulse(
 			Vector2.from_angle(
-				rotation + randf_range(-spread, spread)
+				global_rotation + randf_range(-spread, spread)
 			) * velocity,
 		)
-		add_child(instance)
+		get_tree().current_scene.call_deferred("add_child", instance)
+		
 		if sound:
 			sound.play()
-		shot_timer.start(rate)
+		
+		if use_rate:
+			shot_timer.start(rate)
+		
+		if use_ammo:
+			magazine_current -= 1
 		
 		var mount = get_mount("")
 		mount.do(self, "recoil", recoil)

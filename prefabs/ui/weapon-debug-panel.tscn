@@ -1,0 +1,175 @@
+[gd_scene load_steps=2 format=3 uid="uid://ie1un8jx1lxk"]
+
+[ext_resource type="Script" path="res://prefabs/ui/weapon-debug-panel.gd" id="1_5o4uu"]
+
+[node name="WeaponDebugPanel" type="Panel"]
+anchors_preset = -1
+anchor_right = 0.084
+anchor_bottom = 0.217
+offset_right = -0.280012
+offset_bottom = -0.360008
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5o4uu")
+
+[node name="MarginPanel" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginPanel"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="LabelWeaponName" type="Label" parent="MarginPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Weapon Name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="MarginPanel/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="LabelMagazineAmmoTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "Ammo Magazine"
+vertical_alignment = 1
+
+[node name="LabelMagazineAmmoValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "<value>"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelTotalAmmoTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "Ammo Total"
+vertical_alignment = 1
+
+[node name="LabelTotalAmmoValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "<value>"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelHealthTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "Health
+"
+vertical_alignment = 1
+
+[node name="LabelHealthValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "<value>"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelRecoilTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "Recoil"
+vertical_alignment = 1
+
+[node name="LabelRecoilValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "<value>"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelVelocityTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "Power"
+vertical_alignment = 1
+
+[node name="LabelVelocityValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "<value>"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelReloadTimerTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "Time Reload"
+vertical_alignment = 1
+
+[node name="LabelReloadTimerValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "<value>"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelCooldownTimerTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "Time Cooldown
+"
+vertical_alignment = 1
+
+[node name="LabelCooldownTimerValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "<value>"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelUseAmmoTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "Use Ammo
+"
+vertical_alignment = 1
+
+[node name="LabelUseAmmoValue" type="CheckBox" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+disabled = true
+
+[node name="LabelUseRateTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "Use Rate
+"
+vertical_alignment = 1
+
+[node name="LabelUseRateValue" type="CheckBox" parent="MarginPanel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+disabled = true

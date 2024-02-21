@@ -1,6 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cis3fbeacp7l1"]
+[gd_scene load_steps=8 format=3 uid="uid://cis3fbeacp7l1"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_pt5pr"]
+[ext_resource type="PackedScene" uid="uid://beanxs20fe7qx" path="res://prefabs/ui/hud.tscn" id="2_g6ofe"]
+[ext_resource type="PackedScene" uid="uid://dy8c1mmutnbql" path="res://prefabs/ui/controls-hint.tscn" id="3_0o1pf"]
 
 [sub_resource type="Curve" id="Curve_51lj4"]
 bake_resolution = 1000
@@ -62,3 +64,7 @@ blend_mode = 2
 shadow_item_cull_mask = 3
 texture = SubResource("GradientTexture2D_wr6eu")
 texture_scale = 50.0
+
+[node name="Hud" parent="." instance=ExtResource("2_g6ofe")]
+
+[node name="Controls-hint" parent="." instance=ExtResource("3_0o1pf")]

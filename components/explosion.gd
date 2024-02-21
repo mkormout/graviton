@@ -45,7 +45,7 @@ func initialize():
 		audio.play()
 	
 
-func update_light(delta):
+func update_light(_delta):
 	if light:
 		light.energy -= light.energy / (25 * time)
 
@@ -92,8 +92,8 @@ func apply_kickback(body: RigidBody2D):
 
 func apply_damage(body: Body):
 		var damage = Damage.new()
-		damage.energy = attack.energy if attack else 0
-		damage.kinetic = attack.kinetic if attack else 0
+		damage.energy = attack.energy if attack else 0.0
+		damage.kinetic = attack.kinetic if attack else 0.0
 		
 		var distance = (body.global_position - global_position).length()
 		var strength = 1 - min(distance / radius, 1)

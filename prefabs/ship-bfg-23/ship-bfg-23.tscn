@@ -1,12 +1,19 @@
-[gd_scene load_steps=15 format=3 uid="uid://diqfcg5rnk5rq"]
+[gd_scene load_steps=18 format=3 uid="uid://diqfcg5rnk5rq"]
 
 [ext_resource type="Script" path="res://components/mountable-body.gd" id="1_1orqm"]
 [ext_resource type="Texture2D" uid="uid://oeyjmpan7p6a" path="res://images/ship.png" id="1_2jagq"]
+[ext_resource type="Script" path="res://components/damage.gd" id="2_4p5dg"]
 [ext_resource type="Script" path="res://components/propeller-movement.gd" id="2_5nbxa"]
+[ext_resource type="PackedScene" uid="uid://c5w67ija55whr" path="res://prefabs/weapon-explosion.tscn" id="3_61tl3"]
 [ext_resource type="Resource" uid="uid://c33phqaspm2y4" path="res://prefabs/ship-bfg-23/propeller-main.tres" id="3_vf8yn"]
 [ext_resource type="Resource" uid="uid://dlsp34kplnygi" path="res://prefabs/ship-bfg-23/propeller-left.tres" id="4_sg3ag"]
 [ext_resource type="Resource" uid="uid://bv52moyqaql3y" path="res://prefabs/ship-bfg-23/propeller-right.tres" id="5_5n741"]
 [ext_resource type="Script" path="res://components/mount-point.gd" id="6_h22iy"]
+
+[sub_resource type="Resource" id="Resource_uqj3m"]
+script = ExtResource("2_4p5dg")
+energy = 100.0
+kinetic = 100.0
 
 [sub_resource type="Curve" id="Curve_cbbmj"]
 _data = [Vector2(0, 1), 0.0, -2.85502, 0, 0, Vector2(1, 0), -0.0899593, 0.0, 0, 0]
@@ -45,13 +52,14 @@ fill_to = Vector2(1, 1)
 polygon = PackedVector2Array(-343, -42, -334, -77, -305, -92, -244, -179, -210, -344, -118, -354, -59, -170, 7, -111, 246, -81, 326, -46, 344, 0, 327, 47, 249, 80, 6, 111, -56, 168, -116, 353, -209, 345, -242, 181, -308, 88, -334, 79, -344, 39)
 
 [node name="ShipBFG23" type="RigidBody2D"]
-collision_mask = 4
+collision_mask = 12
 mass = 2000.0
 linear_damp = 1.0
 angular_damp = 1.0
 script = ExtResource("1_1orqm")
 max_health = 10000
-can_die = false
+defense = SubResource("Resource_uqj3m")
+death = ExtResource("3_61tl3")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708
