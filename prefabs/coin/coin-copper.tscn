@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://c16el8k73hxjn"]
 
-[ext_resource type="Script" path="res://components/item.gd" id="1_3rqpa"]
-[ext_resource type="Texture2D" uid="uid://qlljmj2eqjfd" path="res://images/coin.png" id="2_2mtb0"]
-[ext_resource type="PackedScene" uid="uid://dfves2timslw0" path="res://prefabs/coin-explosion.tscn" id="2_c86cb"]
-[ext_resource type="AudioStream" uid="uid://cada10kx4ql5r" path="res://sounds/coin-pick.wav" id="3_1cgm4"]
+[ext_resource type="Script" path="res://components/item.gd" id="1_kqj3d"]
+[ext_resource type="PackedScene" uid="uid://dfves2timslw0" path="res://prefabs/coin-explosion.tscn" id="2_ds6j5"]
+[ext_resource type="Texture2D" uid="uid://cqp88e1mjivnq" path="res://images/coin_copper.png" id="3_o7awp"]
+[ext_resource type="AudioStream" uid="uid://cada10kx4ql5r" path="res://sounds/coin-pick.wav" id="4_ygy5g"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7m0ql"]
 radius = 150.333
@@ -11,22 +11,22 @@ radius = 150.333
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_a1j40"]
 polygon = PackedVector2Array(18, 150, 80, 131, 136, 69, 151, -4, 132, -67, 82, -127, 21, -149, -43, -145, -111, -99, -146, -30, -140, 49, -102, 112, -50, 142)
 
-[node name="Coin" type="RigidBody2D" node_paths=PackedStringArray("pick_sound")]
+[node name="Coin-copper" type="RigidBody2D" node_paths=PackedStringArray("pick_sound")]
 z_index = -5
 collision_layer = 32
 collision_mask = 0
 max_contacts_reported = 1000
 contact_monitor = true
-script = ExtResource("1_3rqpa")
+script = ExtResource("1_kqj3d")
 pick_sound = NodePath("AudioStreamPlayer2D")
 value = 1
 is_coin = true
 can_die = false
-death = ExtResource("2_c86cb")
+death = ExtResource("2_ds6j5")
 successors_count = 0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_2mtb0")
+texture = ExtResource("3_o7awp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_7m0ql")
@@ -36,6 +36,7 @@ occluder = SubResource("OccluderPolygon2D_a1j40")
 occluder_light_mask = 3
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("3_1cgm4")
-volume_db = -30.0
+stream = ExtResource("4_ygy5g")
+volume_db = -23.0
+pitch_scale = 0.8
 max_distance = 20000.0

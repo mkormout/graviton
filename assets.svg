@@ -26,8 +26,8 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="0.29800909"
-     inkscape:cx="478.17333"
-     inkscape:cy="1674.4456"
+     inkscape:cx="1139.227"
+     inkscape:cy="3023.3977"
      inkscape:window-width="1458"
      inkscape:window-height="916"
      inkscape:window-x="54"
@@ -1016,6 +1016,18 @@
        x2="1346.7598"
        y2="2384.9287"
        gradientUnits="userSpaceOnUse" />
+    <rect
+       x="661.69025"
+       y="531.16504"
+       width="304.55881"
+       height="70.701149"
+       id="rect7844-6" />
+    <rect
+       x="661.69025"
+       y="531.16504"
+       width="304.55881"
+       height="70.701149"
+       id="rect7844-5-0-5" />
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -1056,9 +1068,9 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:42.6667px;font-family:Damascus;-inkscape-font-specification:Damascus;white-space:pre;shape-inside:url(#rect7844);display:inline;fill:#b60000;fill-opacity:0.578723;stroke:none;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"><tspan
            x="661.68945"
            y="569.61351"
-           id="tspan5645"><tspan
+           id="tspan1842"><tspan
              style="font-family:'Arial Rounded MT Bold';-inkscape-font-specification:'Arial Rounded MT Bold, '"
-             id="tspan5643">BFG-23</tspan></tspan></text>
+             id="tspan1840">BFG-23</tspan></tspan></text>
       <text
          xml:space="preserve"
          transform="matrix(-0.01020006,-0.1293507,0.1293507,-0.01020006,848.59564,560.34759)"
@@ -1066,7 +1078,7 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:42.6667px;font-family:Damascus;-inkscape-font-specification:Damascus;white-space:pre;shape-inside:url(#rect7844-5-0);display:inline;fill:#555555;fill-opacity:1;stroke:none;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"><tspan
            x="661.68945"
            y="570.09019"
-           id="tspan5647">WARNING</tspan></text>
+           id="tspan1844">WARNING</tspan></text>
       <path
          style="fill:none;fill-opacity:0.578723;stroke:#717171;stroke-width:1.05833;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.27234"
          d="M 898.14329,499.38632 V 385.53813"
@@ -1627,7 +1639,7 @@
            style="font-weight:bold;font-size:42.6667px;font-family:Damascus;-inkscape-font-specification:'Damascus Bold';font-variation-settings:normal;white-space:pre;shape-inside:url(#rect6061);display:inline;opacity:1;fill:url(#linearGradient6070);fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"><tspan
              x="2429.6309"
              y="3041.1585"
-             id="tspan5649">BIG ONE</tspan></text>
+             id="tspan1846">BIG ONE</tspan></text>
       </g>
       <path
          id="rect1231"
@@ -1717,7 +1729,7 @@
          style="font-weight:bold;font-size:42.6667px;font-family:Damascus;-inkscape-font-specification:'Damascus Bold';font-variation-settings:normal;white-space:pre;shape-inside:url(#rect3605);display:inline;opacity:1;fill:url(#linearGradient5277);fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"><tspan
            x="2429.6309"
            y="3041.1585"
-           id="tspan5651">BIG ONE</tspan></text>
+           id="tspan1848">BIG ONE</tspan></text>
     </g>
     <g
        id="g4553"
@@ -1740,9 +1752,9 @@
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:42.6667px;font-family:AppleGothic;-inkscape-font-specification:'AppleGothic Bold';white-space:pre;shape-inside:url(#rect1463);fill:url(#linearGradient3811);fill-opacity:1;stroke:#8a6b31;stroke-width:0.56409;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"><tspan
            x="1320.5098"
            y="2400.4808"
-           id="tspan5655"><tspan
+           id="tspan1852"><tspan
              style="font-family:Damascus;-inkscape-font-specification:'Damascus Bold'"
-             id="tspan5653">1</tspan></tspan></text>
+             id="tspan1850">1</tspan></tspan></text>
     </g>
   </g>
 </svg>

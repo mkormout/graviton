@@ -7,7 +7,7 @@
 
 [sub_resource type="Resource" id="Resource_cs8mi"]
 script = ExtResource("3_a2nh5")
-energy = 50
+energy = 100.0
 kinetic = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_djo2k"]

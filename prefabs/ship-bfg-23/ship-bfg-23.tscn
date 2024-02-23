@@ -1,8 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://diqfcg5rnk5rq"]
+[gd_scene load_steps=17 format=3 uid="uid://diqfcg5rnk5rq"]
 
 [ext_resource type="Script" path="res://components/player-ship.gd" id="1_1i2ql"]
 [ext_resource type="Texture2D" uid="uid://oeyjmpan7p6a" path="res://images/ship.png" id="1_2jagq"]
 [ext_resource type="Script" path="res://components/propeller-movement.gd" id="2_5nbxa"]
+[ext_resource type="PackedScene" uid="uid://bgiyj83xynsd" path="res://prefabs/ship-bfg-23/ship-explosion.tscn" id="2_gb8g2"]
 [ext_resource type="Resource" uid="uid://c33phqaspm2y4" path="res://prefabs/ship-bfg-23/propeller-main.tres" id="3_vf8yn"]
 [ext_resource type="Resource" uid="uid://dlsp34kplnygi" path="res://prefabs/ship-bfg-23/propeller-left.tres" id="4_sg3ag"]
 [ext_resource type="Resource" uid="uid://bv52moyqaql3y" path="res://prefabs/ship-bfg-23/propeller-right.tres" id="5_5n741"]
@@ -50,12 +51,15 @@ radius = 986.018
 [node name="ShipBFG23" type="RigidBody2D" node_paths=PackedStringArray("picker")]
 collision_mask = 12
 mass = 2000.0
+max_contacts_reported = 100
+contact_monitor = true
 linear_damp = 1.0
 angular_damp = 1.0
 script = ExtResource("1_1i2ql")
 picker = NodePath("Picker")
 can_pick_coin = true
 max_health = 10000
+death = ExtResource("2_gb8g2")
 successors_count = 0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

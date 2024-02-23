@@ -7,18 +7,18 @@ var rpg_model = preload("res://prefabs/rpg/rpg.tscn")
 var laser_model = preload("res://prefabs/laser/laser.tscn")
 
 var asteroids_small_model = [
-	preload("res://prefabs/asteroid-small-1.tscn"),
-	preload("res://prefabs/asteroid-small-2.tscn"),
+	preload("res://prefabs/asteroid/asteroid-small-1.tscn"),
+	preload("res://prefabs/asteroid/asteroid-small-2.tscn"),
 ]
 
 var asteroids_medium_model = [
-	preload("res://prefabs/asteroid-medium-1.tscn"),
-	preload("res://prefabs/asteroid-medium-2.tscn"),
+	preload("res://prefabs/asteroid/asteroid-medium-1.tscn"),
+	preload("res://prefabs/asteroid/asteroid-medium-2.tscn"),
 ]
 
 var asteroids_large_model = [
-	preload("res://prefabs/asteroid-large-1.tscn"),
-	preload("res://prefabs/asteroid-large-2.tscn"),
+	preload("res://prefabs/asteroid/asteroid-large-1.tscn"),
+	preload("res://prefabs/asteroid/asteroid-large-2.tscn"),
 ]
 
 var ship: MountableBody
@@ -47,6 +47,9 @@ func _ready():
 	spawn_asteroids(100)
 
 func notify_weapons(action: String):
+	if not ship:
+		return
+	
 	ship.do(null, action, "")
 	ship.do(null, action, "left")
 	ship.do(null, action, "right")
@@ -57,6 +60,9 @@ func _process(_delta):
 		notify_weapons("fire")
 
 func _input(_ev):
+	if not ship:
+		return
+		
 	if Input.is_key_pressed(KEY_Q):
 		ship.do(null, "fire", "left")
 	if Input.is_key_pressed(KEY_W):

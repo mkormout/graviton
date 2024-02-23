@@ -8,7 +8,7 @@
 [sub_resource type="Resource" id="Resource_bkfm0"]
 script = ExtResource("3_w2xbv")
 energy = 200
-kinetic = 200
+kinetic = 300.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uqvau"]
 size = Vector2(103, 442)

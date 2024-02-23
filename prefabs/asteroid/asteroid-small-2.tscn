@@ -1,9 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bgngk1qmeh8ed"]
+[gd_scene load_steps=8 format=3 uid="uid://bgngk1qmeh8ed"]
 
-[ext_resource type="Script" path="res://components/asteroid.gd" id="1_gwqjj"]
-[ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-explosion.tscn" id="2_dy4w6"]
-[ext_resource type="Texture2D" uid="uid://c4gy34pv1a31w" path="res://images/asteroid-small-2.png" id="2_nu1et"]
-[ext_resource type="PackedScene" uid="uid://c16el8k73hxjn" path="res://prefabs/coin.tscn" id="3_wfut4"]
+[ext_resource type="Script" path="res://components/asteroid.gd" id="1_8sigh"]
+[ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-explosion.tscn" id="2_exvpo"]
+[ext_resource type="PackedScene" uid="uid://c16el8k73hxjn" path="res://prefabs/coin/coin-copper.tscn" id="3_a7bgg"]
+[ext_resource type="PackedScene" uid="uid://d2qcve43hkac8" path="res://prefabs/coin/coin-gold.tscn" id="4_b48ww"]
+[ext_resource type="PackedScene" uid="uid://dexkeq6lwlood" path="res://prefabs/coin/coin-silver.tscn" id="5_iqsks"]
+[ext_resource type="Texture2D" uid="uid://c4gy34pv1a31w" path="res://images/asteroid-small-2.png" id="6_3kmgm"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2rnp4"]
 polygon = PackedVector2Array(0, 173, 83, 170, 140, 155, 168, 115, 177, 59, 174, -39, 149, -109, 105, -156, 49, -172, -13, -169, -75, -146, -126, -104, -156, -49, -175, 16, -176, 62, -157, 114, -114, 151, -64, 167)
@@ -14,15 +16,15 @@ collision_mask = 8
 mass = 10000.0
 max_contacts_reported = 10
 contact_monitor = true
-script = ExtResource("1_gwqjj")
+script = ExtResource("1_8sigh")
 max_health = 100
-death = ExtResource("2_dy4w6")
-successors = Array[PackedScene]([ExtResource("3_wfut4")])
+death = ExtResource("2_exvpo")
+successors = Array[PackedScene]([ExtResource("3_a7bgg"), ExtResource("4_b48ww"), ExtResource("5_iqsks")])
 successors_count = 1
 successors_damp = 0.5
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_nu1et")
+texture = ExtResource("6_3kmgm")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-21, 170, 59, 171, 120, 162, 162, 132, 177, 57, 171, -52, 135, -128, 79, -166, 3, -171, -63, -151, -127, -102, -170, -15, -174, 69, -140, 132, -81, 161)

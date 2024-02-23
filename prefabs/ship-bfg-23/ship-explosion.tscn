@@ -1,0 +1,84 @@
+[gd_scene load_steps=13 format=3 uid="uid://bgiyj83xynsd"]
+
+[ext_resource type="Script" path="res://components/explosion.gd" id="1_afcri"]
+[ext_resource type="Script" path="res://components/damage.gd" id="2_vt132"]
+[ext_resource type="Script" path="res://components/random-audio-player.gd" id="3_3u6eb"]
+[ext_resource type="AudioStream" uid="uid://7wuqk2kqrxs2" path="res://sounds/explosion-1.wav" id="4_q6m6e"]
+[ext_resource type="AudioStream" uid="uid://l6jfw80adfj8" path="res://sounds/explosion-2.wav" id="5_p4q73"]
+[ext_resource type="AudioStream" uid="uid://c0o0nycma3ye1" path="res://sounds/explosion-3.wav" id="6_fl284"]
+[ext_resource type="AudioStream" uid="uid://dhpc7rcrllys1" path="res://sounds/explosion-4.wav" id="7_aq25g"]
+
+[sub_resource type="Resource" id="Resource_062r6"]
+script = ExtResource("2_vt132")
+energy = 500.0
+kinetic = 500.0
+
+[sub_resource type="Curve" id="Curve_nhauv"]
+_data = [Vector2(0, 1), 0.0, -3.99931, 0, 0, Vector2(0.161889, 0.524751), -1.38422, -1.38422, 0, 0, Vector2(1, 0.0901849), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_inhcr"]
+offsets = PackedFloat32Array(0, 0.211215, 0.392523, 1)
+colors = PackedColorArray(2, 2, 2, 1, 0.952941, 0.894118, 0, 1, 0.964706, 0.329412, 0, 1, 0.345098, 0.0705882, 0, 0.635294)
+
+[sub_resource type="Gradient" id="Gradient_jli4k"]
+offsets = PackedFloat32Array(0, 0.373849)
+colors = PackedColorArray(3, 3, 3, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_sva77"]
+gradient = SubResource("Gradient_jli4k")
+width = 300
+height = 300
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[node name="Ship-explosion" type="Node2D" node_paths=PackedStringArray("particles", "light", "audio")]
+script = ExtResource("1_afcri")
+radius = 3000.0
+particles = NodePath("CPUParticles2D")
+light = NodePath("PointLight2D")
+audio = NodePath("RandomAudioPlayer")
+time = 6.0
+power = 50000
+attack = SubResource("Resource_062r6")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+z_index = -1
+scale = Vector2(10, 10)
+emitting = false
+amount = 10000
+lifetime = 6.0
+one_shot = true
+explosiveness = 1.0
+lifetime_randomness = 1.0
+direction = Vector2(2.08165e-12, 2.08165e-12)
+spread = 180.0
+gravity = Vector2(2.08165e-12, 2.08165e-12)
+initial_velocity_min = 100.0
+initial_velocity_max = 400.0
+angular_velocity_max = 100.0
+damping_max = 10000.0
+angle_max = 90.0
+scale_amount_max = 500.0
+scale_amount_curve = SubResource("Curve_nhauv")
+color_ramp = SubResource("Gradient_inhcr")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+z_index = 10
+scale = Vector2(2, 2)
+color = Color(1, 0.8, 0.129412, 1)
+energy = 2.0
+shadow_color = Color(0, 0, 0, 0.905882)
+shadow_filter_smooth = 1.7
+shadow_item_cull_mask = 3
+texture = SubResource("GradientTexture2D_sva77")
+texture_scale = 50.0
+height = 100.0
+
+[node name="RandomAudioPlayer" type="Node2D" parent="."]
+script = ExtResource("3_3u6eb")
+autoplay = false
+resources = Array[AudioStream]([ExtResource("4_q6m6e"), ExtResource("5_p4q73"), ExtResource("6_fl284"), ExtResource("7_aq25g")])
+volume_db = 0
