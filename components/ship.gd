@@ -22,6 +22,7 @@ func pick(item: Item):
 
 func pick_coin(item: Item):
 	coins += item.value
+	item.pick()
 
 func body_entered(body):
 	if not body is Item:
@@ -31,4 +32,3 @@ func body_entered(body):
 	
 	if item.is_coin:
 		pick_coin(item)
-		item.queue_free()
