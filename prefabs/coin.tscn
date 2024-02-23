@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://c16el8k73hxjn"]
+
+[ext_resource type="Script" path="res://components/item.gd" id="1_3rqpa"]
+[ext_resource type="Texture2D" uid="uid://qlljmj2eqjfd" path="res://images/coin.png" id="2_2mtb0"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7m0ql"]
+radius = 150.333
+
+[sub_resource type="Gradient" id="Gradient_lf3u4"]
+colors = PackedColorArray(1, 1, 0, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_vvldo"]
+gradient = SubResource("Gradient_lf3u4")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_a1j40"]
+polygon = PackedVector2Array(18, 150, 80, 131, 136, 69, 151, -4, 132, -67, 82, -127, 21, -149, -43, -145, -111, -99, -146, -30, -140, 49, -102, 112, -50, 142)
+
+[node name="Coin" type="RigidBody2D"]
+z_index = -5
+collision_layer = 32
+collision_mask = 0
+max_contacts_reported = 1000
+contact_monitor = true
+script = ExtResource("1_3rqpa")
+value = 1
+is_coin = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_2mtb0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_7m0ql")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(1, 0.886275, 0, 1)
+energy = 0.6
+texture = SubResource("GradientTexture2D_vvldo")
+texture_scale = 10.0
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_a1j40")
+occluder_light_mask = 3

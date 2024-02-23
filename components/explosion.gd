@@ -10,6 +10,7 @@ extends Node2D
 @export var attack: Damage
 @export var debris: Array[PackedScene] = []
 @export var debris_count: int = 0
+@export var debris_damp: float = 0
 
 var area: Area2D
 
@@ -67,8 +68,8 @@ func generate_debris():
 		node.global_position = position + Vector2.from_angle(randf() * 2*PI) * randf_range(MIN_RANGE, MAX_RANGE)
 		node.rotation = randf_range(0, 2*PI)
 		node.angular_velocity = MAX_ANGULAR_VELOCITY * randi_range(-1, 1)
-		node.angular_damp = -1
-		node.linear_damp = 0
+		node.angular_damp = debris_damp
+		node.linear_damp = debris_damp
 		get_tree().current_scene.call_deferred("add_child", node)
 		
 func apply_shockwave():

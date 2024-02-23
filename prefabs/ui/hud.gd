@@ -3,7 +3,8 @@ extends CanvasLayer
 
 @export var ship: MountableBody
 
-@onready var health = $Panel/MarginContainer/Panel/HealthValue
+@onready var health = $Panel/MarginContainer/VBoxContainer/Panel/HealthValue
+@onready var coins = $Panel/MarginContainer/VBoxContainer/Panel2/CoinsValue
 
 @onready var weapon_front = $Panel/MarginContainer/GridContainer/WeaponFrontDebug
 @onready var weapon_left = $Panel/MarginContainer/GridContainer/WeaponLeftDebug
@@ -37,3 +38,5 @@ func _process(_delta):
 	
 	health.value = ship.health
 	health.max_value = ship.max_health
+	coins.text = str(ship.coins)
+	

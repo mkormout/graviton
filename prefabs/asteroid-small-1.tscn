@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://b3vjq05jtdfvv"]
+[gd_scene load_steps=6 format=3 uid="uid://b3vjq05jtdfvv"]
 
 [ext_resource type="Script" path="res://components/asteroid.gd" id="1_rvqx0"]
 [ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-explosion.tscn" id="2_6cud6"]
 [ext_resource type="Texture2D" uid="uid://cj147elxy4bu0" path="res://images/asteroid-small-1.png" id="2_56l8v"]
+[ext_resource type="PackedScene" uid="uid://c16el8k73hxjn" path="res://prefabs/coin.tscn" id="3_cox0c"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_w77cl"]
 polygon = PackedVector2Array(-43, 158, 33, 169, 101, 161, 142, 137, 163, 94, 167, 19, 173, -66, 165, -130, 133, -161, 85, -172, 24, -166, -60, -149, -123, -108, -165, -57, -176, 9, -166, 70, -135, 121, -87, 147)
@@ -16,6 +17,9 @@ contact_monitor = true
 script = ExtResource("1_rvqx0")
 max_health = 100
 death = ExtResource("2_6cud6")
+successors = Array[PackedScene]([ExtResource("3_cox0c")])
+successors_count = 1
+successors_damp = 0.5
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_56l8v")

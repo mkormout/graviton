@@ -7,6 +7,7 @@ extends RigidBody2D
 @export var death: PackedScene
 @export var successors: Array[PackedScene]
 @export var successors_count: int = 3
+@export var successors_damp: float = 0
 
 var health: int
 var dying = false
@@ -55,7 +56,7 @@ func add_successor(model: PackedScene, radius: int = 200, speed: int = 1000):
 	successor.rotation = randi_range(0, 360)
 	successor.linear_velocity = Vector2(randi_range(-speed, speed), randi_range(-speed, speed))
 	successor.angular_velocity = randi_range(-5, 5)
-	successor.angular_damp = -1
-	successor.linear_damp = 0
+	successor.angular_damp = successors_damp
+	successor.linear_damp = successors_damp
 	
 	get_tree().current_scene.call_deferred("add_child", successor)
