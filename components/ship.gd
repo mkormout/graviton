@@ -25,7 +25,7 @@ func pick_item(item: Item):
 	coins += item.value
 	item.pick()
 
-func body_entered(body):
+func body_entered(_body):
 	var attack = Damage.new()
 	attack.kinetic = 1000
 	damage(attack)

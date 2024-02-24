@@ -41,14 +41,14 @@ func apply_damage():
 		
 		var body = item as RigidBody2D
 		
-		var damage = Damage.new()
-		damage.energy = attack.energy if attack else 0.0
-		damage.kinetic = attack.kinetic if attack else 0.0
+		var dmg = Damage.new()
+		dmg.energy = attack.energy if attack else 0.0
+		dmg.kinetic = attack.kinetic if attack else 0.0
 		
 		var distance = (body.global_position - global_position).length()
-		var strength = 1 - min(distance / strength, 1)
+		var loss = 1 - min(distance / strength, 1)
 		
-		damage.energy = damage.energy * strength
-		damage.kinetic = damage.kinetic * strength
+		dmg.energy = dmg.energy * loss
+		dmg.kinetic = dmg.kinetic * loss
 		
-		body.damage(damage)
+		body.damage(dmg)

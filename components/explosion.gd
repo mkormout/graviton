@@ -37,14 +37,13 @@ func initialize():
 	area.set_collision_mask_value(3, false)
 	area.set_collision_mask_value(4, true)
 	
-	add_child(area)
+	call_deferred("add_child", area)
 	
 	if particles:
 		particles.emitting = true
 	
 	if audio:
 		audio.play()
-	
 
 func update_light(_delta):
 	if light:
