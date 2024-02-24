@@ -1,0 +1,44 @@
+[gd_scene load_steps=8 format=3 uid="uid://3i76im636d0y"]
+
+[ext_resource type="Script" path="res://components/asteroid.gd" id="1_2pcbl"]
+[ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-explosion.tscn" id="2_3bgy2"]
+[ext_resource type="PackedScene" uid="uid://bcugkd5de5gob" path="res://prefabs/asteroid/asteroid-small-3.tscn" id="3_btrb3"]
+[ext_resource type="Texture2D" uid="uid://bmhemak7icwfm" path="res://images/dickhead.png" id="5_by4wl"]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_uxoky"]
+polygon = PackedVector2Array(4, -497, -154, -477, -282, -389, -348, -243, -388, -153, -378, 29, -350, 111, -342, 301, -304, 373, -198, 459, -76, 509, 48, 477, 154, 421, 234, 343, 272, 215, 328, 161, 400, -29, 382, -89, 360, -265, 290, -369, 172, -459)
+
+[sub_resource type="Gradient" id="Gradient_x8y8m"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wd3ek"]
+gradient = SubResource("Gradient_x8y8m")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.495726, 0)
+
+[node name="Asteroid-medium-3" type="RigidBody2D"]
+collision_layer = 8
+collision_mask = 8
+mass = 50000.0
+max_contacts_reported = 10
+contact_monitor = true
+script = ExtResource("1_2pcbl")
+max_health = 800
+death = ExtResource("2_3bgy2")
+successors = Array[PackedScene]([ExtResource("3_btrb3")])
+successors_count = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("5_by4wl")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_uxoky")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-258, -409, -324, -317, -360, -205, -380, -29, -350, 175, -324, 335, -202, 453, -62, 505, 98, 459, 228, 361, 284, 217, 392, 17, 376, -85, 364, -257, 286, -375, 148, -475, -38, -501, -184, -463)
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+texture = SubResource("GradientTexture2D_wd3ek")
+texture_scale = 20.0

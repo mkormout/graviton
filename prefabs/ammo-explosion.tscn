@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://bex5u7fwgdwf4"]
+
+[ext_resource type="Script" path="res://components/explosion.gd" id="1_ts6ky"]
+
+[sub_resource type="Curve" id="Curve_7vq8a"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0901849), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_dcw3e"]
+offsets = PackedFloat32Array(0, 0.211215, 0.392523, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 0.827451, 0, 1, 1, 0.647059, 0, 1, 1, 0, 0, 1)
+
+[node name="Ammo-explosion" type="Node2D" node_paths=PackedStringArray("particles")]
+script = ExtResource("1_ts6ky")
+particles = NodePath("CPUParticles2D")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+scale = Vector2(10, 10)
+emitting = false
+amount = 20
+lifetime = 0.2
+one_shot = true
+explosiveness = 0.8
+direction = Vector2(2.08165e-12, 2.08165e-12)
+spread = 180.0
+gravity = Vector2(2.08165e-12, 2.08165e-12)
+initial_velocity_min = 200.0
+initial_velocity_max = 200.0
+scale_amount_min = 10.0
+scale_amount_max = 20.0
+scale_amount_curve = SubResource("Curve_7vq8a")
+color_ramp = SubResource("Gradient_dcw3e")

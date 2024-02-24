@@ -23,6 +23,7 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.49359, 0)
 
 [node name="Gravitygun" type="RigidBody2D" node_paths=PackedStringArray("area", "barrel", "sound", "reload_sound")]
+z_index = -1
 collision_layer = 2
 collision_mask = 8
 script = ExtResource("1_j7sby")
@@ -38,13 +39,14 @@ recoil = 5000.0
 magazine_max = 1
 ammo_max = 20
 reload_time = 1.0
-can_die = false
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708
 texture = ExtResource("3_cu8m6")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(-1.73589, 1.90712)
+scale = Vector2(0.764055, 0.814189)
 polygon = PackedVector2Array(-100, 72, -57, 48, 25, 47, 44, 91, 207, 92, 208, -90, 51, -93, 22, -45, -61, -49, -103, -69, -209, -69, -210, 69)
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
@@ -53,14 +55,14 @@ volume_db = -20.0
 max_distance = 20000.0
 
 [node name="Barrel" type="Node2D" parent="."]
-position = Vector2(790, 0)
+position = Vector2(700, 2.08165e-12)
 
 [node name="MountPoint" type="Node2D" parent="."]
-position = Vector2(-137, 0)
+position = Vector2(-103, 2.08165e-12)
 script = ExtResource("5_qcpsb")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
-position = Vector2(146, 0)
+position = Vector2(110, 2.08165e-12)
 texture = SubResource("GradientTexture2D_17mc0")
 texture_scale = 20.0
 

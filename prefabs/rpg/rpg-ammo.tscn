@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://3cqs1wv6of6h"]
+
+[ext_resource type="Script" path="res://components/ammo.gd" id="1_m5gys"]
+[ext_resource type="Texture2D" uid="uid://li5sb7yjhtqd" path="res://images/rpg-ammo.png" id="2_gucei"]
+[ext_resource type="PackedScene" uid="uid://bex5u7fwgdwf4" path="res://prefabs/ammo-explosion.tscn" id="2_n3tpx"]
+[ext_resource type="AudioStream" uid="uid://bxgccs4e2ejvv" path="res://sounds/ammo-pick.mp3" id="3_sl8wl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_64ipc"]
+size = Vector2(210, 225)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_ge5w8"]
+polygon = PackedVector2Array(-104, 112, 106, 111, 106, -113, -105, -113)
+
+[node name="Rpg-ammo" type="RigidBody2D" node_paths=PackedStringArray("pick_sound")]
+collision_layer = 64
+collision_mask = 0
+max_contacts_reported = 10
+contact_monitor = true
+script = ExtResource("1_m5gys")
+count = 10
+pick_sound = NodePath("AudioStreamPlayer2D")
+value = 500
+death = ExtResource("2_n3tpx")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_gucei")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1.5)
+shape = SubResource("RectangleShape2D_64ipc")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_ge5w8")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_sl8wl")
+volume_db = -20.0
+max_distance = 20000.0

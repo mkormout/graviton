@@ -1,8 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://cis3fbeacp7l1"]
+[gd_scene load_steps=10 format=3 uid="uid://cis3fbeacp7l1"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_pt5pr"]
+[ext_resource type="Script" path="res://components/body_camera.gd" id="2_bv2fa"]
 [ext_resource type="PackedScene" uid="uid://beanxs20fe7qx" path="res://prefabs/ui/hud.tscn" id="2_g6ofe"]
 [ext_resource type="PackedScene" uid="uid://dy8c1mmutnbql" path="res://prefabs/ui/controls-hint.tscn" id="3_0o1pf"]
+[ext_resource type="PackedScene" uid="uid://diqfcg5rnk5rq" path="res://prefabs/ship-bfg-23/ship-bfg-23.tscn" id="5_auikb"]
 
 [sub_resource type="Curve" id="Curve_51lj4"]
 bake_resolution = 1000
@@ -52,6 +54,13 @@ grow_vertical = 2
 color = Color(0.172549, 0.172549, 0.172549, 1)
 
 [node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.1, 0.1)
+position_smoothing_enabled = true
+
+[node name="ShipCamera" type="Camera2D" parent="." node_paths=PackedStringArray("body")]
+position_smoothing_enabled = true
+script = ExtResource("2_bv2fa")
+body = NodePath("../ShipBFG23")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0.223529, 0.223529, 0.223529, 1)
@@ -65,6 +74,9 @@ shadow_item_cull_mask = 3
 texture = SubResource("GradientTexture2D_wr6eu")
 texture_scale = 50.0
 
-[node name="Hud" parent="." instance=ExtResource("2_g6ofe")]
+[node name="Hud" parent="." node_paths=PackedStringArray("ship") instance=ExtResource("2_g6ofe")]
+ship = NodePath("../ShipBFG23")
 
 [node name="Controls-hint" parent="." instance=ExtResource("3_0o1pf")]
+
+[node name="ShipBFG23" parent="." instance=ExtResource("5_auikb")]

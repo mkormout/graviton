@@ -1,5 +1,4 @@
-class_name Body
-extends RigidBody2D
+class_name Body extends RigidBody2D
 
 @export var max_health: int = 1
 @export var can_die = true
@@ -8,6 +7,7 @@ extends RigidBody2D
 @export var successors: Array[PackedScene]
 @export var successors_count: int = 3
 @export var successors_damp: float = 0
+@export var item_dropper: ItemDropper
 
 var health: int
 var dying = false
@@ -45,6 +45,9 @@ func die(delay: float = 0.0):
 	if not successors.is_empty():
 		for i in range(successors_count):
 			add_successor(successors.pick_random(), 200, 2000)
+	
+	if item_dropper:
+		item_dropper.drop()
 		
 	queue_free()
 

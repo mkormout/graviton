@@ -22,8 +22,8 @@ var asteroids_large_model = [
 	preload("res://prefabs/asteroid/asteroid-large-2.tscn"),
 ]
 
-var ship: MountableBody
 var godmode: bool = false
+var camera_follow: bool = false
 
 # PHYSICAL LAYERS DESCRIPTION:
 # 1. Ship
@@ -31,29 +31,24 @@ var godmode: bool = false
 # 3. Bullets
 # 4. Asteroids
 # 5. Explosions
+# 6. Coins
+# 7. Ammo
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$Camera2D.zoom = Vector2(0.1, 0.1)
-	
-	ship = ship_model.instantiate() 
-	ship.position = Vector2(0, 0)
-	add_child(ship)
-	$Hud.ship = ship
-	
-	mount_weapon(ship, minigun_model, "")
-	mount_weapon(ship, minigun_model, "left")
-	mount_weapon(ship, minigun_model, "right")
+	mount_weapon($ShipBFG23, minigun_model, "")
+	mount_weapon($ShipBFG23, minigun_model, "left")
+	mount_weapon($ShipBFG23, minigun_model, "right")
 	
 	spawn_asteroids(100)
 
 func notify_weapons(action: String):
-	if not ship:
+	if not $ShipBFG23:
 		return
 	
-	ship.do(null, action, "")
-	ship.do(null, action, "left")
-	ship.do(null, action, "right")
+	$ShipBFG23.do(null, action, "")
+	$ShipBFG23.do(null, action, "left")
+	$ShipBFG23.do(null, action, "right")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
@@ -61,15 +56,15 @@ func _process(_delta):
 		notify_weapons("fire")
 
 func _input(_ev):
-	if not ship:
+	if not $ShipBFG23:
 		return
 		
 	if Input.is_key_pressed(KEY_Q):
-		ship.do(null, "fire", "left")
+		$ShipBFG23.do(null, "fire", "left")
 	if Input.is_key_pressed(KEY_W):
-		ship.do(null, "fire", "")
+		$ShipBFG23.do(null, "fire", "")
 	if Input.is_key_pressed(KEY_E):
-		ship.do(null, "fire", "right")
+		$ShipBFG23.do(null, "fire", "right")
 		
 	if Input.is_key_pressed(KEY_1):
 		mount_ship_weapons(minigun_model)
@@ -86,6 +81,11 @@ func _input(_ev):
 	if Input.is_key_pressed(KEY_5):
 		mount_ship_weapons(gravitygun_model)
 	
+	if Input.is_key_pressed(KEY_6):
+		mount_weapon($ShipBFG23, laser_model, "")
+		mount_weapon($ShipBFG23, minigun_model, "left")
+		mount_weapon($ShipBFG23, minigun_model, "right")
+		
 	if Input.is_key_pressed(KEY_ENTER):
 		spawn_asteroids(10)
 	
@@ -101,6 +101,14 @@ func _input(_ev):
 			
 	if Input.is_key_pressed(KEY_R):
 		notify_weapons("reload")
+	
+	if Input.is_key_pressed(KEY_C):
+		camera_follow = not camera_follow
+		
+		if camera_follow:
+			$ShipCamera.make_current()
+		else:
+			$Camera2D.make_current()
 
 func spawn_asteroids(count: int):
 	for x in range(count * 0.5):
@@ -117,9 +125,9 @@ func mount_weapon(body: MountableBody, what: PackedScene, where: String):
 	body.mount_weapon(weapon, where)
 
 func mount_ship_weapons(what: PackedScene):
-	mount_weapon(ship, what, "")
-	mount_weapon(ship, what, "left")
-	mount_weapon(ship, what, "right")
+	mount_weapon($ShipBFG23, what, "")
+	mount_weapon($ShipBFG23, what, "left")
+	mount_weapon($ShipBFG23, what, "right")
 
 func add_asteroid(model: PackedScene):
 	const MIN_RANGE = 4000

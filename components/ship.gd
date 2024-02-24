@@ -21,6 +21,10 @@ func pick_coin(item: Item):
 	coins += item.value
 	item.pick()
 
+func pick_item(item: Item):
+	coins += item.value
+	item.pick()
+
 func body_entered(body):
 	var attack = Damage.new()
 	attack.kinetic = 1000
@@ -34,3 +38,5 @@ func picker_body_entered(body):
 	
 	if item.is_coin:
 		pick_coin(item)
+	else:
+		pick_item(item)

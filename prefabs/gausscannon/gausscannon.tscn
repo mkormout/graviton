@@ -1,8 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://cbco1xs1gleke"]
+[gd_scene load_steps=11 format=3 uid="uid://cbco1xs1gleke"]
 
 [ext_resource type="Script" path="res://components/mountable-weapon.gd" id="1_iml48"]
 [ext_resource type="PackedScene" uid="uid://bbbou6h5jmvbh" path="res://prefabs/gausscannon/gausscannon-bullet.tscn" id="2_i52xv"]
-[ext_resource type="PackedScene" uid="uid://c5w67ija55whr" path="res://prefabs/weapon-explosion.tscn" id="3_fsb1m"]
 [ext_resource type="Texture2D" uid="uid://nu0w8gtlvc3" path="res://images/gausscannon.png" id="3_og6jl"]
 [ext_resource type="AudioStream" uid="uid://bbri5doimels0" path="res://sounds/gausscannon.mp3" id="4_33d08"]
 [ext_resource type="Script" path="res://components/mount-point.gd" id="5_sjve5"]
@@ -21,7 +20,7 @@ seamless = true
 noise = SubResource("FastNoiseLite_k8745")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mhy0m"]
-size = Vector2(151, 463)
+size = Vector2(126, 345)
 
 [node name="Gausscannon" type="RigidBody2D" node_paths=PackedStringArray("barrel", "sound", "reload_sound")]
 z_index = -1
@@ -38,8 +37,6 @@ recoil = 500000.0
 magazine_max = 10
 ammo_max = 100
 reload_time = 1.0
-can_die = false
-death = ExtResource("3_fsb1m")
 
 [node name="Line2D" type="Line2D" parent="."]
 points = PackedVector2Array(0, 0, 10000, 0)
@@ -53,15 +50,15 @@ rotation = 1.5708
 texture = ExtResource("3_og6jl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0.5, -1.5)
+position = Vector2(2.08165e-12, 2.08165e-12)
 rotation = 1.5708
 shape = SubResource("RectangleShape2D_mhy0m")
 
 [node name="Barrel" type="Node2D" parent="."]
-position = Vector2(456, 2.08165e-12)
+position = Vector2(400, 2.08165e-12)
 
 [node name="MountPoint" type="Node2D" parent="."]
-position = Vector2(-149, 2.08165e-12)
+position = Vector2(-111, 0)
 script = ExtResource("5_sjve5")
 
 [node name="FireSound" type="AudioStreamPlayer2D" parent="."]

@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bat6fby04jm0q"]
+[gd_scene load_steps=8 format=3 uid="uid://bat6fby04jm0q"]
 
-[ext_resource type="Script" path="res://components/asteroid.gd" id="1_pr5h4"]
-[ext_resource type="PackedScene" uid="uid://bsbom0yj1xcx2" path="res://prefabs/asteroid/asteroid-medium-1.tscn" id="2_7ytu4"]
-[ext_resource type="Texture2D" uid="uid://b1qeuxu053jf2" path="res://images/asteroid-large-2.png" id="2_d7tor"]
-[ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-explosion.tscn" id="2_ebjxa"]
-[ext_resource type="PackedScene" uid="uid://b8b07kcxmxfw1" path="res://prefabs/asteroid/asteroid-medium-2.tscn" id="3_od34t"]
+[ext_resource type="Script" path="res://components/asteroid.gd" id="1_gcsb7"]
+[ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-explosion.tscn" id="2_kurlo"]
+[ext_resource type="PackedScene" uid="uid://bsbom0yj1xcx2" path="res://prefabs/asteroid/asteroid-medium-1.tscn" id="3_7ydh6"]
+[ext_resource type="PackedScene" uid="uid://b8b07kcxmxfw1" path="res://prefabs/asteroid/asteroid-medium-2.tscn" id="4_ta5dx"]
+[ext_resource type="PackedScene" uid="uid://3i76im636d0y" path="res://prefabs/asteroid/asteroid-medium-3.tscn" id="5_yt0ur"]
+[ext_resource type="Texture2D" uid="uid://b1qeuxu053jf2" path="res://images/asteroid-large-2.png" id="6_u8de6"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_5cxlc"]
 polygon = PackedVector2Array(-3, 784, 367, 766, 567, 712, 721, 598, 850, 403, 940, 152, 954, -83, 912, -245, 852, -386, 736, -521, 604, -623, 439, -693, 177, -770, -43, -788, -240, -771, -481, -729, -612, -663, -745, -557, -826, -416, -910, -179, -949, 55, -948, 256, -907, 425, -814, 562, -676, 655, -345, 749, -102, 779)
@@ -15,13 +16,13 @@ collision_mask = 8
 mass = 150000.0
 max_contacts_reported = 10
 contact_monitor = true
-script = ExtResource("1_pr5h4")
+script = ExtResource("1_gcsb7")
 max_health = 1000
-death = ExtResource("2_ebjxa")
-successors = Array[PackedScene]([ExtResource("2_7ytu4"), ExtResource("3_od34t")])
+death = ExtResource("2_kurlo")
+successors = Array[PackedScene]([ExtResource("3_7ydh6"), ExtResource("4_ta5dx"), ExtResource("5_yt0ur")])
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_d7tor")
+texture = ExtResource("6_u8de6")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-148, 772, 222, 782, 520, 730, 703, 619, 843, 407, 940, 143, 949, -128, 859, -373, 691, -568, 445, -686, 181, -765, -87, -789, -456, -737, -718, -589, -858, -358, -933, -79, -954, 218, -889, 469, -754, 620, -501, 710, -318, 749)

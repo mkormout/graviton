@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://dy7xaj3ele8dl"]
+
+[ext_resource type="Script" path="res://components/ammo.gd" id="1_gjstf"]
+[ext_resource type="PackedScene" uid="uid://bex5u7fwgdwf4" path="res://prefabs/ammo-explosion.tscn" id="2_87e48"]
+[ext_resource type="Texture2D" uid="uid://ca8mwrfvvhsdf" path="res://images/gravitygun-ammo.png" id="2_f05y2"]
+[ext_resource type="AudioStream" uid="uid://bxgccs4e2ejvv" path="res://sounds/ammo-pick.mp3" id="3_y6fst"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_b71fj"]
+radius = 129.28
+
+[node name="Gravitygun-ammo" type="RigidBody2D" node_paths=PackedStringArray("pick_sound")]
+collision_layer = 64
+collision_mask = 0
+max_contacts_reported = 10
+contact_monitor = true
+script = ExtResource("1_gjstf")
+count = 5
+pick_sound = NodePath("AudioStreamPlayer2D")
+value = 2000
+death = ExtResource("2_87e48")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_f05y2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, -0.5)
+shape = SubResource("CircleShape2D_b71fj")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_y6fst")
+volume_db = -20.0
+max_distance = 20000.0

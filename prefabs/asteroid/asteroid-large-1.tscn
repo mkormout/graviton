@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://bs6g3mnrmhoii"]
+[gd_scene load_steps=8 format=3 uid="uid://bs6g3mnrmhoii"]
 
 [ext_resource type="Script" path="res://components/asteroid.gd" id="1_2vepp"]
-[ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-explosion.tscn" id="2_jbnfv"]
-[ext_resource type="PackedScene" uid="uid://bsbom0yj1xcx2" path="res://prefabs/asteroid/asteroid-medium-1.tscn" id="3_m1mja"]
-[ext_resource type="PackedScene" uid="uid://b8b07kcxmxfw1" path="res://prefabs/asteroid/asteroid-medium-2.tscn" id="4_v0dp0"]
+[ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-explosion.tscn" id="2_8kvip"]
+[ext_resource type="PackedScene" uid="uid://bsbom0yj1xcx2" path="res://prefabs/asteroid/asteroid-medium-1.tscn" id="3_2et0p"]
+[ext_resource type="PackedScene" uid="uid://b8b07kcxmxfw1" path="res://prefabs/asteroid/asteroid-medium-2.tscn" id="4_ke1gt"]
+[ext_resource type="PackedScene" uid="uid://3i76im636d0y" path="res://prefabs/asteroid/asteroid-medium-3.tscn" id="5_pql33"]
 [ext_resource type="Texture2D" uid="uid://dyim1oylx08mh" path="res://images/asteroid-large-1.png" id="5_s1wtx"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_q2mew"]
@@ -17,8 +18,8 @@ max_contacts_reported = 10
 contact_monitor = true
 script = ExtResource("1_2vepp")
 max_health = 1000
-death = ExtResource("2_jbnfv")
-successors = Array[PackedScene]([ExtResource("3_m1mja"), ExtResource("4_v0dp0")])
+death = ExtResource("2_8kvip")
+successors = Array[PackedScene]([ExtResource("3_2et0p"), ExtResource("4_ke1gt"), ExtResource("5_pql33")])
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("5_s1wtx")

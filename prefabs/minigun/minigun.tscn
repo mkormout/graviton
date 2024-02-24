@@ -1,10 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://chwvdyeaq44p4"]
+[gd_scene load_steps=8 format=3 uid="uid://chwvdyeaq44p4"]
 
 [ext_resource type="Texture2D" uid="uid://d0mea2b5pdefi" path="res://images/minigun.png" id="1_acpa0"]
 [ext_resource type="Script" path="res://components/mountable-weapon.gd" id="1_f25lk"]
 [ext_resource type="PackedScene" uid="uid://cn8cxmqc4klkd" path="res://prefabs/minigun/minigun-bullet.tscn" id="2_72a78"]
 [ext_resource type="Script" path="res://components/mount-point.gd" id="2_uuclo"]
-[ext_resource type="PackedScene" uid="uid://c5w67ija55whr" path="res://prefabs/weapon-explosion.tscn" id="3_x80ot"]
 [ext_resource type="AudioStream" uid="uid://bs1yoexmwj7op" path="res://sounds/minigun-shot.mp3" id="5_smrsu"]
 [ext_resource type="AudioStream" uid="uid://ch8rnjocy08u1" path="res://sounds/reload_clip.wav" id="7_s2xpc"]
 
@@ -27,8 +26,6 @@ recoil = 10000.0
 magazine_max = 200
 ammo_max = 10000
 reload_time = 1.0
-can_die = false
-death = ExtResource("3_x80ot")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708

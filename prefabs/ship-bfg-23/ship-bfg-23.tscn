@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://components/player-ship.gd" id="1_1i2ql"]
 [ext_resource type="Texture2D" uid="uid://oeyjmpan7p6a" path="res://images/ship.png" id="1_2jagq"]
 [ext_resource type="Script" path="res://components/propeller-movement.gd" id="2_5nbxa"]
-[ext_resource type="PackedScene" uid="uid://bgiyj83xynsd" path="res://prefabs/ship-bfg-23/ship-explosion.tscn" id="2_gb8g2"]
+[ext_resource type="PackedScene" uid="uid://bgiyj83xynsd" path="res://prefabs/ship-bfg-23/ship-explosion.tscn" id="2_8k7x0"]
 [ext_resource type="Resource" uid="uid://c33phqaspm2y4" path="res://prefabs/ship-bfg-23/propeller-main.tres" id="3_vf8yn"]
 [ext_resource type="Resource" uid="uid://dlsp34kplnygi" path="res://prefabs/ship-bfg-23/propeller-left.tres" id="4_sg3ag"]
 [ext_resource type="Resource" uid="uid://bv52moyqaql3y" path="res://prefabs/ship-bfg-23/propeller-right.tres" id="5_5n741"]
@@ -59,8 +59,7 @@ script = ExtResource("1_1i2ql")
 picker = NodePath("Picker")
 can_pick_coin = true
 max_health = 10000
-death = ExtResource("2_gb8g2")
-successors_count = 0
+death = ExtResource("2_8k7x0")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708
@@ -213,7 +212,7 @@ occluder_light_mask = 2
 
 [node name="Picker" type="Area2D" parent="."]
 collision_layer = 0
-collision_mask = 32
+collision_mask = 96
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Picker"]
 shape = SubResource("CircleShape2D_0fxht")

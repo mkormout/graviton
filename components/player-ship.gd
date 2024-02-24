@@ -1,5 +1,4 @@
-class_name PlayerShip
-extends Ship
+class_name PlayerShip extends Ship
 
 
 # Called when the node enters the scene tree for the first time.

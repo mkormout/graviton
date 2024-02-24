@@ -6,11 +6,13 @@ var mounts = []
 func _physics_process(_delta):
 	for item in mounts:
 		var mount = item as MountPoint
+		
 		var opposite = mount.body_opposite
+		
 		if opposite:
-			opposite.scale = scale
-			opposite.global_position = mount.global_position
-			opposite.rotation = mount.rotation
+			opposite.global_position = global_position
+			opposite.global_rotation = global_rotation
+			opposite.position += mount.position - mount.connection.position
 
 func mount_weapon(what: MountableWeapon, where: String):
 	var mount1 = get_mount(where)

@@ -1,8 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://cm18d0dsljju"]
+[gd_scene load_steps=8 format=3 uid="uid://cm18d0dsljju"]
 
 [ext_resource type="Script" path="res://components/bullet.gd" id="1_pgpjq"]
 [ext_resource type="Texture2D" uid="uid://ncjba5q4ihas" path="res://images/laser-bullet.png" id="2_8kldn"]
-[ext_resource type="PackedScene" uid="uid://bea8xntn1kx3l" path="res://prefabs/laser/laser-bullet-explosion.tscn" id="2_rs20m"]
 [ext_resource type="Script" path="res://components/damage.gd" id="3_a2nh5"]
 
 [sub_resource type="Resource" id="Resource_cs8mi"]
@@ -33,7 +32,6 @@ max_contacts_reported = 100
 contact_monitor = true
 script = ExtResource("1_pgpjq")
 attack = SubResource("Resource_cs8mi")
-death = ExtResource("2_rs20m")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708
