@@ -4,7 +4,7 @@ on: push
 env:
   GODOT_VERSION: 4.2.1
   EXPORT_NAME: graviton
-  PROJECT_PATH: graviton
+  PROJECT_PATH: ./
 
 jobs:
   export-windows:
