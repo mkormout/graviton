@@ -29,4 +29,5 @@ window/size/viewport_height=1080
 [rendering]
 
 renderer/rendering_method.mobile="gl_compatibility"
+limits/opengl/max_renderable_lights=128
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)

@@ -4,6 +4,7 @@ var ship_model = preload("res://prefabs/ship-bfg-23/ship-bfg-23.tscn")
 var minigun_model = preload("res://prefabs/minigun/minigun.tscn")
 var gausscannon_model = preload("res://prefabs/gausscannon/gausscannon.tscn")
 var rpg_model = preload("res://prefabs/rpg/rpg.tscn")
+var gravitygun_model = preload("res://prefabs/gravitygun/gravitygun.tscn")
 var laser_model = preload("res://prefabs/laser/laser.tscn")
 
 var asteroids_small_model = [
@@ -81,6 +82,9 @@ func _input(_ev):
 	
 	if Input.is_key_pressed(KEY_4):
 		mount_ship_weapons(rpg_model)
+	
+	if Input.is_key_pressed(KEY_5):
+		mount_ship_weapons(gravitygun_model)
 	
 	if Input.is_key_pressed(KEY_ENTER):
 		spawn_asteroids(10)

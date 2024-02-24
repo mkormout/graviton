@@ -1,0 +1,74 @@
+[gd_scene load_steps=8 format=3 uid="uid://btge3o3l7u07w"]
+
+[ext_resource type="Script" path="res://components/bullet.gd" id="1_3qhnn"]
+[ext_resource type="Texture2D" uid="uid://cpptu026cfcc7" path="res://images/gravitygun-bullet.png" id="2_isbr0"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_blath"]
+radius = 266.188
+
+[sub_resource type="Gradient" id="Gradient_f3ccf"]
+offsets = PackedFloat32Array(0, 0.281385, 0.701299)
+colors = PackedColorArray(1, 1, 1, 0.533333, 1, 1, 1, 0.243137, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_sdy5p"]
+gradient = SubResource("Gradient_f3ccf")
+width = 300
+height = 300
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="Curve" id="Curve_0nxeo"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0901849), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_1c2uo"]
+offsets = PackedFloat32Array(0, 0.118519, 0.218519, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 0.854902, 1, 1, 0.999054, 0.419104, 1, 1, 0.600406, 0.000277, 0.604114, 1)
+
+[node name="Gravitygun-bullet" type="RigidBody2D"]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_3qhnn")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+self_modulate = Color(2, 2, 2, 1)
+rotation = 1.5708
+texture = ExtResource("2_isbr0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_blath")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+z_index = 10
+scale = Vector2(2, 2)
+color = Color(0.94902, 0, 1, 1)
+energy = 1.5
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.905882)
+shadow_filter = 2
+shadow_filter_smooth = 1.7
+texture = SubResource("GradientTexture2D_sdy5p")
+texture_scale = 50.0
+height = 100.0
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+scale = Vector2(5, 5)
+amount = 100
+lifetime = 2.0
+speed_scale = 2.0
+randomness = 1.0
+lifetime_randomness = 1.0
+emission_shape = 1
+emission_sphere_radius = 128.0
+direction = Vector2(-1, 2.08165e-12)
+spread = 30.0
+gravity = Vector2(2.08165e-12, 2.08165e-12)
+initial_velocity_min = 10.0
+initial_velocity_max = 1000.0
+scale_amount_min = 20.0
+scale_amount_max = 100.0
+scale_amount_curve = SubResource("Curve_0nxeo")
+color = Color(1, 0.576471, 1, 1)
+color_ramp = SubResource("Gradient_1c2uo")
