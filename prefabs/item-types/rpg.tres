@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemType" load_steps=2 format=3 uid="uid://bjja6sues7s3s"]
+
+[ext_resource type="Script" path="res://components/item-type.gd" id="1_htjks"]
+
+[resource]
+script = ExtResource("1_htjks")
+name = "rpg"
+title = "RPG"
+price = 100000
+is_coin = false

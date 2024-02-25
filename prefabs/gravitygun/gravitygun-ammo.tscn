@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://dy7xaj3ele8dl"]
+[gd_scene load_steps=7 format=3 uid="uid://dy7xaj3ele8dl"]
 
 [ext_resource type="Script" path="res://components/ammo.gd" id="1_gjstf"]
 [ext_resource type="PackedScene" uid="uid://bex5u7fwgdwf4" path="res://prefabs/ammo-explosion.tscn" id="2_87e48"]
 [ext_resource type="Texture2D" uid="uid://ca8mwrfvvhsdf" path="res://images/gravitygun-ammo.png" id="2_f05y2"]
+[ext_resource type="Resource" uid="uid://besvh5hp7cj2q" path="res://prefabs/item-types/ammo-gravitygun.tres" id="2_okelu"]
 [ext_resource type="AudioStream" uid="uid://bxgccs4e2ejvv" path="res://sounds/ammo-pick.mp3" id="3_y6fst"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_b71fj"]
@@ -14,10 +15,15 @@ collision_mask = 0
 max_contacts_reported = 10
 contact_monitor = true
 script = ExtResource("1_gjstf")
-count = 5
+amount = 5
 pick_sound = NodePath("AudioStreamPlayer2D")
-value = 2000
+type = ExtResource("2_okelu")
+max_health = null
+can_die = null
 death = ExtResource("2_87e48")
+successors = null
+successors_count = null
+successors_damp = null
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_f05y2")

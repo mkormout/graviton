@@ -1,0 +1,75 @@
+[gd_scene load_steps=4 format=3 uid="uid://cdueiyx71afgd"]
+
+[ext_resource type="Script" path="res://prefabs/ui/status-bar.gd" id="1_8jfbo"]
+[ext_resource type="Texture2D" uid="uid://dvosd2e7aex6b" path="res://images/coin_gold.png" id="2_fm42e"]
+[ext_resource type="Texture2D" uid="uid://dn66mwliwhxc6" path="res://images/heart.png" id="2_n6pu3"]
+
+[node name="StatusBar" type="CanvasLayer"]
+script = ExtResource("1_8jfbo")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+offset_right = 664.0
+offset_bottom = 334.0
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("2_n6pu3")
+expand_mode = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="LabelHealthValue" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 0, 0, 0.247059)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 40
+theme_override_font_sizes/font_size = 60
+text = "<value>"
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(2.08165e-12, 20)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("2_fm42e")
+expand_mode = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="LabelCoinsValue" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.717647, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 0.631373, 0, 0.247059)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 40
+theme_override_font_sizes/font_size = 60
+text = "<value>"

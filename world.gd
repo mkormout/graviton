@@ -33,6 +33,7 @@ var camera_follow: bool = false
 # 5. Explosions
 # 6. Coins
 # 7. Ammo
+# 8. Weapon Item
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

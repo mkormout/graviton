@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemType" load_steps=2 format=3 uid="uid://b6kbq3ho748c1"]
+
+[ext_resource type="Script" path="res://components/item-type.gd" id="1_0f2sd"]
+
+[resource]
+script = ExtResource("1_0f2sd")
+name = "gravitygun"
+title = "Gravity Gun"
+price = 500000
+is_coin = false

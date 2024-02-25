@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemType" load_steps=2 format=3 uid="uid://b6iqy2gg6o6uo"]
+
+[ext_resource type="Script" path="res://components/item-type.gd" id="1_xlpb5"]
+
+[resource]
+script = ExtResource("1_xlpb5")
+name = "ammo-gausscannon"
+title = "Gauss Cannon Ammo"
+price = 400
+is_coin = false

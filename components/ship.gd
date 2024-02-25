@@ -18,11 +18,11 @@ func pick(item: Item):
 	inventory.append(item)
 
 func pick_coin(item: Item):
-	coins += item.value
+	coins += item.count * item.type.price
 	item.pick()
 
 func pick_item(item: Item):
-	coins += item.value
+	coins += item.count * item.type.price
 	item.pick()
 
 func body_entered(_body):
@@ -36,7 +36,10 @@ func picker_body_entered(body):
 	
 	var item = body as Item
 	
-	if item.is_coin:
+	if not item.type:
+		return
+	
+	if item.type.is_coin:
 		pick_coin(item)
 	else:
 		pick_item(item)

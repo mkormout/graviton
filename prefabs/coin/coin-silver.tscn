@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://dexkeq6lwlood"]
+[gd_scene load_steps=8 format=3 uid="uid://dexkeq6lwlood"]
 
 [ext_resource type="Script" path="res://components/item.gd" id="1_to8ch"]
 [ext_resource type="PackedScene" uid="uid://dfves2timslw0" path="res://prefabs/coin/coin-explosion.tscn" id="2_si3oj"]
+[ext_resource type="Resource" uid="uid://dlemk2yq2ywjc" path="res://prefabs/item-types/coin-silver.tres" id="2_tbe5k"]
 [ext_resource type="Texture2D" uid="uid://bcex6ks87vkmr" path="res://images/coin_silver.png" id="3_opeii"]
 [ext_resource type="AudioStream" uid="uid://cada10kx4ql5r" path="res://sounds/coin-pick.wav" id="4_q5u6e"]
 
@@ -19,11 +20,11 @@ max_contacts_reported = 10
 contact_monitor = true
 script = ExtResource("1_to8ch")
 pick_sound = NodePath("AudioStreamPlayer2D")
-value = 2
-is_coin = true
+type = ExtResource("2_tbe5k")
 death = ExtResource("2_si3oj")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(2, 2, 2, 1)
 texture = ExtResource("3_opeii")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

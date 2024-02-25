@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemType" load_steps=2 format=3 uid="uid://wy7fs5ut1vqx"]
+
+[ext_resource type="Script" path="res://components/item-type.gd" id="1_tkfej"]
+
+[resource]
+script = ExtResource("1_tkfej")
+name = "coin-gold"
+title = "Gold Coin"
+price = 5
+is_coin = true

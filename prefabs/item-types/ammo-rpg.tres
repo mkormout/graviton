@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemType" load_steps=2 format=3 uid="uid://ha5mg162nc1n"]
+
+[ext_resource type="Script" path="res://components/item-type.gd" id="1_5154m"]
+
+[resource]
+script = ExtResource("1_5154m")
+name = "ammo-rpg"
+title = "RPG Ammo"
+price = 500
+is_coin = false

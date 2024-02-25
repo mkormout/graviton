@@ -46,7 +46,7 @@ fill_to = Vector2(1, 1)
 polygon = PackedVector2Array(-343, -42, -334, -77, -305, -92, -244, -179, -210, -344, -118, -354, -59, -170, 7, -111, 246, -81, 326, -46, 344, 0, 327, 47, 249, 80, 6, 111, -56, 168, -116, 353, -209, 345, -242, 181, -308, 88, -334, 79, -344, 39)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0fxht"]
-radius = 986.018
+radius = 1446.12
 
 [node name="ShipBFG23" type="RigidBody2D" node_paths=PackedStringArray("picker")]
 collision_mask = 12
@@ -212,7 +212,7 @@ occluder_light_mask = 2
 
 [node name="Picker" type="Area2D" parent="."]
 collision_layer = 0
-collision_mask = 96
+collision_mask = 224
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Picker"]
 shape = SubResource("CircleShape2D_0fxht")

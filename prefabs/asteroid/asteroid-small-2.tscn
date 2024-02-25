@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://bgngk1qmeh8ed"]
+[gd_scene load_steps=35 format=3 uid="uid://bgngk1qmeh8ed"]
 
 [ext_resource type="Script" path="res://components/asteroid.gd" id="1_8sigh"]
 [ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-explosion.tscn" id="2_rrqf0"]
@@ -13,6 +13,11 @@
 [ext_resource type="PackedScene" uid="uid://3cqs1wv6of6h" path="res://prefabs/rpg/rpg-ammo.tscn" id="11_2ut08"]
 [ext_resource type="PackedScene" uid="uid://ccipsuvq4or4m" path="res://prefabs/gausscannon/gausscannon-ammo.tscn" id="12_3l5jo"]
 [ext_resource type="PackedScene" uid="uid://dy7xaj3ele8dl" path="res://prefabs/gravitygun/gravitygun-ammo.tscn" id="13_rpelg"]
+[ext_resource type="PackedScene" uid="uid://dwyp6ckhkvla6" path="res://prefabs/rpg/rpg-item.tscn" id="14_fl5rf"]
+[ext_resource type="PackedScene" uid="uid://dsw7ahi84oqay" path="res://prefabs/minigun/minigun-item.tscn" id="15_xycr1"]
+[ext_resource type="PackedScene" uid="uid://wqqfwfhnbit6" path="res://prefabs/laser/laser-item.tscn" id="16_qjr00"]
+[ext_resource type="PackedScene" uid="uid://epfdus3x86sd" path="res://prefabs/gravitygun/gravitygun-item.tscn" id="17_jmrif"]
+[ext_resource type="PackedScene" uid="uid://bbvt33km276g0" path="res://prefabs/gausscannon/gausscannon-item.tscn" id="18_e63l5"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2rnp4"]
 polygon = PackedVector2Array(0, 173, 83, 170, 140, 155, 168, 115, 177, 59, 174, -39, 149, -109, 105, -156, 49, -172, -13, -169, -75, -146, -126, -104, -156, -49, -175, 16, -176, 62, -157, 114, -114, 151, -64, 167)
@@ -66,6 +71,31 @@ script = ExtResource("7_u3edc")
 model = ExtResource("13_rpelg")
 chance = 2.0
 
+[sub_resource type="Resource" id="Resource_qa14h"]
+script = ExtResource("7_u3edc")
+model = ExtResource("14_fl5rf")
+chance = 1.0
+
+[sub_resource type="Resource" id="Resource_cl6uy"]
+script = ExtResource("7_u3edc")
+model = ExtResource("15_xycr1")
+chance = 1.0
+
+[sub_resource type="Resource" id="Resource_whdey"]
+script = ExtResource("7_u3edc")
+model = ExtResource("16_qjr00")
+chance = 1.0
+
+[sub_resource type="Resource" id="Resource_hynri"]
+script = ExtResource("7_u3edc")
+model = ExtResource("17_jmrif")
+chance = 1.0
+
+[sub_resource type="Resource" id="Resource_vv3j0"]
+script = ExtResource("7_u3edc")
+model = ExtResource("18_e63l5")
+chance = 1.0
+
 [node name="Asteroid-small-2" type="RigidBody2D" node_paths=PackedStringArray("item_dropper")]
 collision_layer = 8
 collision_mask = 8
@@ -88,5 +118,5 @@ occluder = SubResource("OccluderPolygon2D_2rnp4")
 
 [node name="ItemDropper" type="Node2D" parent="."]
 script = ExtResource("6_rtwt0")
-models = Array[ExtResource("7_u3edc")]([SubResource("Resource_f6868"), SubResource("Resource_6glhi"), SubResource("Resource_1ty41"), SubResource("Resource_pjlja"), SubResource("Resource_owhap"), SubResource("Resource_gxfu0"), SubResource("Resource_g3crs"), SubResource("Resource_1q4gv"), SubResource("Resource_6d3dt"), SubResource("Resource_al1f8")])
+models = Array[ExtResource("7_u3edc")]([SubResource("Resource_f6868"), SubResource("Resource_6glhi"), SubResource("Resource_1ty41"), SubResource("Resource_pjlja"), SubResource("Resource_owhap"), SubResource("Resource_gxfu0"), SubResource("Resource_g3crs"), SubResource("Resource_1q4gv"), SubResource("Resource_6d3dt"), SubResource("Resource_al1f8"), SubResource("Resource_qa14h"), SubResource("Resource_cl6uy"), SubResource("Resource_whdey"), SubResource("Resource_hynri"), SubResource("Resource_vv3j0")])
 drop_count = 1
