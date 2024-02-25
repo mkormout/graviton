@@ -89,7 +89,7 @@ jobs:
         with:
           branch: main # The branch the action should deploy to.
           folder: build/web # The folder the action should deploy.
-          repository-name: graviton-app
+          repository-name: mkormout/graviton-app
 
   export-mac:
     name: Mac Export
