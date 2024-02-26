@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://3i76im636d0y"]
+[gd_scene load_steps=9 format=3 uid="uid://3i76im636d0y"]
 
 [ext_resource type="Script" path="res://components/asteroid.gd" id="1_2pcbl"]
 [ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-explosion.tscn" id="2_3bgy2"]
 [ext_resource type="PackedScene" uid="uid://bcugkd5de5gob" path="res://prefabs/asteroid/asteroid-small-3.tscn" id="3_btrb3"]
+[ext_resource type="PackedScene" uid="uid://clgvd7qry3vdk" path="res://prefabs/asteroid/asteroid-small-4.tscn" id="4_lfpyw"]
 [ext_resource type="Texture2D" uid="uid://bmhemak7icwfm" path="res://images/dickhead.png" id="5_by4wl"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_uxoky"]
@@ -26,7 +27,7 @@ contact_monitor = true
 script = ExtResource("1_2pcbl")
 max_health = 800
 death = ExtResource("2_3bgy2")
-successors = Array[PackedScene]([ExtResource("3_btrb3")])
+successors = Array[PackedScene]([ExtResource("3_btrb3"), ExtResource("4_lfpyw")])
 successors_count = 6
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
