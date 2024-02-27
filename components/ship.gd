@@ -2,11 +2,9 @@ class_name Ship
 extends MountableBody
 
 @export var picker: Area2D
-@export var max_inventory: int = 10
 @export var inventory: Inventory
 @export var can_pick_coin: bool = false
-
-signal inventory_updated(inventory: Array[Item])
+@export var inventory_ui: Node
 
 var coins: int = 0
 
@@ -21,12 +19,10 @@ func pick(item: Item):
 
 func pick_coin(item: Item):
 	coins += item.count * item.type.price
-	item.pick()
+	item.pick(null)
 
 func pick_item(item: Item):
-	
-	inventory_updated.emit(inventory)
-	item.pick()
+	item.pick(inventory)
 
 func body_entered(body):
 	var ray = RayCast2D.new()
@@ -51,3 +47,7 @@ func picker_body_entered(body):
 		pick_coin(item)
 	else:
 		pick_item(item)
+	
+func toggle_inventory():
+	if inventory_ui:
+		inventory_ui.visible = not inventory_ui.visible

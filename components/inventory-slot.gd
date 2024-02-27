@@ -1,11 +1,20 @@
-class_name ItemSlot extends Node
+class_name InventorySlot extends Node
 
+enum ItemSlotType {
+	STORAGE,
+	WEAPON,
+	UTIL,
+	ENGINE,
+	DROP
+}
+
+@export var slot_type: ItemSlotType = ItemSlotType.STORAGE
 @export var max_items: int = 50
 
 var items: Array[Item]
 
-signal item_added(sender: ItemSlot, item: Item)
-signal item_removed(sender: ItemSlot, item: Item)
+signal item_added(sender: InventorySlot, item: Item)
+signal item_removed(sender: InventorySlot, item: Item)
 
 func add_item(item: Item) -> int:
 	items.append(item)

@@ -119,7 +119,7 @@ func _input(_ev):
 		$ShipBFG23.unmount_weapon("right")
 	
 	if Input.is_key_pressed(KEY_I):
-		$Inventory.visible = not $Inventory.visible
+		$ShipBFG23.toggle_inventory()
 
 func spawn_asteroids(count: int):
 	for x in range(count * 0.5):

@@ -1,13 +1,14 @@
-[gd_scene load_steps=18 format=3 uid="uid://diqfcg5rnk5rq"]
+[gd_scene load_steps=19 format=3 uid="uid://diqfcg5rnk5rq"]
 
 [ext_resource type="Script" path="res://components/player-ship.gd" id="1_1i2ql"]
 [ext_resource type="Texture2D" uid="uid://oeyjmpan7p6a" path="res://images/ship.png" id="1_2jagq"]
+[ext_resource type="PackedScene" uid="uid://c5n2g0g788e3r" path="res://prefabs/ship-bfg-23/ship-bfg-23-inventory.tscn" id="2_2j5ki"]
 [ext_resource type="Script" path="res://components/propeller-movement.gd" id="2_5nbxa"]
-[ext_resource type="PackedScene" uid="uid://bgiyj83xynsd" path="res://prefabs/ship-bfg-23/ship-explosion.tscn" id="2_8k7x0"]
-[ext_resource type="Resource" uid="uid://c33phqaspm2y4" path="res://prefabs/ship-bfg-23/propeller-main.tres" id="3_vf8yn"]
-[ext_resource type="Resource" uid="uid://dlsp34kplnygi" path="res://prefabs/ship-bfg-23/propeller-left.tres" id="4_sg3ag"]
-[ext_resource type="Resource" uid="uid://bv52moyqaql3y" path="res://prefabs/ship-bfg-23/propeller-right.tres" id="5_5n741"]
+[ext_resource type="PackedScene" uid="uid://bgiyj83xynsd" path="res://prefabs/ship-bfg-23/ship-bfg-23-explosion.tscn" id="3_ff5xn"]
+[ext_resource type="Resource" uid="uid://c33phqaspm2y4" path="res://prefabs/ship-bfg-23/Ship-bfg-23-propeller-main.tres" id="6_dfrcp"]
 [ext_resource type="Script" path="res://components/mount-point.gd" id="6_h22iy"]
+[ext_resource type="Resource" uid="uid://dlsp34kplnygi" path="res://prefabs/ship-bfg-23/ship-bfg-23-propeller-left.tres" id="7_ypcv7"]
+[ext_resource type="Resource" uid="uid://bv52moyqaql3y" path="res://prefabs/ship-bfg-23/Ship-bfg-23-propeller-right.tres" id="8_gsrqr"]
 [ext_resource type="Script" path="res://components/inventory.gd" id="9_8kp54"]
 
 [sub_resource type="Curve" id="Curve_cbbmj"]
@@ -49,7 +50,7 @@ polygon = PackedVector2Array(-343, -42, -334, -77, -305, -92, -244, -179, -210, 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0fxht"]
 radius = 1446.12
 
-[node name="ShipBFG23" type="RigidBody2D" node_paths=PackedStringArray("picker")]
+[node name="ShipBFG23" type="RigidBody2D" node_paths=PackedStringArray("picker", "inventory", "inventory_ui")]
 collision_mask = 12
 mass = 2000.0
 max_contacts_reported = 100
@@ -58,9 +59,11 @@ linear_damp = 1.0
 angular_damp = 1.0
 script = ExtResource("1_1i2ql")
 picker = NodePath("Picker")
+inventory = NodePath("InventoryStorage")
 can_pick_coin = true
+inventory_ui = NodePath("Ship-bfg-23-inventory")
 max_health = 10000
-death = ExtResource("2_8k7x0")
+death = ExtResource("3_ff5xn")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708
@@ -71,7 +74,7 @@ script = ExtResource("2_5nbxa")
 body = NodePath("..")
 particles = NodePath("../PropellerMainEffect")
 light = NodePath("../PropellerMainEffect/PropellerMainEffectLight")
-profile = ExtResource("3_vf8yn")
+profile = ExtResource("6_dfrcp")
 action = &"ui_up"
 position = Vector2(-330, 2.08165e-12)
 
@@ -80,7 +83,7 @@ script = ExtResource("2_5nbxa")
 body = NodePath("..")
 particles = NodePath("../PropellerLeftEffect")
 light = NodePath("../PropellerLeftEffect/PropellerLeftEffectLight")
-profile = ExtResource("4_sg3ag")
+profile = ExtResource("7_ypcv7")
 action = &"ui_right"
 position = Vector2(241, -76)
 
@@ -89,7 +92,7 @@ script = ExtResource("2_5nbxa")
 body = NodePath("..")
 particles = NodePath("../PropellerRightEffect")
 light = NodePath("../PropellerRightEffect/PropellerRightEffectLight")
-profile = ExtResource("5_5n741")
+profile = ExtResource("8_gsrqr")
 action = &"ui_left"
 position = Vector2(241, 76)
 
@@ -220,3 +223,7 @@ shape = SubResource("CircleShape2D_0fxht")
 
 [node name="InventoryStorage" type="Node" parent="."]
 script = ExtResource("9_8kp54")
+
+[node name="Ship-bfg-23-inventory" parent="." node_paths=PackedStringArray("ship") instance=ExtResource("2_2j5ki")]
+visible = false
+ship = NodePath("..")

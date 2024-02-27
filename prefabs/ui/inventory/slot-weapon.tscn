@@ -1,10 +1,12 @@
 [gd_scene load_steps=3 format=3 uid="uid://ubuo4v7on0j4"]
 
-[ext_resource type="Script" path="res://prefabs/ui/inventory/slot.gd" id="1_81osf"]
+[ext_resource type="Script" path="res://components/inventory-slot.gd" id="1_m4xfv"]
 [ext_resource type="Texture2D" uid="uid://db3afwvw3uh8u" path="res://images/inventory-slot-red.png" id="2_28m4h"]
 
-[node name="Slot-storage" type="CenterContainer"]
-script = ExtResource("1_81osf")
+[node name="Slot-weapon" type="CenterContainer"]
+script = ExtResource("1_m4xfv")
+slot_type = 1
+max_items = 1
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 2

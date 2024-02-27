@@ -21,12 +21,7 @@ script = ExtResource("1_7w2at")
 amount = 20
 pick_sound = NodePath("AudioStreamPlayer2D")
 type = ExtResource("2_2tm30")
-max_health = null
-can_die = null
 death = ExtResource("2_hsyb5")
-successors = null
-successors_count = null
-successors_damp = null
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_1egn4")

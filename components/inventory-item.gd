@@ -1,5 +1,7 @@
-class_name Slot extends CenterContainer
+class_name InventoryItem extends Node
 
+@export var type: ItemType
+@export var model: PackedScene
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
