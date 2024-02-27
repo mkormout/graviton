@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b3pcsj8urlm74"]
+
+[ext_resource type="Script" path="res://prefabs/ui/inventory/slot.gd" id="1_0t61m"]
+[ext_resource type="Texture2D" uid="uid://brondjxykikse" path="res://images/inventory-slot-green.png" id="2_xu5j5"]
+
+[node name="Slot-storage" type="CenterContainer"]
+script = ExtResource("1_0t61m")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("2_xu5j5")
