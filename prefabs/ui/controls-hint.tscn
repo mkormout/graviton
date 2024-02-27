@@ -7,7 +7,7 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -381.0
-offset_bottom = 601.0
+offset_bottom = 704.0
 grow_horizontal = 0
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
@@ -19,10 +19,10 @@ layout_mode = 2
 
 [node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/Panel"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = 2.0
+anchor_bottom = 1.076
+offset_bottom = 0.255934
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/normal_font_size = 20
@@ -35,11 +35,9 @@ text = "[b]Controls[/b]
 
 ARROW KEYS - thrusters
 SPACE - fire all
-Q - fire left
-W - fire front
-E - fire right
 R - reload
 C - camera
+I - inventory
 
 1 - Minigun
 2 - Laser
@@ -48,8 +46,14 @@ C - camera
 5 - Gravity Gun
 6 - Miniguns & Laser
 
+Q - fire left mount
+W - fire front mount
+E - fire right mount
+A - drop left mount
+S - drop front mount
+D - drop right mount
+
+ENTER - asteroid spawn
 G - god mode for current weapon
 H - unlimited ammo, no reload
-J  - no cooldown, maximum fire rate
-
-"
+J  - no cooldown, maximum fire rate"

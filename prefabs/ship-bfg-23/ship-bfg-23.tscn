@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://diqfcg5rnk5rq"]
+[gd_scene load_steps=18 format=3 uid="uid://diqfcg5rnk5rq"]
 
 [ext_resource type="Script" path="res://components/player-ship.gd" id="1_1i2ql"]
 [ext_resource type="Texture2D" uid="uid://oeyjmpan7p6a" path="res://images/ship.png" id="1_2jagq"]
@@ -8,6 +8,7 @@
 [ext_resource type="Resource" uid="uid://dlsp34kplnygi" path="res://prefabs/ship-bfg-23/propeller-left.tres" id="4_sg3ag"]
 [ext_resource type="Resource" uid="uid://bv52moyqaql3y" path="res://prefabs/ship-bfg-23/propeller-right.tres" id="5_5n741"]
 [ext_resource type="Script" path="res://components/mount-point.gd" id="6_h22iy"]
+[ext_resource type="Script" path="res://components/inventory.gd" id="9_8kp54"]
 
 [sub_resource type="Curve" id="Curve_cbbmj"]
 _data = [Vector2(0, 1), 0.0, -2.85502, 0, 0, Vector2(1, 0), -0.0899593, 0.0, 0, 0]
@@ -216,3 +217,6 @@ collision_mask = 224
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Picker"]
 shape = SubResource("CircleShape2D_0fxht")
+
+[node name="InventoryStorage" type="Node" parent="."]
+script = ExtResource("9_8kp54")

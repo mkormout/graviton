@@ -3,8 +3,10 @@ extends MountableBody
 
 @export var picker: Area2D
 @export var max_inventory: int = 10
-@export var inventory: Array[Item]
+@export var inventory: Inventory
 @export var can_pick_coin: bool = false
+
+signal inventory_updated(inventory: Array[Item])
 
 var coins: int = 0
 
@@ -22,10 +24,16 @@ func pick_coin(item: Item):
 	item.pick()
 
 func pick_item(item: Item):
-	coins += item.count * item.type.price
+	
+	inventory_updated.emit(inventory)
 	item.pick()
 
-func body_entered(_body):
+func body_entered(body):
+	var ray = RayCast2D.new()
+	ray.position = global_position
+	ray.target_position = body.global_position
+	var collision = ray.get_collision_point()
+	
 	var attack = Damage.new()
 	attack.kinetic = 1000
 	damage(attack)

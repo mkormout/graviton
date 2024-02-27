@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ib2hc10g3wbl"]
+[gd_scene load_steps=12 format=3 uid="uid://ib2hc10g3wbl"]
 
 [ext_resource type="Script" path="res://prefabs/gravitygun/gravitygun-script.gd" id="1_j7sby"]
 [ext_resource type="PackedScene" uid="uid://btge3o3l7u07w" path="res://prefabs/gravitygun/gravitygun-bullet.tscn" id="2_j36r0"]
@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://bgabun2hciihe" path="res://sounds/gravitygun.wav" id="4_blhgr"]
 [ext_resource type="Script" path="res://components/mount-point.gd" id="5_qcpsb"]
 [ext_resource type="AudioStream" uid="uid://ch8rnjocy08u1" path="res://sounds/reload_clip.wav" id="6_nt1dy"]
+[ext_resource type="AudioStream" uid="uid://d1khlswfftyfa" path="res://sounds/empty-magazine.wav" id="8_j46xg"]
 
 [sub_resource type="Resource" id="Resource_bdikp"]
 script = ExtResource("2_ouie2")
@@ -22,7 +23,7 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.49359, 0)
 
-[node name="Gravitygun" type="RigidBody2D" node_paths=PackedStringArray("area", "barrel", "sound", "reload_sound")]
+[node name="Gravitygun" type="RigidBody2D" node_paths=PackedStringArray("area", "barrel", "sound", "empty_sound", "reload_sound")]
 z_index = -1
 collision_layer = 2
 collision_mask = 8
@@ -32,6 +33,7 @@ attack = SubResource("Resource_bdikp")
 ammo = ExtResource("2_j36r0")
 barrel = NodePath("Barrel")
 sound = NodePath("AudioStreamPlayer2D")
+empty_sound = NodePath("EmptySound")
 reload_sound = NodePath("ReloadSound")
 rate = 2.0
 velocity = 25000.0
@@ -79,3 +81,8 @@ collision_mask = 8
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Effect"]
 polygon = PackedVector2Array(300, 1300, 10000, 3000, 10000, -3000, 300, -1300)
+
+[node name="EmptySound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_j46xg")
+volume_db = -20.0
+max_distance = 20000.0

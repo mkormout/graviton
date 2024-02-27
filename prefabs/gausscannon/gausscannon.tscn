@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://cbco1xs1gleke"]
+[gd_scene load_steps=12 format=3 uid="uid://cbco1xs1gleke"]
 
 [ext_resource type="Script" path="res://components/mountable-weapon.gd" id="1_iml48"]
 [ext_resource type="PackedScene" uid="uid://bbbou6h5jmvbh" path="res://prefabs/gausscannon/gausscannon-bullet.tscn" id="2_i52xv"]
 [ext_resource type="Texture2D" uid="uid://nu0w8gtlvc3" path="res://images/gausscannon.png" id="3_og6jl"]
 [ext_resource type="AudioStream" uid="uid://bbri5doimels0" path="res://sounds/gausscannon.mp3" id="4_33d08"]
 [ext_resource type="Script" path="res://components/mount-point.gd" id="5_sjve5"]
+[ext_resource type="AudioStream" uid="uid://d1khlswfftyfa" path="res://sounds/empty-magazine.wav" id="7_gyh01"]
 [ext_resource type="AudioStream" uid="uid://ch8rnjocy08u1" path="res://sounds/reload_clip.wav" id="7_h51wr"]
 
 [sub_resource type="Gradient" id="Gradient_3hseg"]
@@ -22,7 +23,7 @@ noise = SubResource("FastNoiseLite_k8745")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mhy0m"]
 size = Vector2(126, 345)
 
-[node name="Gausscannon" type="RigidBody2D" node_paths=PackedStringArray("barrel", "sound", "reload_sound")]
+[node name="Gausscannon" type="RigidBody2D" node_paths=PackedStringArray("barrel", "sound", "empty_sound", "reload_sound")]
 z_index = -1
 collision_layer = 2
 collision_mask = 8
@@ -30,6 +31,7 @@ script = ExtResource("1_iml48")
 ammo = ExtResource("2_i52xv")
 barrel = NodePath("Barrel")
 sound = NodePath("FireSound")
+empty_sound = NodePath("EmptySound")
 reload_sound = NodePath("ReloadSound")
 rate = 0.5
 velocity = 40000.0
@@ -73,3 +75,8 @@ volume_db = -20.0
 pitch_scale = 1.2
 max_distance = 20000.0
 max_polyphony = 3
+
+[node name="EmptySound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_gyh01")
+volume_db = -20.0
+max_distance = 20000.0

@@ -22,6 +22,10 @@ func mount_weapon(what: MountableWeapon, where: String):
 	
 	mounts = get_mounts()
 
+func unmount_weapon(where: String):
+	var mount = get_mount(where)
+	mount.unplug()
+
 func do(sender: MountableBody, action: String, where: String, meta = null):
 	if not sender:
 		sender = self

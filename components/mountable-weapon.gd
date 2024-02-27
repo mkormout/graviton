@@ -5,6 +5,7 @@ extends MountableBody
 @export var ammo: PackedScene
 @export var barrel: Node2D
 @export var sound: AudioStreamPlayer2D
+@export var empty_sound: AudioStreamPlayer2D
 @export var reload_sound: AudioStreamPlayer2D
 @export_group("Firing")
 @export var rate: float
@@ -38,8 +39,17 @@ func _ready() -> void:
 	magazine_current = magazine_max
 	ammo_current = ammo_max
 
+func has_ammo() -> bool:
+	return magazine_current > 0
+
+func is_reloading() -> bool:
+	return not reload_timer.is_stopped()
+
+func is_cooldown() -> bool:
+	return not shot_timer.is_stopped()
+
 func can_shoot() -> bool:
-	return shot_timer.is_stopped() and reload_timer.is_stopped() and magazine_current > 0
+	return not is_cooldown() and not is_reloading() and has_ammo()
 
 func reload() -> void:
 	reload_timer.start()
@@ -69,6 +79,11 @@ func do(_sender: Node2D, action: String, _where: String, _meta = null):
 		use_rate = false
 		
 func fire():
+	if not has_ammo() and not is_reloading():
+		if empty_sound and not empty_sound.playing:
+			empty_sound.play()
+		return
+	
 	if can_shoot():
 		var instance = ammo.instantiate() as RigidBody2D
 		instance.position = barrel.global_position
@@ -91,4 +106,3 @@ func fire():
 		
 		var mount = get_mount("")
 		mount.do(self, "recoil", recoil)
-	pass

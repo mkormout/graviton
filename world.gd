@@ -110,6 +110,16 @@ func _input(_ev):
 			$ShipCamera.make_current()
 		else:
 			$Camera2D.make_current()
+			
+	if Input.is_key_pressed(KEY_A):
+		$ShipBFG23.unmount_weapon("left")
+	if Input.is_key_pressed(KEY_S):
+		$ShipBFG23.unmount_weapon("")
+	if Input.is_key_pressed(KEY_D):
+		$ShipBFG23.unmount_weapon("right")
+	
+	if Input.is_key_pressed(KEY_I):
+		$Inventory.visible = not $Inventory.visible
 
 func spawn_asteroids(count: int):
 	for x in range(count * 0.5):
@@ -122,7 +132,7 @@ func spawn_asteroids(count: int):
 		add_asteroid(asteroids_large_model.pick_random())
 
 func mount_weapon(body: MountableBody, what: PackedScene, where: String):
-	var weapon = what.instantiate()
+	var weapon = what.instantiate() if what else null
 	body.mount_weapon(weapon, where)
 
 func mount_ship_weapons(what: PackedScene):

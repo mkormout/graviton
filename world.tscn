@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cis3fbeacp7l1"]
+[gd_scene load_steps=12 format=3 uid="uid://cis3fbeacp7l1"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_pt5pr"]
 [ext_resource type="Script" path="res://components/body_camera.gd" id="2_bv2fa"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dy8c1mmutnbql" path="res://prefabs/ui/controls-hint.tscn" id="3_0o1pf"]
 [ext_resource type="PackedScene" uid="uid://diqfcg5rnk5rq" path="res://prefabs/ship-bfg-23/ship-bfg-23.tscn" id="5_auikb"]
 [ext_resource type="PackedScene" uid="uid://cdueiyx71afgd" path="res://prefabs/ui/status-bar.tscn" id="6_gtmcj"]
+[ext_resource type="PackedScene" uid="uid://c5n2g0g788e3r" path="res://prefabs/ui/inventory/inventory.tscn" id="7_xmc06"]
 
 [sub_resource type="Curve" id="Curve_51lj4"]
 bake_resolution = 1000
@@ -84,3 +85,6 @@ ship = NodePath("../ShipBFG23")
 
 [node name="Coins" parent="." node_paths=PackedStringArray("ship") instance=ExtResource("6_gtmcj")]
 ship = NodePath("../ShipBFG23")
+
+[node name="Inventory" parent="." instance=ExtResource("7_xmc06")]
+visible = false

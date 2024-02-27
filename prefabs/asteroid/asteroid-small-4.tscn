@@ -8,7 +8,7 @@
 [ext_resource type="Script" path="res://components/item-drop.gd" id="5_wpxbj"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_rtibw"]
-polygon = PackedVector2Array(-27, 177, 39, 160, 82, 111, 104, 65, 137, -12, 126, -85, 87, -144, 25, -176, -38, -171, -98, -135, -119, -88, -135, -52, -129, 21, -117, 104, -88, 148)
+polygon = PackedVector2Array(-11, 176, 26, 174, 62, 145, 82, 111, 104, 65, 137, -12, 126, -85, 87, -144, 25, -176, -38, -171, -98, -135, -120, -48, -130, -17, -129, 21, -106, 71, -93, 78, -73, 123, -54, 154)
 
 [sub_resource type="Resource" id="Resource_5v5hc"]
 script = ExtResource("5_wpxbj")
@@ -32,7 +32,7 @@ scale = Vector2(0.7, 0.7)
 texture = ExtResource("2_ei2uw")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-polygon = PackedVector2Array(-24, 176, 55, 149, 88, 105, 136, -14, 124, -97, 82, -147, 27, -173, -44, -168, -98, -134, -122, -82, -134, -43, -125, 38, -118, 110, -79, 154)
+polygon = PackedVector2Array(-7, 176, 30, 173, 55, 149, 88, 105, 136, -14, 121, -98, 82, -147, 27, -173, -44, -168, -98, -134, -118, -70, -132, -13, -125, 38, -112, 63, -93, 76, -60, 150)
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
 occluder = SubResource("OccluderPolygon2D_rtibw")
