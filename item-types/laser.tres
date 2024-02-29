@@ -9,4 +9,4 @@ name = "laser"
 title = "Laser"
 price = 20000
 image = ExtResource("1_wqea5")
-is_coin = false
+type = 2

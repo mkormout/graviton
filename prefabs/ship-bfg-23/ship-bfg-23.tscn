@@ -50,7 +50,7 @@ polygon = PackedVector2Array(-343, -42, -334, -77, -305, -92, -244, -179, -210, 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0fxht"]
 radius = 1446.12
 
-[node name="ShipBFG23" type="RigidBody2D" node_paths=PackedStringArray("picker", "inventory", "inventory_ui")]
+[node name="ShipBFG23" type="RigidBody2D" node_paths=PackedStringArray("picker", "storage", "ammo", "drop", "inventory_ui")]
 collision_mask = 12
 mass = 2000.0
 max_contacts_reported = 100
@@ -59,7 +59,9 @@ linear_damp = 1.0
 angular_damp = 1.0
 script = ExtResource("1_1i2ql")
 picker = NodePath("Picker")
-inventory = NodePath("InventoryStorage")
+storage = NodePath("InventoryStorage")
+ammo = NodePath("InventoryAmmo")
+drop = NodePath("InventoryDrop")
 can_pick_coin = true
 inventory_ui = NodePath("Ship-bfg-23-inventory")
 max_health = 10000
@@ -224,6 +226,12 @@ shape = SubResource("CircleShape2D_0fxht")
 [node name="InventoryStorage" type="Node" parent="."]
 script = ExtResource("9_8kp54")
 
+[node name="InventoryAmmo" type="Node" parent="."]
+script = ExtResource("9_8kp54")
+
 [node name="Ship-bfg-23-inventory" parent="." node_paths=PackedStringArray("ship") instance=ExtResource("2_2j5ki")]
 visible = false
 ship = NodePath("..")
+
+[node name="InventoryDrop" type="Node" parent="."]
+script = ExtResource("9_8kp54")

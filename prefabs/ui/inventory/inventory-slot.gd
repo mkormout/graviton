@@ -6,11 +6,12 @@ extends InventorySlot
 @onready var texture_red = preload("res://images/inventory-slot-red.png")
 @onready var texture_white = preload("res://images/inventory-slot-white.png")
 @onready var texture_yellow = preload("res://images/inventory-slot-yellow.png")
+@onready var texture_pink = preload("res://images/inventory-slot-pink.png")
 
-@onready var background = $Background
-@onready var item_image = $Background/Margin/ItemImage
-@onready var quanity_panel = $Background/Margin/ItemImage/QuantityPanel
-@onready var quanity = $Background/Margin/ItemImage/QuantityPanel/MarginContainer/Quantity
+@onready var background = $MarginContainer/Background
+@onready var item_image = $MarginContainer/Background/Margin/ItemImage
+@onready var quanity_panel = $MarginContainer/Background/Margin/ItemImage/QuantityPanel
+@onready var quanity = $MarginContainer/Background/Margin/ItemImage/QuantityPanel/MarginContainer/Quantity
 
 func _ready():
 	var texture = null
@@ -21,6 +22,7 @@ func _ready():
 		ItemSlotType.WEAPON: texture = texture_red
 		ItemSlotType.STORAGE: texture = texture_yellow
 		ItemSlotType.DROP: texture = texture_white
+		ItemSlotType.AMMO: texture = texture_pink
 	
 	background.texture = texture
 

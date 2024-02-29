@@ -9,4 +9,4 @@ name = "gravitygun"
 title = "Gravity Gun"
 price = 500000
 image = ExtResource("1_2rbph")
-is_coin = false
+type = 2

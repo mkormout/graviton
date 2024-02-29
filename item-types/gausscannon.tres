@@ -9,4 +9,4 @@ name = "gausscannon"
 title = "Gauss Cannon"
 price = 50000
 image = ExtResource("1_8ndeu")
-is_coin = false
+type = 2

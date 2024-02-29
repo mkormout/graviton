@@ -9,4 +9,4 @@ name = "ammo-gravitygun"
 title = "Gravity Gun Ammo"
 price = 1000
 image = ExtResource("1_ws541")
-is_coin = false
+type = 1

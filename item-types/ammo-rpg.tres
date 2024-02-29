@@ -9,4 +9,4 @@ name = "ammo-rpg"
 title = "RPG Ammo"
 price = 500
 image = ExtResource("1_v62rp")
-is_coin = false
+type = 1

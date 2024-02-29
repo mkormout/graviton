@@ -5,7 +5,8 @@ enum ItemSlotType {
 	WEAPON,
 	UTIL,
 	ENGINE,
-	DROP
+	DROP,
+	AMMO
 }
 
 @export var slot_type: ItemSlotType
@@ -16,9 +17,6 @@ var quantity: int = 0
 
 signal item_added(sender: InventorySlot, item: Item)
 signal item_removed(sender: InventorySlot, item: Item)
-
-func changed():
-	pass
 
 func inc(type: ItemType) -> int:
 	quantity += 1
@@ -60,6 +58,8 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 		set_drag_preview(
 			make_drag_preview()
 		)
+	
+	print("_get_drag_data: ", data)
 	
 	return data
 

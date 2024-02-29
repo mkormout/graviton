@@ -9,4 +9,4 @@ name = "ammo-gausscannon"
 title = "Gauss Cannon Ammo"
 price = 400
 image = ExtResource("1_dbebv")
-is_coin = false
+type = 1

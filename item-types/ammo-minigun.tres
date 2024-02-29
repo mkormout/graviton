@@ -9,4 +9,4 @@ name = "ammo-minigun"
 title = "Minigun Ammo"
 price = 100
 image = ExtResource("1_gxcwq")
-is_coin = false
+type = 1

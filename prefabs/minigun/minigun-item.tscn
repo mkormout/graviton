@@ -11,7 +11,7 @@ name = "minigun"
 title = "Minigun"
 price = 10000
 image = ExtResource("2_gysjv")
-is_coin = false
+type = 2
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2nb7d"]
 size = Vector2(413, 413)

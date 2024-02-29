@@ -29,15 +29,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
 
 [node name="ItemImage" type="TextureRect" parent="MarginContainer/Background/Margin"]
 layout_mode = 2
-expand_mode = 1
-stretch_mode = 4
+expand_mode = 3
 
 [node name="QuantityPanel" type="Panel" parent="MarginContainer/Background/Margin/ItemImage"]
 layout_mode = 1

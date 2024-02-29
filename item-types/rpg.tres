@@ -9,4 +9,4 @@ name = "rpg"
 title = "RPG"
 price = 100000
 image = ExtResource("1_13air")
-is_coin = false
+type = 2

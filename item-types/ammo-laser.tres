@@ -9,4 +9,4 @@ name = "ammo-laser"
 title = "Laser Ammo"
 price = 200
 image = ExtResource("1_5sc5o")
-is_coin = false
+type = 1

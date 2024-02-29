@@ -1,8 +1,12 @@
 class_name Ship
 extends MountableBody
 
+var IT = preload("res://components/item-type.gd")
+
 @export var picker: Area2D
-@export var inventory: Inventory
+@export var storage: Inventory
+@export var ammo: Inventory
+@export var drop: Inventory
 @export var can_pick_coin: bool = false
 @export var inventory_ui: Node
 
@@ -14,15 +18,20 @@ func _ready():
 	picker.connect("body_entered", picker_body_entered)
 	super()
 
-func pick(item: Item):
-	inventory.append(item)
-
 func pick_coin(item: Item):
 	coins += item.count * item.type.price
 	item.pick()
 
-func pick_item(item: Item):
-	inventory.add_item(item)
+func pick_weapon(item: Item):
+	storage.add_item(item)
+	item.pick()
+
+func pick_ammo(item: Item):
+	ammo.add_item(item)
+	item.pick()
+
+func pick_health(item: Item):
+	storage.add_item(item)
 	item.pick()
 
 func body_entered(body):
@@ -44,10 +53,11 @@ func picker_body_entered(body):
 	if not item.type:
 		return
 	
-	if item.type.is_coin:
-		pick_coin(item)
-	else:
-		pick_item(item)
+	match item.type.type:
+		IT.ItemTypes.COIN: pick_coin(item)
+		IT.ItemTypes.AMMO: pick_ammo(item)
+		IT.ItemTypes.WEAPON: pick_weapon(item)
+		IT.ItemTypes.HEALTH: pick_health(item)
 	
 func toggle_inventory():
 	if inventory_ui:
