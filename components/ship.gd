@@ -19,10 +19,11 @@ func pick(item: Item):
 
 func pick_coin(item: Item):
 	coins += item.count * item.type.price
-	item.pick(null)
+	item.pick()
 
 func pick_item(item: Item):
-	item.pick(inventory)
+	inventory.add_item(item)
+	item.pick()
 
 func body_entered(body):
 	var ray = RayCast2D.new()

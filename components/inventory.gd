@@ -23,14 +23,14 @@ func add_item(item: Item) -> InventorySlot:
 	slot = slot if slot else find_free()
 	
 	if slot:
-		slot.add_item(item)
+		slot.inc(item.type)
 	
 	return slot
 
 
 func find_free(type: ItemType = null) -> InventorySlot:
 	var values = slots.filter(
-		func(slot: InventorySlot): return slot.has_space() and (not type or slot.has_type(type))
+		func(slot: InventorySlot): return slot.has_type(type) and slot.has_space() if type else slot.is_empty()
 	)
 	
 	return values[0] if values.size() > 0 else null

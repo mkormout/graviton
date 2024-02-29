@@ -1,10 +1,12 @@
-[gd_resource type="Resource" script_class="ItemType" load_steps=2 format=3 uid="uid://besvh5hp7cj2q"]
+[gd_resource type="Resource" script_class="ItemType" load_steps=3 format=3 uid="uid://besvh5hp7cj2q"]
 
 [ext_resource type="Script" path="res://components/item-type.gd" id="1_p04po"]
+[ext_resource type="Texture2D" uid="uid://ca8mwrfvvhsdf" path="res://images/gravitygun-ammo.png" id="1_ws541"]
 
 [resource]
 script = ExtResource("1_p04po")
 name = "ammo-gravitygun"
 title = "Gravity Gun Ammo"
 price = 1000
+image = ExtResource("1_ws541")
 is_coin = false

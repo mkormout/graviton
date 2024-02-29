@@ -5,7 +5,7 @@ extends Body
 @export var count: int = 1
 @export var type: ItemType
 
-func pick(inventory: Inventory = null):
+func pick():
 	if pick_sound:
 		pick_sound.play()
 		pick_sound.reparent(

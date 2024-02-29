@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="ItemType" load_steps=2 format=3 uid="uid://bxg3kiniypv6l"]
+[gd_resource type="Resource" script_class="ItemType" load_steps=3 format=3 uid="uid://bxg3kiniypv6l"]
 
+[ext_resource type="Texture2D" uid="uid://bsav2wyjc24v7" path="res://images/minigun-ammo.png" id="1_gxcwq"]
 [ext_resource type="Script" path="res://components/item-type.gd" id="1_tkh6g"]
 
 [resource]
@@ -7,4 +8,5 @@ script = ExtResource("1_tkh6g")
 name = "ammo-minigun"
 title = "Minigun Ammo"
 price = 100
+image = ExtResource("1_gxcwq")
 is_coin = false
