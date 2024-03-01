@@ -1,6 +1,9 @@
 class_name MountPoint
 extends Node2D
 
+signal plugging(sender: MountPoint, target: MountPoint)
+signal unplugging(sender: MountPoint, target: MountPoint)
+
 @export var connection: MountPoint
 @export var tag: String
 @export var throw_force: int = 1000
@@ -19,6 +22,8 @@ func plug(other: MountPoint):
 	connection = other
 	other.connection = self
 	
+	plugging.emit(self, other)
+	
 	add_child(body_opposite)
 	
 func unplug():	
@@ -28,6 +33,8 @@ func unplug():
 			Vector2.from_angle(body_opposite.rotation) * throw_force
 		)
 		body_opposite.reparent(get_tree().current_scene)
+		
+		unplugging.emit(self, connection)
 	
 	connection = null
 

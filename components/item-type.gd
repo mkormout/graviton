@@ -9,9 +9,9 @@ enum ItemTypes {
 
 @export var name: String
 @export var title: String
+@export var type: ItemTypes
 @export var price: int
 @export var image: Texture2D
-@export var type: ItemTypes
 
 func same(type: ItemType) -> bool:
 	return type.name == name

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://components/ammo.gd" id="1_mbyth"]
 [ext_resource type="Texture2D" uid="uid://bsav2wyjc24v7" path="res://images/minigun-ammo.png" id="2_1g4gu"]
-[ext_resource type="Resource" uid="uid://bxg3kiniypv6l" path="res://item-types/ammo-minigun.tres" id="2_ae8q0"]
+[ext_resource type="Resource" uid="uid://bxg3kiniypv6l" path="res://items/ammo-minigun.tres" id="2_ae8q0"]
 [ext_resource type="PackedScene" uid="uid://bex5u7fwgdwf4" path="res://prefabs/ammo-explosion.tscn" id="2_rx3nm"]
 [ext_resource type="AudioStream" uid="uid://bxgccs4e2ejvv" path="res://sounds/ammo-pick.mp3" id="3_las7q"]
 

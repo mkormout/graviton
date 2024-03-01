@@ -8,7 +8,6 @@ enum ItemSlotType {
 	DROP,
 	AMMO
 }
-
 @export var slot_type: ItemSlotType
 @export var max_items: int = 50
 
@@ -82,3 +81,9 @@ func make_drag_preview() -> TextureRect:
 		return t
 	else:
 		return null
+
+func link_mount(mount: MountPoint):
+	mount.plugging.connect(_mount_plugging)
+
+func _mount_plugging(sender: MountPoint, target: MountPoint):
+	print("plugging ", target, " to ", self)

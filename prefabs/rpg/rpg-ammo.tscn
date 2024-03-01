@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://components/ammo.gd" id="1_m5gys"]
 [ext_resource type="Texture2D" uid="uid://li5sb7yjhtqd" path="res://images/rpg-ammo.png" id="2_gucei"]
 [ext_resource type="PackedScene" uid="uid://bex5u7fwgdwf4" path="res://prefabs/ammo-explosion.tscn" id="2_n3tpx"]
-[ext_resource type="Resource" uid="uid://ha5mg162nc1n" path="res://item-types/ammo-rpg.tres" id="2_wryw0"]
+[ext_resource type="Resource" uid="uid://ha5mg162nc1n" path="res://items/ammo-rpg.tres" id="2_wryw0"]
 [ext_resource type="AudioStream" uid="uid://bxgccs4e2ejvv" path="res://sounds/ammo-pick.mp3" id="3_sl8wl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_64ipc"]

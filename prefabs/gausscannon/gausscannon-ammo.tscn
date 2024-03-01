@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://components/ammo.gd" id="1_7w2at"]
 [ext_resource type="Texture2D" uid="uid://b2h6q8q42jxv5" path="res://images/gausscannon-ammo.png" id="2_1egn4"]
-[ext_resource type="Resource" uid="uid://b6iqy2gg6o6uo" path="res://item-types/ammo-gausscannon.tres" id="2_2tm30"]
+[ext_resource type="Resource" uid="uid://b6iqy2gg6o6uo" path="res://items/ammo-gausscannon.tres" id="2_2tm30"]
 [ext_resource type="PackedScene" uid="uid://bex5u7fwgdwf4" path="res://prefabs/ammo-explosion.tscn" id="2_hsyb5"]
 [ext_resource type="AudioStream" uid="uid://bxgccs4e2ejvv" path="res://sounds/ammo-pick.mp3" id="3_0yydn"]
 

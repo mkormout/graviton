@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://components/item.gd" id="1_y3tju"]
 [ext_resource type="PackedScene" uid="uid://c5w67ija55whr" path="res://prefabs/weapon-explosion.tscn" id="2_mfps8"]
-[ext_resource type="Resource" uid="uid://bjja6sues7s3s" path="res://item-types/rpg.tres" id="2_r6i52"]
+[ext_resource type="Resource" uid="uid://bjja6sues7s3s" path="res://items/rpg.tres" id="2_r6i52"]
 [ext_resource type="Texture2D" uid="uid://ctj46g5b8547d" path="res://images/rpg-item.png" id="2_tsmua"]
 [ext_resource type="AudioStream" uid="uid://bxgccs4e2ejvv" path="res://sounds/ammo-pick.mp3" id="3_g830t"]
 

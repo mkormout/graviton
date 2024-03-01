@@ -27,6 +27,14 @@ func _ready():
 	ship.drop.register_slot($"MarginContainer/TextureRect/GridContainer2/Drop-slot-6")
 	ship.drop.register_slot($"MarginContainer/TextureRect/GridContainer2/Drop-slot-7")
 	ship.drop.register_slot($"MarginContainer/TextureRect/GridContainer2/Drop-slot-8")
+	
+	var mount_front = ship.get_mount("")
+	var mount_left = ship.get_mount("left")
+	var mount_right = ship.get_mount("right")
+	
+	$"MarginContainer/TextureRect/Slot-weapon-1".link_mount(mount_front)
+	$"MarginContainer/TextureRect/Slot-weapon-2".link_mount(mount_left)
+	$"MarginContainer/TextureRect/Slot-weapon-3".link_mount(mount_right)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

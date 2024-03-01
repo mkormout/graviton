@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://components/item.gd" id="1_kqj3d"]
 [ext_resource type="PackedScene" uid="uid://dfves2timslw0" path="res://prefabs/coin/coin-explosion.tscn" id="2_1agth"]
-[ext_resource type="Resource" uid="uid://06ssae7pnxi4" path="res://item-types/coin-copper.tres" id="2_2028i"]
+[ext_resource type="Resource" uid="uid://06ssae7pnxi4" path="res://items/coin-copper.tres" id="2_2028i"]
 [ext_resource type="Texture2D" uid="uid://cqp88e1mjivnq" path="res://images/coin_copper.png" id="3_o7awp"]
 [ext_resource type="AudioStream" uid="uid://cada10kx4ql5r" path="res://sounds/coin-pick.wav" id="4_ygy5g"]
 

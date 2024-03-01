@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://components/item.gd" id="1_3mujt"]
 [ext_resource type="Texture2D" uid="uid://62ioxknfi178" path="res://images/gausscannon-item.png" id="2_2fp22"]
-[ext_resource type="Resource" uid="uid://c1iigd6ec20sn" path="res://item-types/gausscannon.tres" id="2_oomdd"]
+[ext_resource type="Resource" uid="uid://c1iigd6ec20sn" path="res://items/gausscannon.tres" id="2_7ieta"]
 [ext_resource type="AudioStream" uid="uid://bxgccs4e2ejvv" path="res://sounds/ammo-pick.mp3" id="3_684pu"]
 [ext_resource type="PackedScene" uid="uid://c5w67ija55whr" path="res://prefabs/weapon-explosion.tscn" id="3_tbebw"]
 
@@ -19,7 +19,7 @@ max_contacts_reported = 10
 contact_monitor = true
 script = ExtResource("1_3mujt")
 pick_sound = NodePath("AudioStreamPlayer2D")
-type = ExtResource("2_oomdd")
+type = ExtResource("2_7ieta")
 death = ExtResource("3_tbebw")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
