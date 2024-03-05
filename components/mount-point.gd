@@ -8,6 +8,9 @@ signal unplugging(sender: MountPoint, target: MountPoint)
 @export var tag: String
 @export var throw_force: int = 1000
 
+var slots: Array[InventorySlot] = []
+var is_notifying: bool = false
+
 var body_opposite: MountableBody:
 	get: return get_body_opposite()
 var body_self: MountableBody:
@@ -19,14 +22,19 @@ func _ready():
 func plug(other: MountPoint):
 	unplug()
 	
+	plugging.emit(self, other)
+	
 	connection = other
 	other.connection = self
 	
-	plugging.emit(self, other)
-	
 	add_child(body_opposite)
 	
-func unplug():	
+	call_slots(
+		func(slot: InventorySlot):
+			slot.inc(body_opposite.item_type)
+	)
+	
+func unplug(free: bool = false):
 	if connection:
 		# throw away the body
 		body_opposite.apply_central_impulse(
@@ -35,6 +43,15 @@ func unplug():
 		body_opposite.reparent(get_tree().current_scene)
 		
 		unplugging.emit(self, connection)
+				
+		if free and body_opposite:
+			body_opposite.queue_free()
+		
+		call_slots(
+			func(slot: InventorySlot):
+				slot.dec(body_opposite.item_type)
+		)
+
 	
 	connection = null
 
@@ -55,3 +72,37 @@ func do(sender: MountableBody, action: String, meta = null):
 
 func _connection_tree_exiting():
 	unplug()
+
+func link_slot(slot: InventorySlot) -> void:
+	slot.item_adding.connect(_slot_item_adding)
+	slot.item_removing.connect(_slot_item_removing)
+	slots.append(slot)
+
+func unlink_slot(slot: InventorySlot) -> void:
+	slot.item_adding.disconnect(_slot_item_adding)
+	slot.item_removing.disconnect(_slot_item_removing)
+	slots.erase(slot)
+
+func call_slots(slot_func: Callable):
+	if is_notifying:
+		return
+		
+	is_notifying = true
+	
+	for slot in slots:
+		slot_func.call(slot)
+	
+	is_notifying = false
+
+func _slot_item_adding(sender: InventorySlot, type: ItemType, quantity: int):
+	if is_notifying:
+		return
+		
+	var body = type.instantiate()
+	plug(body.get_mount())
+
+func _slot_item_removing(sender: InventorySlot, type: ItemType, quantity: int):
+	if is_notifying:
+		return
+		
+	unplug(true)

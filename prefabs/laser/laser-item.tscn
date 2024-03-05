@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://components/item.gd" id="1_30cgq"]
 [ext_resource type="Texture2D" uid="uid://cvtwoim2fym2g" path="res://images/laser-item.png" id="2_33r2k"]
-[ext_resource type="Resource" uid="uid://bj036cibp8ms4" path="res://items/laser.tres" id="2_dtpg8"]
+[ext_resource type="Resource" uid="uid://bj036cibp8ms4" path="res://items/laser.tres" id="2_kkk5n"]
 [ext_resource type="AudioStream" uid="uid://bxgccs4e2ejvv" path="res://sounds/ammo-pick.mp3" id="3_7sdph"]
 [ext_resource type="PackedScene" uid="uid://c5w67ija55whr" path="res://prefabs/weapon-explosion.tscn" id="3_f7l15"]
 
@@ -19,7 +19,7 @@ max_contacts_reported = 10
 contact_monitor = true
 script = ExtResource("1_30cgq")
 pick_sound = NodePath("AudioStreamPlayer2D")
-type = ExtResource("2_dtpg8")
+type = ExtResource("2_kkk5n")
 death = ExtResource("3_f7l15")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

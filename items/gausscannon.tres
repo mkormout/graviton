@@ -1,12 +1,13 @@
 [gd_resource type="Resource" script_class="ItemType" load_steps=3 format=3 uid="uid://c1iigd6ec20sn"]
 
-[ext_resource type="Texture2D" uid="uid://62ioxknfi178" path="res://images/gausscannon-item.png" id="1_8ndeu"]
-[ext_resource type="Script" path="res://components/item-type.gd" id="1_rb5em"]
+[ext_resource type="Texture2D" uid="uid://62ioxknfi178" path="res://images/gausscannon-item.png" id="1_iyheg"]
+[ext_resource type="Script" path="res://components/item-type.gd" id="2_bej7d"]
 
 [resource]
-script = ExtResource("1_rb5em")
+script = ExtResource("2_bej7d")
 name = "gausscannon"
+name_item = "gausscannon-item"
 title = "Gauss Cannon"
-price = 50000
-image = ExtResource("1_8ndeu")
 type = 2
+price = 50000
+image = ExtResource("1_iyheg")

@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://chwvdyeaq44p4"]
+[gd_scene load_steps=10 format=3 uid="uid://chwvdyeaq44p4"]
 
 [ext_resource type="Texture2D" uid="uid://d0mea2b5pdefi" path="res://images/minigun.png" id="1_acpa0"]
 [ext_resource type="Script" path="res://components/mountable-weapon.gd" id="1_f25lk"]
 [ext_resource type="PackedScene" uid="uid://cn8cxmqc4klkd" path="res://prefabs/minigun/minigun-bullet.tscn" id="2_72a78"]
 [ext_resource type="Script" path="res://components/mount-point.gd" id="2_uuclo"]
+[ext_resource type="Resource" uid="uid://bhrvhxm1dooog" path="res://items/minigun.tres" id="3_408ca"]
 [ext_resource type="AudioStream" uid="uid://bs1yoexmwj7op" path="res://sounds/minigun-shot.mp3" id="5_smrsu"]
 [ext_resource type="AudioStream" uid="uid://ch8rnjocy08u1" path="res://sounds/reload_clip.wav" id="7_s2xpc"]
 [ext_resource type="AudioStream" uid="uid://d1khlswfftyfa" path="res://sounds/empty-magazine.wav" id="7_yjvrk"]
@@ -21,6 +22,7 @@ barrel = NodePath("Barrel")
 sound = NodePath("FireSound")
 empty_sound = NodePath("EmptySound")
 reload_sound = NodePath("ReloadSound")
+item_type = ExtResource("3_408ca")
 rate = 0.02
 velocity = 15000.0
 spread = 0.01

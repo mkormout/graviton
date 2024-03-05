@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://components/ammo.gd" id="1_gjstf"]
 [ext_resource type="PackedScene" uid="uid://bex5u7fwgdwf4" path="res://prefabs/ammo-explosion.tscn" id="2_87e48"]
 [ext_resource type="Texture2D" uid="uid://ca8mwrfvvhsdf" path="res://images/gravitygun-ammo.png" id="2_f05y2"]
-[ext_resource type="Resource" uid="uid://besvh5hp7cj2q" path="res://items/ammo-gravitygun.tres" id="2_okelu"]
+[ext_resource type="Resource" uid="uid://besvh5hp7cj2q" path="res://items/gravitygun-ammo.tres" id="2_okelu"]
 [ext_resource type="AudioStream" uid="uid://bxgccs4e2ejvv" path="res://sounds/ammo-pick.mp3" id="3_y6fst"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fnglq"]

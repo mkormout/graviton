@@ -1,21 +1,21 @@
 class_name Inventory extends Node
 
-signal slot_item_added(sender: Inventory, slot: InventorySlot, item: Item)
-signal slot_item_removed(sender: Inventory, slot: InventorySlot, item: Item)
+signal slot_item_adding(sender: Inventory, slot: InventorySlot, item: ItemType)
+signal slot_item_removing(sender: Inventory, slot: InventorySlot, item: ItemType)
 
 var slots: Array[InventorySlot] = []
 
 func register_slot(slot: InventorySlot):
-	slot.item_added.connect(_on_slot_item_added)
-	slot.item_removed.connect(_on_slot_item_removed)
+	slot.item_adding.connect(_on_slot_item_adding)
+	slot.item_removing.connect(_on_slot_item_removing)
 	slots.append(slot)
 
 func unregister_slot(slot: InventorySlot):
 	var i = slots.find(slot)
 	
 	if i > -1:
-		slots[i].item_added.disconnect(_on_slot_item_added)
-		slots[i].item_removed.disconnect(_on_slot_item_removed)
+		slots[i].item_adding.disconnect(_on_slot_item_adding)
+		slots[i].item_removing.disconnect(_on_slot_item_removing)
 		slots.remove_at(i)
 
 func add_item(item: Item) -> InventorySlot:
@@ -35,9 +35,8 @@ func find_free(type: ItemType = null) -> InventorySlot:
 	
 	return values[0] if values.size() > 0 else null
 
-func _on_slot_item_added(sender: InventorySlot, item: Item):
-	slot_item_added.emit(self, sender, item)
-	print(item)
+func _on_slot_item_adding(sender: InventorySlot, item: Item):
+	slot_item_adding.emit(self, sender, item)
 
-func _on_slot_item_removed(sender: InventorySlot, item: Item):
-	slot_item_removed.emit(self, sender, item)
+func _on_slot_item_removing(sender: InventorySlot, item: Item):
+	slot_item_removing.emit(self, sender, item)

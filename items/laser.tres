@@ -1,12 +1,13 @@
 [gd_resource type="Resource" script_class="ItemType" load_steps=3 format=3 uid="uid://bj036cibp8ms4"]
 
-[ext_resource type="Script" path="res://components/item-type.gd" id="1_kn8bp"]
-[ext_resource type="Texture2D" uid="uid://cvtwoim2fym2g" path="res://images/laser-item.png" id="1_wqea5"]
+[ext_resource type="Texture2D" uid="uid://cvtwoim2fym2g" path="res://images/laser-item.png" id="1_jmsws"]
+[ext_resource type="Script" path="res://components/item-type.gd" id="2_e2iiw"]
 
 [resource]
-script = ExtResource("1_kn8bp")
+script = ExtResource("2_e2iiw")
 name = "laser"
+name_item = "laser-item"
 title = "Laser"
-price = 20000
-image = ExtResource("1_wqea5")
 type = 2
+price = 20000
+image = ExtResource("1_jmsws")

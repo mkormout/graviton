@@ -1,6 +1,8 @@
 class_name MountableBody
 extends Body
 
+@export var item_type: ItemType
+
 var mounts = []
 
 func _physics_process(_delta):

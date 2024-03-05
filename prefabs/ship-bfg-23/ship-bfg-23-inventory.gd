@@ -32,9 +32,9 @@ func _ready():
 	var mount_left = ship.get_mount("left")
 	var mount_right = ship.get_mount("right")
 	
-	$"MarginContainer/TextureRect/Slot-weapon-1".link_mount(mount_front)
-	$"MarginContainer/TextureRect/Slot-weapon-2".link_mount(mount_left)
-	$"MarginContainer/TextureRect/Slot-weapon-3".link_mount(mount_right)
+	mount_front.link_slot($"MarginContainer/TextureRect/Slot-weapon-front")
+	mount_left.link_slot($"MarginContainer/TextureRect/Slot-weapon-left")
+	mount_right.link_slot($"MarginContainer/TextureRect/Slot-weapon-right")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

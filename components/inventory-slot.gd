@@ -14,8 +14,8 @@ enum ItemSlotType {
 var occupant: ItemType
 var quantity: int = 0
 
-signal item_added(sender: InventorySlot, item: Item)
-signal item_removed(sender: InventorySlot, item: Item)
+signal item_adding(sender: InventorySlot, type: ItemType, quantity: int)
+signal item_removing(sender: InventorySlot, type: ItemType)
 
 func inc(type: ItemType) -> int:
 	quantity += 1
@@ -24,16 +24,26 @@ func inc(type: ItemType) -> int:
 	if quantity >= max_items:
 		quantity = max_items
 	
+	item_adding.emit(self, type, 1)
+	
 	return quantity
 
 func dec(type: ItemType) -> int:
 	quantity -= 1
+	
+	item_removing.emit(self, type, 1)
 	
 	if quantity <= 0:
 		quantity = 0
 		occupant = null
 	
 	return quantity
+
+func clear():
+	if occupant:
+		item_removing.emit(self, occupant, quantity)
+	quantity = 0
+	occupant = null
 
 func has_space(how_much: int = 0) -> bool:
 	return (quantity + how_much) < max_items
@@ -66,10 +76,10 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	return is_empty() or (has_type(data.item_type) and has_space(data.quantity))
 	
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
-	data.source.occupant = null
-	data.source.quantity = 0
+	data.source.clear()
 	occupant = data.item_type
 	quantity = quantity + data.quantity
+	item_adding.emit(self, data.item_type, data.quantity)
 
 func make_drag_preview() -> TextureRect:
 	if occupant and occupant.image:
@@ -81,9 +91,3 @@ func make_drag_preview() -> TextureRect:
 		return t
 	else:
 		return null
-
-func link_mount(mount: MountPoint):
-	mount.plugging.connect(_mount_plugging)
-
-func _mount_plugging(sender: MountPoint, target: MountPoint):
-	print("plugging ", target, " to ", self)

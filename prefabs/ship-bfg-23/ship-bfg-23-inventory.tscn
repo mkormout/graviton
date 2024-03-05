@@ -95,7 +95,7 @@ offset_bottom = 0.833862
 slot_type = 2
 max_items = 1
 
-[node name="Slot-weapon-1" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
+[node name="Slot-weapon-left" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.285
@@ -109,7 +109,7 @@ offset_bottom = -0.330078
 slot_type = 1
 max_items = 1
 
-[node name="Slot-weapon-2" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
+[node name="Slot-weapon-right" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.285
@@ -123,7 +123,7 @@ offset_bottom = -0.417999
 slot_type = 1
 max_items = 1
 
-[node name="Slot-weapon-3" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
+[node name="Slot-weapon-front" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.803
