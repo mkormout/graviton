@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://cbco1xs1gleke"]
+[gd_scene load_steps=14 format=3 uid="uid://cbco1xs1gleke"]
 
 [ext_resource type="Script" path="res://components/mountable-weapon.gd" id="1_iml48"]
 [ext_resource type="PackedScene" uid="uid://bbbou6h5jmvbh" path="res://prefabs/gausscannon/gausscannon-bullet.tscn" id="2_i52xv"]
+[ext_resource type="Resource" uid="uid://b6iqy2gg6o6uo" path="res://items/gausscannon-ammo.tres" id="3_2ppho"]
 [ext_resource type="Resource" uid="uid://c1iigd6ec20sn" path="res://items/gausscannon.tres" id="3_ljmf2"]
 [ext_resource type="Texture2D" uid="uid://nu0w8gtlvc3" path="res://images/gausscannon.png" id="3_og6jl"]
 [ext_resource type="AudioStream" uid="uid://bbri5doimels0" path="res://sounds/gausscannon.mp3" id="4_33d08"]
@@ -34,6 +35,7 @@ barrel = NodePath("Barrel")
 sound = NodePath("FireSound")
 empty_sound = NodePath("EmptySound")
 reload_sound = NodePath("ReloadSound")
+ammo_type = ExtResource("3_2ppho")
 rate = 0.5
 velocity = 40000.0
 recoil = 500000.0

@@ -40,3 +40,8 @@ func _on_slot_item_adding(sender: InventorySlot, item: Item):
 
 func _on_slot_item_removing(sender: InventorySlot, item: Item):
 	slot_item_removing.emit(self, sender, item)
+
+func get_by_type(type: ItemType):
+	return slots.filter(
+		func(slot: InventorySlot): return slot.has_type(type)
+	)

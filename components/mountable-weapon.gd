@@ -7,6 +7,7 @@ extends MountableBody
 @export var sound: AudioStreamPlayer2D
 @export var empty_sound: AudioStreamPlayer2D
 @export var reload_sound: AudioStreamPlayer2D
+@export var ammo_type: ItemType
 @export_group("Firing")
 @export var rate: float
 @export var velocity: float
@@ -38,6 +39,18 @@ func _ready() -> void:
 	
 	magazine_current = magazine_max
 	ammo_current = ammo_max
+
+func get_ship():
+	var mount = get_mount()
+	var body = null
+	
+	if mount:
+		body = mount.body_opposite
+	
+	if body and body is Ship:
+		return body as Ship
+	else:
+		return null
 
 func has_ammo() -> bool:
 	return magazine_current > 0
