@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_7hdti")
 name = "rpg"
-name_item = "rpg-item"
+name_item = ""
 title = "RPG"
 type = 2
 price = 100000

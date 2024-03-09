@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_l7bxg")
 name = "gravitygun"
-name_item = "gravitygun-item"
+name_item = ""
 title = "Gravity Gun"
 type = 2
 price = 500000

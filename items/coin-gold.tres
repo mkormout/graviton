@@ -6,7 +6,8 @@
 [resource]
 script = ExtResource("1_tkfej")
 name = "coin-gold"
+name_item = ""
 title = "Gold Coin"
+type = 0
 price = 5
 image = ExtResource("1_q6yhs")
-type = 0

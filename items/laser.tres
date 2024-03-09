@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_e2iiw")
 name = "laser"
-name_item = "laser-item"
+name_item = ""
 title = "Laser"
 type = 2
 price = 20000
