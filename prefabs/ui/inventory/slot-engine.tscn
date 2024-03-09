@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://b1icw4sgu11vq"]
+
+[ext_resource type="Script" path="res://components/inventory-slot.gd" id="1_rmr65"]
+[ext_resource type="Texture2D" uid="uid://brondjxykikse" path="res://images/inventory-slot-green.png" id="2_xu5j5"]
+
+[node name="Slot-engine" type="CenterContainer"]
+script = ExtResource("1_rmr65")
+slot_type = 3
+max_items = 1
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("2_xu5j5")

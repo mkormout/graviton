@@ -1,6 +1,8 @@
 class_name MountableBody
 extends Body
 
+@export var item_type: ItemType
+
 var mounts = []
 
 func _physics_process(_delta):
@@ -21,6 +23,10 @@ func mount_weapon(what: MountableWeapon, where: String):
 	mount1.plug(mount2)
 	
 	mounts = get_mounts()
+
+func unmount_weapon(where: String):
+	var mount = get_mount(where)
+	mount.unplug()
 
 func do(sender: MountableBody, action: String, where: String, meta = null):
 	if not sender:

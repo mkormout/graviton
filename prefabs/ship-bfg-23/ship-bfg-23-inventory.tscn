@@ -1,0 +1,230 @@
+[gd_scene load_steps=4 format=3 uid="uid://c5n2g0g788e3r"]
+
+[ext_resource type="Script" path="res://prefabs/ship-bfg-23/ship-bfg-23-inventory.gd" id="1_mhngw"]
+[ext_resource type="Texture2D" uid="uid://b0vj1nsx0hpy6" path="res://images/ship-inventory.png" id="2_s8nkx"]
+[ext_resource type="PackedScene" uid="uid://cg0rnqqif7mao" path="res://prefabs/ui/inventory/inventory-slot.tscn" id="3_uuhwj"]
+
+[node name="Ship-bfg-23-inventory" type="CanvasLayer"]
+script = ExtResource("1_mhngw")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -900.0
+offset_top = -859.0
+offset_right = 900.0
+offset_bottom = 859.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer"]
+layout_mode = 2
+texture = ExtResource("2_s8nkx")
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/TextureRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.131
+anchor_top = 0.414
+anchor_right = 0.551
+anchor_bottom = 0.586
+offset_left = 0.199982
+offset_top = 0.747925
+offset_right = -0.799988
+offset_bottom = 0.251953
+columns = 5
+
+[node name="Storage-slot-1" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+
+[node name="Storage-slot-2" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+
+[node name="Storage-slot-3" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+
+[node name="Storage-slot-4" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+
+[node name="Storage-slot-5" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+
+[node name="Storage-slot-6" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+
+[node name="Storage-slot-7" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+
+[node name="Storage-slot-8" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+
+[node name="Storage-slot-9" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+
+[node name="Storage-slot-10" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+
+[node name="Slot-util-1" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.234
+anchor_top = 0.262
+anchor_right = 0.315
+anchor_bottom = 0.347
+offset_left = -0.200012
+offset_top = -0.116028
+offset_right = -6.10352e-05
+offset_bottom = -0.145996
+slot_type = 2
+max_items = 1
+
+[node name="Slot-util-2" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.234
+anchor_top = 0.653
+anchor_right = 0.315
+anchor_bottom = 0.737
+offset_left = -0.200012
+offset_top = -0.854126
+offset_right = -6.10352e-05
+offset_bottom = 0.833862
+slot_type = 2
+max_items = 1
+
+[node name="Slot-weapon-left" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.285
+anchor_top = 0.85
+anchor_right = 0.366
+anchor_bottom = 0.935
+offset_left = -6.10352e-05
+offset_top = -0.300049
+offset_right = 0.199951
+offset_bottom = -0.330078
+slot_type = 1
+max_items = 1
+
+[node name="Slot-weapon-right" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.285
+anchor_top = 0.066
+anchor_right = 0.366
+anchor_bottom = 0.151
+offset_left = -6.10352e-05
+offset_top = -0.388
+offset_right = 0.199951
+offset_bottom = -0.417999
+slot_type = 1
+max_items = 1
+
+[node name="Slot-weapon-front" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.803
+anchor_top = 0.458
+anchor_right = 0.884
+anchor_bottom = 0.543
+offset_left = -0.400024
+offset_top = 0.155945
+offset_right = -0.200073
+offset_bottom = 0.125916
+slot_type = 1
+max_items = 1
+
+[node name="Slot-engine-1" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.006
+anchor_top = 0.458
+anchor_right = 0.087
+anchor_bottom = 0.542
+offset_left = -0.8
+offset_top = -0.844055
+offset_right = -0.600006
+offset_bottom = 0.843933
+slot_type = 3
+max_items = 1
+
+[node name="GridContainer2" type="GridContainer" parent="MarginContainer/TextureRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.577
+anchor_top = 0.053
+anchor_right = 0.908
+anchor_bottom = 0.225
+offset_left = -0.600098
+offset_top = -0.0540085
+offset_right = -0.400146
+offset_bottom = 0.449982
+columns = 4
+
+[node name="Drop-slot-1" parent="MarginContainer/TextureRect/GridContainer2" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+slot_type = 4
+
+[node name="Drop-slot-2" parent="MarginContainer/TextureRect/GridContainer2" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+slot_type = 4
+
+[node name="Drop-slot-3" parent="MarginContainer/TextureRect/GridContainer2" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+slot_type = 4
+
+[node name="Drop-slot-4" parent="MarginContainer/TextureRect/GridContainer2" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+slot_type = 4
+
+[node name="Drop-slot-5" parent="MarginContainer/TextureRect/GridContainer2" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+slot_type = 4
+
+[node name="Drop-slot-6" parent="MarginContainer/TextureRect/GridContainer2" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+slot_type = 4
+
+[node name="Drop-slot-7" parent="MarginContainer/TextureRect/GridContainer2" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+slot_type = 4
+
+[node name="Drop-slot-8" parent="MarginContainer/TextureRect/GridContainer2" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+slot_type = 4
+
+[node name="GridContainer3" type="GridContainer" parent="MarginContainer/TextureRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.538
+anchor_top = 0.793
+anchor_right = 0.952
+anchor_bottom = 0.878
+offset_left = -0.400085
+offset_top = -0.374023
+offset_right = 0.399902
+offset_bottom = -0.404053
+columns = 5
+
+[node name="Ammo-slot-1" parent="MarginContainer/TextureRect/GridContainer3" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+slot_type = 5
+
+[node name="Ammo-slot-2" parent="MarginContainer/TextureRect/GridContainer3" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+slot_type = 5
+
+[node name="Ammo-slot-3" parent="MarginContainer/TextureRect/GridContainer3" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+slot_type = 5
+
+[node name="Ammo-slot-4" parent="MarginContainer/TextureRect/GridContainer3" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+slot_type = 5
+
+[node name="Ammo-slot-5" parent="MarginContainer/TextureRect/GridContainer3" instance=ExtResource("3_uuhwj")]
+layout_mode = 2
+slot_type = 5

@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://epfdus3x86sd"]
 
 [ext_resource type="Script" path="res://components/item.gd" id="1_yroo7"]
-[ext_resource type="Resource" uid="uid://b6kbq3ho748c1" path="res://prefabs/item-types/gravitygun.tres" id="2_1oi5s"]
+[ext_resource type="Resource" uid="uid://b6kbq3ho748c1" path="res://items/gravitygun.tres" id="2_1oi5s"]
 [ext_resource type="Texture2D" uid="uid://cl4f7nqrbwybk" path="res://images/gravitygun-item.png" id="2_j0agc"]
 [ext_resource type="AudioStream" uid="uid://bxgccs4e2ejvv" path="res://sounds/ammo-pick.mp3" id="3_6uw8h"]
 [ext_resource type="PackedScene" uid="uid://c5w67ija55whr" path="res://prefabs/weapon-explosion.tscn" id="3_r6num"]

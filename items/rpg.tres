@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemType" load_steps=3 format=3 uid="uid://bjja6sues7s3s"]
+
+[ext_resource type="Texture2D" uid="uid://ctj46g5b8547d" path="res://images/rpg-item.png" id="1_i0e3u"]
+[ext_resource type="Script" path="res://components/item-type.gd" id="2_7hdti"]
+
+[resource]
+script = ExtResource("2_7hdti")
+name = "rpg"
+name_item = "rpg-item"
+title = "RPG"
+type = 2
+price = 100000
+image = ExtResource("1_i0e3u")

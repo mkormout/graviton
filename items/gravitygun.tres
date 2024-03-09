@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemType" load_steps=3 format=3 uid="uid://b6kbq3ho748c1"]
+
+[ext_resource type="Texture2D" uid="uid://cl4f7nqrbwybk" path="res://images/gravitygun-item.png" id="1_0r338"]
+[ext_resource type="Script" path="res://components/item-type.gd" id="2_l7bxg"]
+
+[resource]
+script = ExtResource("2_l7bxg")
+name = "gravitygun"
+name_item = "gravitygun-item"
+title = "Gravity Gun"
+type = 2
+price = 500000
+image = ExtResource("1_0r338")

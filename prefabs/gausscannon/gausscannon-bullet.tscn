@@ -1,13 +1,14 @@
-[gd_scene load_steps=10 format=3 uid="uid://bbbou6h5jmvbh"]
+[gd_scene load_steps=11 format=3 uid="uid://bbbou6h5jmvbh"]
 
 [ext_resource type="Script" path="res://components/bullet.gd" id="1_vstys"]
 [ext_resource type="Texture2D" uid="uid://rsyngcr8ff1t" path="res://images/gausscannon-bullet.png" id="2_woche"]
+[ext_resource type="PackedScene" uid="uid://burphg2ey64t1" path="res://prefabs/gausscannon/gausscannon-bullet-explosion.tscn" id="3_d0lkv"]
 [ext_resource type="Script" path="res://components/damage.gd" id="3_w2xbv"]
 
 [sub_resource type="Resource" id="Resource_bkfm0"]
 script = ExtResource("3_w2xbv")
-energy = 200
-kinetic = 300.0
+energy = 200.0
+kinetic = 500.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uqvau"]
 size = Vector2(103, 442)
@@ -41,6 +42,8 @@ max_contacts_reported = 100
 contact_monitor = true
 script = ExtResource("1_vstys")
 attack = SubResource("Resource_bkfm0")
+death_ttl = 2.0
+death = ExtResource("3_d0lkv")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708

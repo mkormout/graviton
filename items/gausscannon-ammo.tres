@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemType" load_steps=3 format=3 uid="uid://b6iqy2gg6o6uo"]
+
+[ext_resource type="Texture2D" uid="uid://b2h6q8q42jxv5" path="res://images/gausscannon-ammo.png" id="1_rtvry"]
+[ext_resource type="Script" path="res://components/item-type.gd" id="2_3s51s"]
+
+[resource]
+script = ExtResource("2_3s51s")
+name = "gausscannon-ammo"
+title = "Gauss Cannon Ammo"
+type = 1
+price = 400
+image = ExtResource("1_rtvry")

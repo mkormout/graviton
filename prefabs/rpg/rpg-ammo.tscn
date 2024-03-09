@@ -3,14 +3,14 @@
 [ext_resource type="Script" path="res://components/ammo.gd" id="1_m5gys"]
 [ext_resource type="Texture2D" uid="uid://li5sb7yjhtqd" path="res://images/rpg-ammo.png" id="2_gucei"]
 [ext_resource type="PackedScene" uid="uid://bex5u7fwgdwf4" path="res://prefabs/ammo-explosion.tscn" id="2_n3tpx"]
-[ext_resource type="Resource" uid="uid://ha5mg162nc1n" path="res://prefabs/item-types/ammo-rpg.tres" id="2_wryw0"]
+[ext_resource type="Resource" uid="uid://ha5mg162nc1n" path="res://items/rpg-ammo.tres" id="2_wryw0"]
 [ext_resource type="AudioStream" uid="uid://bxgccs4e2ejvv" path="res://sounds/ammo-pick.mp3" id="3_sl8wl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_64ipc"]
-size = Vector2(210, 225)
+size = Vector2(503, 448)
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_ge5w8"]
-polygon = PackedVector2Array(-104, 112, 106, 111, 106, -113, -105, -113)
+polygon = PackedVector2Array(-251, 223, 252, 223, 253, -225, -252, -225)
 
 [node name="Rpg-ammo" type="RigidBody2D" node_paths=PackedStringArray("pick_sound")]
 collision_layer = 64
@@ -27,7 +27,7 @@ death = ExtResource("2_n3tpx")
 texture = ExtResource("2_gucei")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -1.5)
+position = Vector2(-0.5, -1)
 shape = SubResource("RectangleShape2D_64ipc")
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]

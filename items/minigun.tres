@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemType" load_steps=3 format=3 uid="uid://bhrvhxm1dooog"]
+
+[ext_resource type="Texture2D" uid="uid://blrw11iqx7flu" path="res://images/minigun-item.png" id="1_jxnsc"]
+[ext_resource type="Script" path="res://components/item-type.gd" id="1_tx6vh"]
+
+[resource]
+script = ExtResource("1_tx6vh")
+name = "minigun"
+name_item = "minigun-item"
+title = "Minigun"
+type = 0
+price = 10000
+image = ExtResource("1_jxnsc")

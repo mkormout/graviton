@@ -1,15 +1,15 @@
 [gd_scene load_steps=13 format=3 uid="uid://bgiyj83xynsd"]
 
-[ext_resource type="Script" path="res://components/explosion.gd" id="1_afcri"]
-[ext_resource type="Script" path="res://components/damage.gd" id="2_vt132"]
-[ext_resource type="Script" path="res://components/random-audio-player.gd" id="3_3u6eb"]
-[ext_resource type="AudioStream" uid="uid://7wuqk2kqrxs2" path="res://sounds/explosion-1.wav" id="4_q6m6e"]
-[ext_resource type="AudioStream" uid="uid://l6jfw80adfj8" path="res://sounds/explosion-2.wav" id="5_p4q73"]
-[ext_resource type="AudioStream" uid="uid://c0o0nycma3ye1" path="res://sounds/explosion-3.wav" id="6_fl284"]
-[ext_resource type="AudioStream" uid="uid://dhpc7rcrllys1" path="res://sounds/explosion-4.wav" id="7_aq25g"]
+[ext_resource type="Script" path="res://components/explosion.gd" id="1_6fb2w"]
+[ext_resource type="Script" path="res://components/damage.gd" id="2_7c6p6"]
+[ext_resource type="Script" path="res://components/random-audio-player.gd" id="3_r43n2"]
+[ext_resource type="AudioStream" uid="uid://7wuqk2kqrxs2" path="res://sounds/explosion-1.wav" id="4_v541t"]
+[ext_resource type="AudioStream" uid="uid://l6jfw80adfj8" path="res://sounds/explosion-2.wav" id="5_8bap4"]
+[ext_resource type="AudioStream" uid="uid://c0o0nycma3ye1" path="res://sounds/explosion-3.wav" id="6_bjr88"]
+[ext_resource type="AudioStream" uid="uid://dhpc7rcrllys1" path="res://sounds/explosion-4.wav" id="7_gwn7a"]
 
 [sub_resource type="Resource" id="Resource_062r6"]
-script = ExtResource("2_vt132")
+script = ExtResource("2_7c6p6")
 energy = 500.0
 kinetic = 500.0
 
@@ -34,8 +34,8 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 1)
 
-[node name="Ship-explosion" type="Node2D" node_paths=PackedStringArray("particles", "light", "audio")]
-script = ExtResource("1_afcri")
+[node name="Ship-bfg-23-explosion" type="Node2D" node_paths=PackedStringArray("particles", "light", "audio")]
+script = ExtResource("1_6fb2w")
 radius = 3000.0
 particles = NodePath("CPUParticles2D")
 light = NodePath("PointLight2D")
@@ -78,7 +78,7 @@ texture_scale = 50.0
 height = 100.0
 
 [node name="RandomAudioPlayer" type="Node2D" parent="."]
-script = ExtResource("3_3u6eb")
+script = ExtResource("3_r43n2")
 autoplay = false
-resources = Array[AudioStream]([ExtResource("4_q6m6e"), ExtResource("5_p4q73"), ExtResource("6_fl284"), ExtResource("7_aq25g")])
+resources = Array[AudioStream]([ExtResource("4_v541t"), ExtResource("5_8bap4"), ExtResource("6_bjr88"), ExtResource("7_gwn7a")])
 volume_db = 0

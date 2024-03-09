@@ -1,16 +1,16 @@
 [gd_scene load_steps=8 format=3 uid="uid://3ceuhnhid3ja"]
 
 [ext_resource type="Script" path="res://components/ammo.gd" id="1_kyqcf"]
-[ext_resource type="Resource" uid="uid://pgum6adscubs" path="res://prefabs/item-types/ammo-laser.tres" id="2_6e0yw"]
+[ext_resource type="Resource" uid="uid://pgum6adscubs" path="res://items/laser-ammo.tres" id="2_6e0yw"]
 [ext_resource type="Texture2D" uid="uid://p3ksdlmsmkkv" path="res://images/laser-ammo.png" id="2_dsert"]
 [ext_resource type="PackedScene" uid="uid://bex5u7fwgdwf4" path="res://prefabs/ammo-explosion.tscn" id="2_gcc3l"]
 [ext_resource type="AudioStream" uid="uid://bxgccs4e2ejvv" path="res://sounds/ammo-pick.mp3" id="3_rmpf7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_64ipc"]
-size = Vector2(200, 163)
+size = Vector2(502, 417)
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_ge5w8"]
-polygon = PackedVector2Array(-98, 83, 101, 83, 101, -82, -98, -82)
+polygon = PackedVector2Array(-253, 226, 252, 227, 252, -194, -253, -194)
 
 [node name="Laser-ammo" type="RigidBody2D" node_paths=PackedStringArray("pick_sound")]
 collision_layer = 64
@@ -27,7 +27,7 @@ death = ExtResource("2_gcc3l")
 texture = ExtResource("2_dsert")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(1, -0.5)
+position = Vector2(0, 14.5)
 shape = SubResource("RectangleShape2D_64ipc")
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]

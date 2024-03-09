@@ -9,11 +9,12 @@
 
 [sub_resource type="Curve" id="Curve_51lj4"]
 bake_resolution = 1000
-_data = [Vector2(0, 0.868571), 0.0, -4.63029, 0, 0, Vector2(0.226415, 0.28017), -1.19561, -1.19561, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 3
+_data = [Vector2(0, 0.0987766), 0.0, 0.0662506, 0, 0, Vector2(0.554667, 0.349116), 0.560463, 0.560463, 0, 0, Vector2(0.877333, 0.684866), 1.43834, 1.43834, 0, 0, Vector2(1, 0.9087), 3.42377, 0.0, 0, 0]
+point_count = 4
 
 [sub_resource type="Gradient" id="Gradient_e8tuq"]
-colors = PackedColorArray(1, 1, 1, 0.721569, 3, 3, 3, 1)
+offsets = PackedFloat32Array(0, 0.760252)
+colors = PackedColorArray(1, 1, 1, 1, 3, 3, 3, 0.0392157)
 
 [sub_resource type="Gradient" id="Gradient_0iis8"]
 offsets = PackedFloat32Array(0, 0.467626, 0.723022, 1)
@@ -21,24 +22,26 @@ colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0.8806, 1, 1, 1, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_wr6eu"]
 gradient = SubResource("Gradient_0iis8")
+width = 200
+height = 200
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_pt5pr")
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
 z_index = -1
-amount = 30000
-lifetime = 200.0
-preprocess = 200.0
-speed_scale = 0.1
-fract_delta = false
+amount = 50000
+lifetime = 10.0
+preprocess = 10.0
+fixed_fps = 5
 emission_shape = 3
-emission_rect_extents = Vector2(20000, 20000)
+emission_rect_extents = Vector2(50000, 50000)
 direction = Vector2(1, 1)
 spread = 180.0
 gravity = Vector2(0, 0)
+angle_max = 90.0
 scale_amount_min = 10.0
-scale_amount_max = 60.0
+scale_amount_max = 160.0
 scale_amount_curve = SubResource("Curve_51lj4")
 color_ramp = SubResource("Gradient_e8tuq")
 
@@ -47,10 +50,10 @@ z_index = -500
 z_as_relative = false
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_left = -24714.0
-offset_top = -24968.0
-offset_right = 25286.0
-offset_bottom = 25032.0
+offset_left = -50000.0
+offset_top = -50000.0
+offset_right = 50000.0
+offset_bottom = 50000.0
 grow_vertical = 2
 color = Color(0.172549, 0.172549, 0.172549, 1)
 

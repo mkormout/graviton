@@ -3,6 +3,7 @@ extends Body
 
 @export var life: float = 2.0
 @export var attack: Damage
+@export var death_ttl: float = 0.1
 
 func _ready():
 	connect("body_entered", collision)
@@ -11,4 +12,4 @@ func _ready():
 func collision(body):
 	if body is Body:
 		body.damage(attack)
-	die(0.1)
+	die(death_ttl)
