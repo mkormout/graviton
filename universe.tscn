@@ -1,0 +1,46 @@
+[gd_scene load_steps=11 format=3 uid="uid://dy3pyxrk63m8d"]
+
+[ext_resource type="PackedScene" uid="uid://5tq6yd8jk6kb" path="res://sectors/sol.tscn" id="1_cye2s"]
+[ext_resource type="Script" path="res://universe.gd" id="1_d2grq"]
+[ext_resource type="Script" path="res://components/body_camera.gd" id="3_jpglq"]
+[ext_resource type="PackedScene" uid="uid://bcxmydu0jwuco" path="res://sectors/proxima-centauri.tscn" id="3_tlc4w"]
+[ext_resource type="PackedScene" uid="uid://beanxs20fe7qx" path="res://prefabs/ui/hud.tscn" id="4_7xrxw"]
+[ext_resource type="PackedScene" uid="uid://dy8c1mmutnbql" path="res://prefabs/ui/controls-hint.tscn" id="5_uwd18"]
+[ext_resource type="PackedScene" uid="uid://diqfcg5rnk5rq" path="res://prefabs/ship-bfg-23/ship-bfg-23.tscn" id="6_kccwf"]
+[ext_resource type="PackedScene" uid="uid://cdueiyx71afgd" path="res://prefabs/ui/status-bar.tscn" id="7_62r70"]
+
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_21b07"]
+scenes/1/scene = ExtResource("1_cye2s")
+scenes/2/scene = ExtResource("3_tlc4w")
+
+[sub_resource type="TileSet" id="TileSet_s2sy6"]
+tile_size = Vector2i(50000, 50000)
+sources/0 = SubResource("TileSetScenesCollectionSource_21b07")
+
+[node name="Universe" type="Node2D"]
+script = ExtResource("1_d2grq")
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_s2sy6")
+rendering_quadrant_size = 4
+format = 2
+layer_0/tile_data = PackedInt32Array(65535, 0, 65536, 0, 0, 65536, -65536, 0, 65536, -1, 0, 131072, -65535, 0, 131072, 1, 0, 131072)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.1, 0.1)
+position_smoothing_enabled = true
+
+[node name="ShipCamera" type="Camera2D" parent="." node_paths=PackedStringArray("body")]
+position_smoothing_enabled = true
+script = ExtResource("3_jpglq")
+body = NodePath("../ShipBFG23")
+
+[node name="Hud" parent="." node_paths=PackedStringArray("ship") instance=ExtResource("4_7xrxw")]
+ship = NodePath("../ShipBFG23")
+
+[node name="Controls-hint" parent="." instance=ExtResource("5_uwd18")]
+
+[node name="ShipBFG23" parent="." instance=ExtResource("6_kccwf")]
+
+[node name="Coins" parent="." node_paths=PackedStringArray("ship") instance=ExtResource("7_62r70")]
+ship = NodePath("../ShipBFG23")

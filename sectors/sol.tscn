@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://5tq6yd8jk6kb"]
+
+[ext_resource type="PackedScene" uid="uid://wrowo07ehy0n" path="res://prefabs/sector.tscn" id="1_ndm6w"]
+
+[node name="Sector" instance=ExtResource("1_ndm6w")]
