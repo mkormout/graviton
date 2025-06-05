@@ -102,7 +102,7 @@ jobs:
           branch: main
           folder: build/web
           repository-name: mkormout/graviton-app
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           
   export-mac:
     name: Mac Export
