@@ -128,3 +128,40 @@ jobs:
         with:
           name: mac
           path: build/mac
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-22.04
+    needs: [export-windows, export-linux, export-mac]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows
+          path: build/windows
+
+      - name: Download Linux Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: linux
+          path: build/linux
+
+      - name: Download Mac Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: mac
+          path: build/mac
+
+      - name: Create GitHub Release and Upload Binaries
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: latest
+          name: Latest Build
+          files: |
+            build/windows/graviton.exe
+            build/linux/graviton.x86_64
+            build/mac/graviton.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
