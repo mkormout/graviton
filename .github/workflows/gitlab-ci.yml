@@ -81,17 +81,26 @@ jobs:
         with:
           name: web
           path: build/web
-      - name: Install rsync 📚
-        run: |
-          apt-get update && apt-get install -y rsync
-      - name: Deploy to GitHub Pages 🚀
-        uses: JamesIves/github-pages-deploy-action@releases/v4
+          
+  deploy-web:
+    name: Deploy Web
+    runs-on: ubuntu-22.04
+    needs: export-web
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
         with:
-          branch: main # The branch the action should deploy to.
-          folder: build/web # The folder the action should deploy.
+          name: web
+          path: build/web
+
+      - name: Deploy to GitHub Pages 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: main
+          folder: build/web
           repository-name: mkormout/graviton-app
           token: ${{ secrets.PAT }}
-
+          
   export-mac:
     name: Mac Export
     runs-on: ubuntu-22.04
