@@ -6,10 +6,13 @@ extends Body
 @export var death_ttl: float = 0.1
 
 func _ready():
-	connect("body_entered", collision)
+	body_entered.connect(collision)
 	die(life)
 
 func collision(body):
 	if body is Body:
-		body.damage(attack)
+		if attack:
+			body.damage(attack)
+		else:
+			push_warning("Bullet %s has no attack resource assigned" % name)
 	die(death_ttl)

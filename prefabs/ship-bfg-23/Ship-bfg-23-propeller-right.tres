@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="PropellerMovementProfile" load_steps=2 format=3 uid="uid://bv52moyqaql3y"]
+[gd_resource type="Resource" script_class="PropellerMovementProfile" format=3 uid="uid://bv52moyqaql3y"]
 
-[ext_resource type="Script" path="res://components/propeller-movement-profile.gd" id="1_8u7m3"]
+[ext_resource type="Script" uid="uid://cqdyi1oltlv8g" path="res://components/propeller-movement-profile.gd" id="1_8u7m3"]
 
 [resource]
 script = ExtResource("1_8u7m3")

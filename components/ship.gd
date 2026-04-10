@@ -14,8 +14,8 @@ var coins: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	connect("body_entered", body_entered)
-	picker.connect("body_entered", picker_body_entered)
+	body_entered.connect(_on_body_entered)
+	picker.body_entered.connect(picker_body_entered)
 	super()
 
 func pick_coin(item: Item):
@@ -34,14 +34,7 @@ func pick_health(item: Item):
 	storage.add_item(item)
 	item.pick()
 
-func body_entered(body):
-	var ray = RayCast2D.new()
-	ray.target_position = to_local(body.global_position)
-	add_child(ray)
-	ray.force_raycast_update()
-	var contact_point = ray.get_collision_point()
-	ray.queue_free()
-
+func _on_body_entered(body):
 	var speed = body.linear_velocity.length() if body is RigidBody2D else 0.0
 	var attack = Damage.new()
 	attack.kinetic = speed / 10.0
@@ -61,7 +54,9 @@ func picker_body_entered(body):
 		IT.ItemTypes.AMMO: pick_ammo(item)
 		IT.ItemTypes.WEAPON: pick_weapon(item)
 		IT.ItemTypes.HEALTH: pick_health(item)
-	
+		_:
+			push_warning("Ship: unhandled item type %s" % item.type.type)
+
 func toggle_inventory():
 	if inventory_ui:
 		inventory_ui.visible = not inventory_ui.visible

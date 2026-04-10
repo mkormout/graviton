@@ -1,13 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://chfdtbmxh2ugj"]
+[gd_scene format=3 uid="uid://chfdtbmxh2ugj"]
 
-[ext_resource type="Script" path="res://components/inventory-slot.gd" id="1_m4xfv"]
+[ext_resource type="Script" uid="uid://shw3ojbfq1e1" path="res://components/inventory-slot.gd" id="1_m4xfv"]
 [ext_resource type="Texture2D" uid="uid://db3afwvw3uh8u" path="res://images/inventory-slot-red.png" id="2_28m4h"]
 
-[node name="Slot-weapon" type="CenterContainer"]
+[node name="Slot-weapon" type="CenterContainer" unique_id=1047007341]
 script = ExtResource("1_m4xfv")
 slot_type = 1
 max_items = 1
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=509847238]
 layout_mode = 2
 texture = ExtResource("2_28m4h")

@@ -1,15 +1,15 @@
-[gd_scene load_steps=19 format=3 uid="uid://diqfcg5rnk5rq"]
+[gd_scene format=3 uid="uid://diqfcg5rnk5rq"]
 
-[ext_resource type="Script" path="res://components/player-ship.gd" id="1_1i2ql"]
+[ext_resource type="Script" uid="uid://dexoy3iiekk74" path="res://components/player-ship.gd" id="1_1i2ql"]
 [ext_resource type="Texture2D" uid="uid://oeyjmpan7p6a" path="res://images/ship.png" id="1_2jagq"]
 [ext_resource type="PackedScene" uid="uid://c5n2g0g788e3r" path="res://prefabs/ship-bfg-23/ship-bfg-23-inventory.tscn" id="2_2j5ki"]
-[ext_resource type="Script" path="res://components/propeller-movement.gd" id="2_5nbxa"]
+[ext_resource type="Script" uid="uid://c35opc12ak56m" path="res://components/propeller-movement.gd" id="2_5nbxa"]
 [ext_resource type="PackedScene" uid="uid://bgiyj83xynsd" path="res://prefabs/ship-bfg-23/ship-bfg-23-explosion.tscn" id="3_ff5xn"]
 [ext_resource type="Resource" uid="uid://c33phqaspm2y4" path="res://prefabs/ship-bfg-23/Ship-bfg-23-propeller-main.tres" id="6_dfrcp"]
-[ext_resource type="Script" path="res://components/mount-point.gd" id="6_h22iy"]
+[ext_resource type="Script" uid="uid://0pndiof485y3" path="res://components/mount-point.gd" id="6_h22iy"]
 [ext_resource type="Resource" uid="uid://dlsp34kplnygi" path="res://prefabs/ship-bfg-23/ship-bfg-23-propeller-left.tres" id="7_ypcv7"]
 [ext_resource type="Resource" uid="uid://bv52moyqaql3y" path="res://prefabs/ship-bfg-23/Ship-bfg-23-propeller-right.tres" id="8_gsrqr"]
-[ext_resource type="Script" path="res://components/inventory.gd" id="9_8kp54"]
+[ext_resource type="Script" uid="uid://cou605up1dwbi" path="res://components/inventory.gd" id="9_8kp54"]
 
 [sub_resource type="Curve" id="Curve_cbbmj"]
 _data = [Vector2(0, 1), 0.0, -2.85502, 0, 0, Vector2(1, 0), -0.0899593, 0.0, 0, 0]
@@ -50,11 +50,11 @@ polygon = PackedVector2Array(-343, -42, -334, -77, -305, -92, -244, -179, -210, 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0fxht"]
 radius = 1446.12
 
-[node name="ShipBFG23" type="RigidBody2D" node_paths=PackedStringArray("picker", "storage", "ammo", "drop", "inventory_ui")]
+[node name="ShipBFG23" type="RigidBody2D" unique_id=249998760 node_paths=PackedStringArray("picker", "storage", "ammo", "drop", "inventory_ui")]
 collision_mask = 12
 mass = 2000.0
-max_contacts_reported = 100
 contact_monitor = true
+max_contacts_reported = 100
 linear_damp = 1.0
 angular_damp = 1.0
 script = ExtResource("1_1i2ql")
@@ -67,11 +67,11 @@ inventory_ui = NodePath("Ship-bfg-23-inventory")
 max_health = 10000
 death = ExtResource("3_ff5xn")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=674260220]
 rotation = 1.5708
 texture = ExtResource("1_2jagq")
 
-[node name="PropellerMain" type="Node" parent="." node_paths=PackedStringArray("body", "particles", "light")]
+[node name="PropellerMain" type="Node" parent="." unique_id=795778789 node_paths=PackedStringArray("body", "particles", "light")]
 script = ExtResource("2_5nbxa")
 body = NodePath("..")
 particles = NodePath("../PropellerMainEffect")
@@ -80,7 +80,7 @@ profile = ExtResource("6_dfrcp")
 action = &"ui_up"
 position = Vector2(-330, 2.08165e-12)
 
-[node name="PropellerLeft" type="Node" parent="." node_paths=PackedStringArray("body", "particles", "light")]
+[node name="PropellerLeft" type="Node" parent="." unique_id=1961088974 node_paths=PackedStringArray("body", "particles", "light")]
 script = ExtResource("2_5nbxa")
 body = NodePath("..")
 particles = NodePath("../PropellerLeftEffect")
@@ -89,7 +89,7 @@ profile = ExtResource("7_ypcv7")
 action = &"ui_right"
 position = Vector2(241, -76)
 
-[node name="PropellerRight" type="Node" parent="." node_paths=PackedStringArray("body", "particles", "light")]
+[node name="PropellerRight" type="Node" parent="." unique_id=614912252 node_paths=PackedStringArray("body", "particles", "light")]
 script = ExtResource("2_5nbxa")
 body = NodePath("..")
 particles = NodePath("../PropellerRightEffect")
@@ -98,7 +98,7 @@ profile = ExtResource("8_gsrqr")
 action = &"ui_left"
 position = Vector2(241, 76)
 
-[node name="PropellerMainEffect" type="CPUParticles2D" parent="."]
+[node name="PropellerMainEffect" type="CPUParticles2D" parent="." unique_id=1913259532]
 position = Vector2(-330, 2.08165e-12)
 emitting = false
 amount = 1000
@@ -114,7 +114,7 @@ scale_amount_max = 50.0
 scale_amount_curve = SubResource("Curve_cbbmj")
 color_ramp = SubResource("Gradient_c3pwc")
 
-[node name="PropellerMainEffectLight" type="PointLight2D" parent="PropellerMainEffect"]
+[node name="PropellerMainEffectLight" type="PointLight2D" parent="PropellerMainEffect" unique_id=581600967]
 z_index = 10
 position = Vector2(-44, -2.08165e-12)
 color = Color(0, 0.243137, 1, 1)
@@ -128,7 +128,7 @@ texture = SubResource("GradientTexture2D_ysh2g")
 texture_scale = 20.0
 height = 100.0
 
-[node name="PropellerLeftEffect" type="CPUParticles2D" parent="."]
+[node name="PropellerLeftEffect" type="CPUParticles2D" parent="." unique_id=508600714]
 position = Vector2(241, -76)
 emitting = false
 amount = 500
@@ -144,7 +144,7 @@ scale_amount_max = 25.0
 scale_amount_curve = SubResource("Curve_cbbmj")
 color_ramp = SubResource("Gradient_c3pwc")
 
-[node name="PropellerLeftEffectLight" type="PointLight2D" parent="PropellerLeftEffect"]
+[node name="PropellerLeftEffectLight" type="PointLight2D" parent="PropellerLeftEffect" unique_id=573385389]
 z_index = 10
 color = Color(0, 0.243137, 1, 1)
 shadow_enabled = true
@@ -156,7 +156,7 @@ texture = SubResource("GradientTexture2D_qitm1")
 texture_scale = 20.0
 height = 100.0
 
-[node name="PropellerRightEffect" type="CPUParticles2D" parent="."]
+[node name="PropellerRightEffect" type="CPUParticles2D" parent="." unique_id=1119346721]
 position = Vector2(241, 76)
 emitting = false
 amount = 500
@@ -172,7 +172,7 @@ scale_amount_max = 25.0
 scale_amount_curve = SubResource("Curve_cbbmj")
 color_ramp = SubResource("Gradient_c3pwc")
 
-[node name="PropellerRightEffectLight" type="PointLight2D" parent="PropellerRightEffect"]
+[node name="PropellerRightEffectLight" type="PointLight2D" parent="PropellerRightEffect" unique_id=1715591115]
 z_index = 10
 color = Color(0, 0.243137, 1, 1)
 shadow_enabled = true
@@ -184,24 +184,24 @@ texture = SubResource("GradientTexture2D_qitm1")
 texture_scale = 20.0
 height = 100.0
 
-[node name="MountPointDefault" type="Node2D" parent="."]
+[node name="MountPointDefault" type="Node2D" parent="." unique_id=1743053780]
 position = Vector2(187, 2.08165e-12)
 script = ExtResource("6_h22iy")
 
-[node name="MountPointLeft" type="Node2D" parent="."]
+[node name="MountPointLeft" type="Node2D" parent="." unique_id=678106161]
 position = Vector2(-165, -271)
 script = ExtResource("6_h22iy")
 tag = "left"
 
-[node name="MountPointRight" type="Node2D" parent="."]
+[node name="MountPointRight" type="Node2D" parent="." unique_id=2095593819]
 position = Vector2(-165, 271)
 script = ExtResource("6_h22iy")
 tag = "right"
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=788669396]
 polygon = PackedVector2Array(-116, 352, -56, 167, 8, 111, 250, 80, 326, 46, 344, 0, 326, -46, 250, -80, 6, -111, -58, -170, -116, -356, -209, -345, -242, -182, -308, -89, -334, -78, -334, 79, -307, 90, -242, 182, -208, 346)
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1546100885]
 z_index = 10
 energy = 1.1
 shadow_enabled = true
@@ -212,26 +212,26 @@ texture = SubResource("GradientTexture2D_ysh2g")
 texture_scale = 50.0
 height = 100.0
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=636716193]
 occluder = SubResource("OccluderPolygon2D_23wga")
 occluder_light_mask = 2
 
-[node name="Picker" type="Area2D" parent="."]
+[node name="Picker" type="Area2D" parent="." unique_id=35720624]
 collision_layer = 0
 collision_mask = 224
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Picker"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Picker" unique_id=1840156756]
 shape = SubResource("CircleShape2D_0fxht")
 
-[node name="InventoryStorage" type="Node" parent="."]
+[node name="InventoryStorage" type="Node" parent="." unique_id=1078544085]
 script = ExtResource("9_8kp54")
 
-[node name="InventoryAmmo" type="Node" parent="."]
+[node name="InventoryAmmo" type="Node" parent="." unique_id=767253884]
 script = ExtResource("9_8kp54")
 
-[node name="Ship-bfg-23-inventory" parent="." node_paths=PackedStringArray("ship") instance=ExtResource("2_2j5ki")]
+[node name="Ship-bfg-23-inventory" parent="." unique_id=1768438966 node_paths=PackedStringArray("ship") instance=ExtResource("2_2j5ki")]
 visible = false
 ship = NodePath("..")
 
-[node name="InventoryDrop" type="Node" parent="."]
+[node name="InventoryDrop" type="Node" parent="." unique_id=497185713]
 script = ExtResource("9_8kp54")

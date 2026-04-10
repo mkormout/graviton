@@ -1,8 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://bgiyj83xynsd"]
+[gd_scene format=3 uid="uid://bgiyj83xynsd"]
 
-[ext_resource type="Script" path="res://components/explosion.gd" id="1_6fb2w"]
-[ext_resource type="Script" path="res://components/damage.gd" id="2_7c6p6"]
-[ext_resource type="Script" path="res://components/random-audio-player.gd" id="3_r43n2"]
+[ext_resource type="Script" uid="uid://drkuv3ul7es3i" path="res://components/explosion.gd" id="1_6fb2w"]
+[ext_resource type="Script" uid="uid://bm8vrr4oi1o18" path="res://components/damage.gd" id="2_7c6p6"]
+[ext_resource type="Script" uid="uid://pqgx4pknqje3" path="res://components/random-audio-player.gd" id="3_r43n2"]
 [ext_resource type="AudioStream" uid="uid://7wuqk2kqrxs2" path="res://sounds/explosion-1.wav" id="4_v541t"]
 [ext_resource type="AudioStream" uid="uid://l6jfw80adfj8" path="res://sounds/explosion-2.wav" id="5_8bap4"]
 [ext_resource type="AudioStream" uid="uid://c0o0nycma3ye1" path="res://sounds/explosion-3.wav" id="6_bjr88"]
@@ -34,7 +34,7 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 1)
 
-[node name="Ship-bfg-23-explosion" type="Node2D" node_paths=PackedStringArray("particles", "light", "audio")]
+[node name="Ship-bfg-23-explosion" type="Node2D" unique_id=1093391732 node_paths=PackedStringArray("particles", "light", "audio")]
 script = ExtResource("1_6fb2w")
 radius = 3000.0
 particles = NodePath("CPUParticles2D")
@@ -44,7 +44,7 @@ time = 6.0
 power = 50000
 attack = SubResource("Resource_062r6")
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1729746937]
 z_index = -1
 scale = Vector2(10, 10)
 emitting = false
@@ -65,7 +65,7 @@ scale_amount_max = 500.0
 scale_amount_curve = SubResource("Curve_nhauv")
 color_ramp = SubResource("Gradient_inhcr")
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=251201235]
 z_index = 10
 scale = Vector2(2, 2)
 color = Color(1, 0.8, 0.129412, 1)
@@ -77,7 +77,7 @@ texture = SubResource("GradientTexture2D_sva77")
 texture_scale = 50.0
 height = 100.0
 
-[node name="RandomAudioPlayer" type="Node2D" parent="."]
+[node name="RandomAudioPlayer" type="Node2D" parent="." unique_id=13144103]
 script = ExtResource("3_r43n2")
 autoplay = false
 resources = Array[AudioStream]([ExtResource("4_v541t"), ExtResource("5_8bap4"), ExtResource("6_bjr88"), ExtResource("7_gwn7a")])

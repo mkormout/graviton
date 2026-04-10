@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://5m634maqwghw"]
+[gd_scene format=3 uid="uid://5m634maqwghw"]
 
-[ext_resource type="Script" path="res://components/ammo.gd" id="1_mbyth"]
+[ext_resource type="Script" uid="uid://806snm4xg2rl" path="res://components/ammo.gd" id="1_mbyth"]
 [ext_resource type="Texture2D" uid="uid://bsav2wyjc24v7" path="res://images/minigun-ammo.png" id="2_1g4gu"]
 [ext_resource type="Resource" uid="uid://bxg3kiniypv6l" path="res://items/minigun-ammo.tres" id="2_ae8q0"]
 [ext_resource type="PackedScene" uid="uid://bex5u7fwgdwf4" path="res://prefabs/ammo-explosion.tscn" id="2_rx3nm"]
@@ -12,28 +12,28 @@ size = Vector2(501, 467)
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_ge5w8"]
 polygon = PackedVector2Array(-281, 234, 221, 234, 221, -233, -281, -233)
 
-[node name="Minigun-ammo" type="RigidBody2D" node_paths=PackedStringArray("pick_sound")]
+[node name="Minigun-ammo" type="RigidBody2D" unique_id=672595205 node_paths=PackedStringArray("pick_sound")]
 collision_layer = 64
 collision_mask = 0
-max_contacts_reported = 10
 contact_monitor = true
+max_contacts_reported = 10
 script = ExtResource("1_mbyth")
 amount = 200
 pick_sound = NodePath("AudioStreamPlayer2D")
 type = ExtResource("2_ae8q0")
 death = ExtResource("2_rx3nm")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1083842666]
 texture = ExtResource("2_1g4gu")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1019546390]
 position = Vector2(-30.5, 0.5)
 shape = SubResource("RectangleShape2D_64ipc")
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=1626856172]
 occluder = SubResource("OccluderPolygon2D_ge5w8")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1313212090]
 stream = ExtResource("3_las7q")
 volume_db = -20.0
 max_distance = 20000.0

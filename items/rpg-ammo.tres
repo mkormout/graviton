@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="ItemType" load_steps=3 format=3 uid="uid://ha5mg162nc1n"]
+[gd_resource type="Resource" script_class="ItemType" format=3 uid="uid://ha5mg162nc1n"]
 
 [ext_resource type="Texture2D" uid="uid://li5sb7yjhtqd" path="res://images/rpg-ammo.png" id="1_q4wx0"]
-[ext_resource type="Script" path="res://components/item-type.gd" id="2_v26m5"]
+[ext_resource type="Script" uid="uid://dclxl44j4opab" path="res://components/item-type.gd" id="2_v26m5"]
 
 [resource]
 script = ExtResource("2_v26m5")

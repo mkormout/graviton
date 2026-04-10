@@ -1,11 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://clgvd7qry3vdk"]
+[gd_scene format=3 uid="uid://clgvd7qry3vdk"]
 
-[ext_resource type="Script" path="res://components/asteroid.gd" id="1_7shk4"]
+[ext_resource type="Script" uid="uid://cjvmk20s72pin" path="res://components/asteroid.gd" id="1_7shk4"]
 [ext_resource type="Texture2D" uid="uid://c53ga06c3j2he" path="res://images/smeghead.png" id="2_ei2uw"]
 [ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-explosion.tscn" id="2_ic3hq"]
-[ext_resource type="Script" path="res://components/item-dropper.gd" id="3_bkt5d"]
+[ext_resource type="Script" uid="uid://ds8aojueywua2" path="res://components/item-dropper.gd" id="3_bkt5d"]
 [ext_resource type="PackedScene" uid="uid://d2qcve43hkac8" path="res://prefabs/coin/coin-gold.tscn" id="4_u786u"]
-[ext_resource type="Script" path="res://components/item-drop.gd" id="5_wpxbj"]
+[ext_resource type="Script" uid="uid://bcw213vwlscqh" path="res://components/item-drop.gd" id="5_wpxbj"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_rtibw"]
 polygon = PackedVector2Array(-11, 176, 26, 174, 62, 145, 82, 111, 104, 65, 137, -12, 126, -85, 87, -144, 25, -176, -38, -171, -98, -135, -120, -48, -130, -17, -129, 21, -106, 71, -93, 78, -73, 123, -54, 154)
@@ -15,29 +15,29 @@ script = ExtResource("5_wpxbj")
 model = ExtResource("4_u786u")
 chance = 100.0
 
-[node name="Asteroid-small-4" type="RigidBody2D" node_paths=PackedStringArray("item_dropper")]
+[node name="Asteroid-small-4" type="RigidBody2D" unique_id=1446971316 node_paths=PackedStringArray("item_dropper")]
 collision_layer = 8
 collision_mask = 8
 mass = 10000.0
-max_contacts_reported = 10
 contact_monitor = true
+max_contacts_reported = 10
 script = ExtResource("1_7shk4")
 max_health = 100
 death = ExtResource("2_ic3hq")
 item_dropper = NodePath("ItemDropper")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1958209449]
 position = Vector2(2, 22)
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("2_ei2uw")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=2069555003]
 polygon = PackedVector2Array(-7, 176, 30, 173, 55, 149, 88, 105, 136, -14, 121, -98, 82, -147, 27, -173, -44, -168, -98, -134, -118, -70, -132, -13, -125, 38, -112, 63, -93, 76, -60, 150)
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=203218047]
 occluder = SubResource("OccluderPolygon2D_rtibw")
 
-[node name="ItemDropper" type="Node2D" parent="."]
+[node name="ItemDropper" type="Node2D" parent="." unique_id=212690894]
 script = ExtResource("3_bkt5d")
 models = Array[ExtResource("5_wpxbj")]([SubResource("Resource_5v5hc")])
 drop_count = 10

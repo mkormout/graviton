@@ -1,13 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://b1icw4sgu11vq"]
+[gd_scene format=3 uid="uid://b1icw4sgu11vq"]
 
-[ext_resource type="Script" path="res://components/inventory-slot.gd" id="1_rmr65"]
+[ext_resource type="Script" uid="uid://shw3ojbfq1e1" path="res://components/inventory-slot.gd" id="1_rmr65"]
 [ext_resource type="Texture2D" uid="uid://brondjxykikse" path="res://images/inventory-slot-green.png" id="2_xu5j5"]
 
-[node name="Slot-engine" type="CenterContainer"]
+[node name="Slot-engine" type="CenterContainer" unique_id=1203039663]
 script = ExtResource("1_rmr65")
 slot_type = 3
 max_items = 1
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=120039882]
 layout_mode = 2
 texture = ExtResource("2_xu5j5")

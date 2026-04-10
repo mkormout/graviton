@@ -1,12 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://g4kc1rn8oyup"]
+[gd_scene format=3 uid="uid://g4kc1rn8oyup"]
 
-[ext_resource type="Script" path="res://components/inventory-slot.gd" id="1_f1unl"]
+[ext_resource type="Script" uid="uid://shw3ojbfq1e1" path="res://components/inventory-slot.gd" id="1_f1unl"]
 [ext_resource type="Texture2D" uid="uid://tnnsd8j0bay6" path="res://images/inventory-slot-white.png" id="2_3ht1m"]
 
-[node name="Slot-drop" type="CenterContainer"]
+[node name="Slot-drop" type="CenterContainer" unique_id=1001341207]
 script = ExtResource("1_f1unl")
 slot_type = 4
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1486004109]
 layout_mode = 2
 texture = ExtResource("2_3ht1m")

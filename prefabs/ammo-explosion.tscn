@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bex5u7fwgdwf4"]
+[gd_scene format=3 uid="uid://bex5u7fwgdwf4"]
 
-[ext_resource type="Script" path="res://components/explosion.gd" id="1_ts6ky"]
+[ext_resource type="Script" uid="uid://drkuv3ul7es3i" path="res://components/explosion.gd" id="1_ts6ky"]
 
 [sub_resource type="Curve" id="Curve_7vq8a"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0901849), 0.0, 0.0, 0, 0]
@@ -10,11 +10,11 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.211215, 0.392523, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 0.827451, 0, 1, 1, 0.647059, 0, 1, 1, 0, 0, 1)
 
-[node name="Ammo-explosion" type="Node2D" node_paths=PackedStringArray("particles")]
+[node name="Ammo-explosion" type="Node2D" unique_id=451855660 node_paths=PackedStringArray("particles")]
 script = ExtResource("1_ts6ky")
 particles = NodePath("CPUParticles2D")
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=327226112]
 scale = Vector2(10, 10)
 emitting = false
 amount = 20

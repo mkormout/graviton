@@ -1,7 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://dsw7ahi84oqay"]
+[gd_scene format=3 uid="uid://dsw7ahi84oqay"]
 
-[ext_resource type="Script" path="res://components/item.gd" id="1_m6uhr"]
-[ext_resource type="Script" path="res://components/item-type.gd" id="2_a4ejn"]
+[ext_resource type="Script" uid="uid://6khmdkbwwqmr" path="res://components/item.gd" id="1_m6uhr"]
+[ext_resource type="Script" uid="uid://dclxl44j4opab" path="res://components/item-type.gd" id="2_a4ejn"]
 [ext_resource type="Texture2D" uid="uid://blrw11iqx7flu" path="res://images/minigun-item.png" id="2_gysjv"]
 [ext_resource type="AudioStream" uid="uid://bxgccs4e2ejvv" path="res://sounds/ammo-pick.mp3" id="3_l5jn8"]
 
@@ -9,9 +9,9 @@
 script = ExtResource("2_a4ejn")
 name = "minigun"
 title = "Minigun"
+type = 2
 price = 10000
 image = ExtResource("2_gysjv")
-type = 2
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2nb7d"]
 size = Vector2(413, 413)
@@ -19,23 +19,23 @@ size = Vector2(413, 413)
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_vjjif"]
 polygon = PackedVector2Array(-205, 209, 207, 207, 207, -205, -206, -206)
 
-[node name="Minigun-item" type="RigidBody2D"]
+[node name="Minigun-item" type="RigidBody2D" unique_id=952578354]
 collision_layer = 128
 collision_mask = 0
-max_contacts_reported = 10
 contact_monitor = true
+max_contacts_reported = 10
 script = ExtResource("1_m6uhr")
 type = SubResource("Resource_n3bj4")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=996133306]
 texture = ExtResource("2_gysjv")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1901538387]
 position = Vector2(0.5, -0.5)
 shape = SubResource("RectangleShape2D_2nb7d")
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=1193803940]
 occluder = SubResource("OccluderPolygon2D_vjjif")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1513725907]
 stream = ExtResource("3_l5jn8")

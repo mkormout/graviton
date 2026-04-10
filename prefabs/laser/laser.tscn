@@ -1,11 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://qgbjdoeg1ce2"]
+[gd_scene format=3 uid="uid://qgbjdoeg1ce2"]
 
-[ext_resource type="Script" path="res://components/mountable-weapon.gd" id="1_e5n1t"]
+[ext_resource type="Script" uid="uid://c78smn4hhr2w5" path="res://components/mountable-weapon.gd" id="1_e5n1t"]
 [ext_resource type="PackedScene" uid="uid://cm18d0dsljju" path="res://prefabs/laser/laser-bullet.tscn" id="2_nvrsh"]
 [ext_resource type="Texture2D" uid="uid://bphxb5bf2jimk" path="res://images/laser.png" id="3_27ca6"]
 [ext_resource type="Resource" uid="uid://pgum6adscubs" path="res://items/laser-ammo.tres" id="3_aery4"]
 [ext_resource type="Resource" uid="uid://bj036cibp8ms4" path="res://items/laser.tres" id="3_v4jvq"]
-[ext_resource type="Script" path="res://components/mount-point.gd" id="4_3iiwc"]
+[ext_resource type="Script" uid="uid://0pndiof485y3" path="res://components/mount-point.gd" id="4_3iiwc"]
 [ext_resource type="AudioStream" uid="uid://bm2syhjfyh74q" path="res://sounds/laser.wav" id="5_toyk8"]
 [ext_resource type="AudioStream" uid="uid://ch8rnjocy08u1" path="res://sounds/reload_clip.wav" id="7_jalqq"]
 [ext_resource type="AudioStream" uid="uid://d1khlswfftyfa" path="res://sounds/empty-magazine.wav" id="7_w8f5x"]
@@ -13,7 +13,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0ximw"]
 size = Vector2(130.999, 295)
 
-[node name="Laser" type="RigidBody2D" node_paths=PackedStringArray("barrel", "sound", "empty_sound", "reload_sound")]
+[node name="Laser" type="RigidBody2D" unique_id=471843574 node_paths=PackedStringArray("barrel", "sound", "empty_sound", "reload_sound")]
 z_index = -1
 collision_layer = 2
 collision_mask = 8
@@ -32,35 +32,35 @@ ammo_max = 500
 reload_time = 1.0
 item_type = ExtResource("3_v4jvq")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=446353072]
 rotation = 1.5708
 texture = ExtResource("3_27ca6")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1232337433]
 position = Vector2(2.08165e-12, 2.08165e-12)
 rotation = 1.5708
 shape = SubResource("RectangleShape2D_0ximw")
 
-[node name="MountPoint" type="Node2D" parent="."]
+[node name="MountPoint" type="Node2D" parent="." unique_id=112570028]
 position = Vector2(-92, 35)
 script = ExtResource("4_3iiwc")
 
-[node name="Barrel" type="Node2D" parent="."]
+[node name="Barrel" type="Node2D" parent="." unique_id=1150353350]
 position = Vector2(300, 35)
 
-[node name="FireSound" type="AudioStreamPlayer2D" parent="."]
+[node name="FireSound" type="AudioStreamPlayer2D" parent="." unique_id=1590556341]
 stream = ExtResource("5_toyk8")
 volume_db = -20.0
 max_distance = 20000.0
 
-[node name="ReloadSound" type="AudioStreamPlayer2D" parent="."]
+[node name="ReloadSound" type="AudioStreamPlayer2D" parent="." unique_id=17595567]
 stream = ExtResource("7_jalqq")
 volume_db = -20.0
 pitch_scale = 1.2
 max_distance = 20000.0
 max_polyphony = 3
 
-[node name="EmptySound" type="AudioStreamPlayer2D" parent="."]
+[node name="EmptySound" type="AudioStreamPlayer2D" parent="." unique_id=1842596152]
 stream = ExtResource("7_w8f5x")
 volume_db = -20.0
 max_distance = 20000.0

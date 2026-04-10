@@ -54,7 +54,11 @@ Plans:
   1. Project opens in Godot 4.6.2 editor with no import errors or conversion failures
   2. The game runs in-editor and as an exported build with no runtime errors attributable to deprecated or removed API calls
   3. Export presets produce a working executable for at least one target platform
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [x] 03-01-PLAN.md — Fix deprecated string-based connect() calls and Linux export preset platform rename
+- [x] 03-02-PLAN.md — Open project in Godot 4.6.2, run conversion, smoke test, and verify 4-platform export
 
 ## Progress
 
@@ -64,4 +68,4 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Bug Fixes | 0/3 | Not started | - |
 | 2. Code Quality | 0/2 | Not started | - |
-| 3. Godot 4.6.2 Migration | 0/? | Not started | - |
+| 3. Godot 4.6.2 Migration | 0/2 | Not started | - |

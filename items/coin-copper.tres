@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="ItemType" load_steps=3 format=3 uid="uid://06ssae7pnxi4"]
+[gd_resource type="Resource" script_class="ItemType" format=3 uid="uid://06ssae7pnxi4"]
 
 [ext_resource type="Texture2D" uid="uid://cqp88e1mjivnq" path="res://images/coin_copper.png" id="1_mf06t"]
-[ext_resource type="Script" path="res://components/item-type.gd" id="2_ooqvi"]
+[ext_resource type="Script" uid="uid://dclxl44j4opab" path="res://components/item-type.gd" id="2_ooqvi"]
 
 [resource]
 script = ExtResource("2_ooqvi")
@@ -9,4 +9,3 @@ name = "coin-copper"
 title = "Copper Coin"
 price = 1
 image = ExtResource("1_mf06t")
-type = 0

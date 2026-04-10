@@ -1,13 +1,13 @@
-[gd_scene load_steps=35 format=3 uid="uid://b3vjq05jtdfvv"]
+[gd_scene format=3 uid="uid://b3vjq05jtdfvv"]
 
-[ext_resource type="Script" path="res://components/asteroid.gd" id="1_km7g8"]
+[ext_resource type="Script" uid="uid://cjvmk20s72pin" path="res://components/asteroid.gd" id="1_km7g8"]
 [ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-explosion.tscn" id="2_cbwy0"]
 [ext_resource type="PackedScene" uid="uid://c16el8k73hxjn" path="res://prefabs/coin/coin-copper.tscn" id="3_6k20o"]
 [ext_resource type="PackedScene" uid="uid://d2qcve43hkac8" path="res://prefabs/coin/coin-gold.tscn" id="4_cr405"]
 [ext_resource type="PackedScene" uid="uid://dexkeq6lwlood" path="res://prefabs/coin/coin-silver.tscn" id="5_1ts0p"]
-[ext_resource type="Script" path="res://components/item-dropper.gd" id="6_bpnnr"]
+[ext_resource type="Script" uid="uid://ds8aojueywua2" path="res://components/item-dropper.gd" id="6_bpnnr"]
 [ext_resource type="Texture2D" uid="uid://cj147elxy4bu0" path="res://images/asteroid-small-1.png" id="6_gw38v"]
-[ext_resource type="Script" path="res://components/item-drop.gd" id="7_bkpmw"]
+[ext_resource type="Script" uid="uid://bcw213vwlscqh" path="res://components/item-drop.gd" id="7_bkpmw"]
 [ext_resource type="PackedScene" uid="uid://5m634maqwghw" path="res://prefabs/minigun/minigun-ammo.tscn" id="9_o43l6"]
 [ext_resource type="PackedScene" uid="uid://3ceuhnhid3ja" path="res://prefabs/laser/laser-ammo.tscn" id="10_6ou6f"]
 [ext_resource type="PackedScene" uid="uid://3cqs1wv6of6h" path="res://prefabs/rpg/rpg-ammo.tscn" id="11_77txb"]
@@ -96,27 +96,27 @@ script = ExtResource("7_bkpmw")
 model = ExtResource("18_gi7lf")
 chance = 1.0
 
-[node name="Asteroid-small-1" type="RigidBody2D" node_paths=PackedStringArray("item_dropper")]
+[node name="Asteroid-small-1" type="RigidBody2D" unique_id=1503372133 node_paths=PackedStringArray("item_dropper")]
 collision_layer = 8
 collision_mask = 8
 mass = 10000.0
-max_contacts_reported = 10
 contact_monitor = true
+max_contacts_reported = 10
 script = ExtResource("1_km7g8")
 max_health = 100
 death = ExtResource("2_cbwy0")
 item_dropper = NodePath("ItemDropper")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=568726244]
 texture = ExtResource("6_gw38v")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=994712980]
 polygon = PackedVector2Array(-68, 153, 5, 166, 79, 167, 128, 151, 158, 106, 166, 17, 174, -66, 167, -128, 134, -162, 71, -172, -49, -150, -122, -112, -164, -53, -172, 18, -161, 82, -117, 134)
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=286705360]
 occluder = SubResource("OccluderPolygon2D_w77cl")
 
-[node name="ItemDropper" type="Node2D" parent="."]
+[node name="ItemDropper" type="Node2D" parent="." unique_id=262722602]
 script = ExtResource("6_bpnnr")
 models = Array[ExtResource("7_bkpmw")]([SubResource("Resource_f6868"), SubResource("Resource_6glhi"), SubResource("Resource_1ty41"), SubResource("Resource_pjlja"), SubResource("Resource_owhap"), SubResource("Resource_gxfu0"), SubResource("Resource_g3crs"), SubResource("Resource_1q4gv"), SubResource("Resource_6d3dt"), SubResource("Resource_al1f8"), SubResource("Resource_ptdrt"), SubResource("Resource_ksxm1"), SubResource("Resource_n2thb"), SubResource("Resource_x1khd"), SubResource("Resource_adu5j")])
 drop_count = 1

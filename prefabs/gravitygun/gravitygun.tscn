@@ -1,19 +1,18 @@
-[gd_scene load_steps=14 format=3 uid="uid://ib2hc10g3wbl"]
+[gd_scene format=3 uid="uid://ib2hc10g3wbl"]
 
-[ext_resource type="Script" path="res://prefabs/gravitygun/gravitygun-script.gd" id="1_j7sby"]
+[ext_resource type="Script" uid="uid://dqsprrb2qhr2n" path="res://prefabs/gravitygun/gravitygun-script.gd" id="1_j7sby"]
 [ext_resource type="PackedScene" uid="uid://btge3o3l7u07w" path="res://prefabs/gravitygun/gravitygun-bullet.tscn" id="2_j36r0"]
-[ext_resource type="Script" path="res://components/damage.gd" id="2_ouie2"]
+[ext_resource type="Script" uid="uid://bm8vrr4oi1o18" path="res://components/damage.gd" id="2_ouie2"]
 [ext_resource type="Texture2D" uid="uid://bky6qh7p2mego" path="res://images/gravitygun.png" id="3_cu8m6"]
 [ext_resource type="Resource" uid="uid://b6kbq3ho748c1" path="res://items/gravitygun.tres" id="4_8tewt"]
 [ext_resource type="AudioStream" uid="uid://bgabun2hciihe" path="res://sounds/gravitygun.wav" id="4_blhgr"]
 [ext_resource type="Resource" uid="uid://besvh5hp7cj2q" path="res://items/gravitygun-ammo.tres" id="4_foi0f"]
-[ext_resource type="Script" path="res://components/mount-point.gd" id="5_qcpsb"]
+[ext_resource type="Script" uid="uid://0pndiof485y3" path="res://components/mount-point.gd" id="5_qcpsb"]
 [ext_resource type="AudioStream" uid="uid://ch8rnjocy08u1" path="res://sounds/reload_clip.wav" id="6_nt1dy"]
 [ext_resource type="AudioStream" uid="uid://d1khlswfftyfa" path="res://sounds/empty-magazine.wav" id="8_j46xg"]
 
 [sub_resource type="Resource" id="Resource_bdikp"]
 script = ExtResource("2_ouie2")
-energy = 0.0
 kinetic = 500.0
 
 [sub_resource type="Gradient" id="Gradient_kfb2d"]
@@ -25,7 +24,7 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.49359, 0)
 
-[node name="Gravitygun" type="RigidBody2D" node_paths=PackedStringArray("area", "barrel", "sound", "empty_sound", "reload_sound")]
+[node name="Gravitygun" type="RigidBody2D" unique_id=1776541003 node_paths=PackedStringArray("area", "barrel", "sound", "empty_sound", "reload_sound")]
 z_index = -1
 collision_layer = 2
 collision_mask = 8
@@ -46,47 +45,47 @@ ammo_max = 20
 reload_time = 1.0
 item_type = ExtResource("4_8tewt")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1023357855]
 rotation = 1.5708
 texture = ExtResource("3_cu8m6")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=954522523]
 position = Vector2(-1.73589, 1.90712)
 scale = Vector2(0.764055, 0.814189)
 polygon = PackedVector2Array(-100, 72, -57, 48, 25, 47, 44, 91, 207, 92, 208, -90, 51, -93, 22, -45, -61, -49, -103, -69, -209, -69, -210, 69)
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=574535998]
 stream = ExtResource("4_blhgr")
 volume_db = -20.0
 max_distance = 20000.0
 
-[node name="Barrel" type="Node2D" parent="."]
+[node name="Barrel" type="Node2D" parent="." unique_id=1791454971]
 position = Vector2(700, 2.08165e-12)
 
-[node name="MountPoint" type="Node2D" parent="."]
+[node name="MountPoint" type="Node2D" parent="." unique_id=1737085087]
 position = Vector2(-103, 2.08165e-12)
 script = ExtResource("5_qcpsb")
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1804566734]
 position = Vector2(110, 2.08165e-12)
 texture = SubResource("GradientTexture2D_17mc0")
 texture_scale = 20.0
 
-[node name="ReloadSound" type="AudioStreamPlayer2D" parent="."]
+[node name="ReloadSound" type="AudioStreamPlayer2D" parent="." unique_id=1928052882]
 stream = ExtResource("6_nt1dy")
 volume_db = -20.0
 pitch_scale = 1.2
 max_distance = 20000.0
 max_polyphony = 3
 
-[node name="Effect" type="Area2D" parent="."]
+[node name="Effect" type="Area2D" parent="." unique_id=677608245]
 collision_layer = 0
 collision_mask = 8
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Effect"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Effect" unique_id=1022913061]
 polygon = PackedVector2Array(300, 1300, 10000, 3000, 10000, -3000, 300, -1300)
 
-[node name="EmptySound" type="AudioStreamPlayer2D" parent="."]
+[node name="EmptySound" type="AudioStreamPlayer2D" parent="." unique_id=1162550102]
 stream = ExtResource("8_j46xg")
 volume_db = -20.0
 max_distance = 20000.0

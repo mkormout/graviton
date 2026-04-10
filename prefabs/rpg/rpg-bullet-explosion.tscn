@@ -1,16 +1,15 @@
-[gd_scene load_steps=13 format=3 uid="uid://dkaulya5g8mnu"]
+[gd_scene format=3 uid="uid://dkaulya5g8mnu"]
 
-[ext_resource type="Script" path="res://components/explosion.gd" id="1_u1ua1"]
-[ext_resource type="Script" path="res://components/damage.gd" id="2_wl3iw"]
+[ext_resource type="Script" uid="uid://drkuv3ul7es3i" path="res://components/explosion.gd" id="1_u1ua1"]
+[ext_resource type="Script" uid="uid://bm8vrr4oi1o18" path="res://components/damage.gd" id="2_wl3iw"]
 [ext_resource type="AudioStream" uid="uid://7wuqk2kqrxs2" path="res://sounds/explosion-1.wav" id="3_ir072"]
-[ext_resource type="Script" path="res://components/random-audio-player.gd" id="3_uevfx"]
+[ext_resource type="Script" uid="uid://pqgx4pknqje3" path="res://components/random-audio-player.gd" id="3_uevfx"]
 [ext_resource type="AudioStream" uid="uid://l6jfw80adfj8" path="res://sounds/explosion-2.wav" id="5_grer4"]
 [ext_resource type="AudioStream" uid="uid://c0o0nycma3ye1" path="res://sounds/explosion-3.wav" id="6_7qmum"]
 [ext_resource type="AudioStream" uid="uid://dhpc7rcrllys1" path="res://sounds/explosion-4.wav" id="7_1p8p1"]
 
 [sub_resource type="Resource" id="Resource_7ipax"]
 script = ExtResource("2_wl3iw")
-energy = 0.0
 kinetic = 3000.0
 
 [sub_resource type="Curve" id="Curve_77gpu"]
@@ -34,7 +33,7 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 1)
 
-[node name="Rpg-bullet-explosion" type="Node2D" node_paths=PackedStringArray("particles", "light", "audio")]
+[node name="Rpg-bullet-explosion" type="Node2D" unique_id=1990101687 node_paths=PackedStringArray("particles", "light", "audio")]
 script = ExtResource("1_u1ua1")
 radius = 3000.0
 particles = NodePath("CPUParticles2D")
@@ -44,7 +43,7 @@ time = 2.0
 power = 30000
 attack = SubResource("Resource_7ipax")
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=306056792]
 scale = Vector2(10, 10)
 emitting = false
 amount = 500
@@ -63,7 +62,7 @@ scale_amount_max = 300.0
 scale_amount_curve = SubResource("Curve_77gpu")
 color_ramp = SubResource("Gradient_kvegs")
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=861676078]
 z_index = 10
 color = Color(1, 0.768627, 0, 1)
 energy = 2.0
@@ -74,7 +73,7 @@ texture = SubResource("GradientTexture2D_k5rlm")
 texture_scale = 50.0
 height = 100.0
 
-[node name="RandomAudioPlayer" type="Node2D" parent="."]
+[node name="RandomAudioPlayer" type="Node2D" parent="." unique_id=348392821]
 script = ExtResource("3_uevfx")
 autoplay = false
 resources = Array[AudioStream]([ExtResource("3_ir072"), ExtResource("5_grer4"), ExtResource("6_7qmum"), ExtResource("7_1p8p1")])

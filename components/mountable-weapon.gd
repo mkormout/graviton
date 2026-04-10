@@ -68,7 +68,7 @@ func reload() -> void:
 	if is_reloading():
 		return
 	reload_timer.start()
-	reload_timer.connect("timeout", reloaded, CONNECT_ONE_SHOT)
+	reload_timer.timeout.connect(reloaded, CONNECT_ONE_SHOT)
 	if reload_sound:
 		reload_sound.play()
 
@@ -94,6 +94,10 @@ func do(_sender: Node2D, action: MountableBody.Action, _where: String, _meta = n
 		use_rate = false
 
 func fire():
+	if not ammo or not barrel:
+		push_warning("MountableWeapon %s: ammo or barrel not configured" % name)
+		return
+
 	if not has_ammo() and not is_reloading():
 		if empty_sound and not empty_sound.playing:
 			empty_sound.play()
@@ -125,4 +129,5 @@ func fire():
 			magazine_current -= 1
 
 		var mount = get_mount("")
-		mount.do(self, Action.RECOIL, recoil)
+		if mount:
+			mount.do(self, Action.RECOIL, recoil)

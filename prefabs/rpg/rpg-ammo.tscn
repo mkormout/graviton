@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://3cqs1wv6of6h"]
+[gd_scene format=3 uid="uid://3cqs1wv6of6h"]
 
-[ext_resource type="Script" path="res://components/ammo.gd" id="1_m5gys"]
+[ext_resource type="Script" uid="uid://806snm4xg2rl" path="res://components/ammo.gd" id="1_m5gys"]
 [ext_resource type="Texture2D" uid="uid://li5sb7yjhtqd" path="res://images/rpg-ammo.png" id="2_gucei"]
 [ext_resource type="PackedScene" uid="uid://bex5u7fwgdwf4" path="res://prefabs/ammo-explosion.tscn" id="2_n3tpx"]
 [ext_resource type="Resource" uid="uid://ha5mg162nc1n" path="res://items/rpg-ammo.tres" id="2_wryw0"]
@@ -12,28 +12,28 @@ size = Vector2(503, 448)
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_ge5w8"]
 polygon = PackedVector2Array(-251, 223, 252, 223, 253, -225, -252, -225)
 
-[node name="Rpg-ammo" type="RigidBody2D" node_paths=PackedStringArray("pick_sound")]
+[node name="Rpg-ammo" type="RigidBody2D" unique_id=1182633632 node_paths=PackedStringArray("pick_sound")]
 collision_layer = 64
 collision_mask = 0
-max_contacts_reported = 10
 contact_monitor = true
+max_contacts_reported = 10
 script = ExtResource("1_m5gys")
 amount = 10
 pick_sound = NodePath("AudioStreamPlayer2D")
 type = ExtResource("2_wryw0")
 death = ExtResource("2_n3tpx")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=689909822]
 texture = ExtResource("2_gucei")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=593131695]
 position = Vector2(-0.5, -1)
 shape = SubResource("RectangleShape2D_64ipc")
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=1862675908]
 occluder = SubResource("OccluderPolygon2D_ge5w8")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=446134461]
 stream = ExtResource("3_sl8wl")
 volume_db = -20.0
 max_distance = 20000.0

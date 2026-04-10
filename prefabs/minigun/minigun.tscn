@@ -1,9 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://chwvdyeaq44p4"]
+[gd_scene format=3 uid="uid://chwvdyeaq44p4"]
 
 [ext_resource type="Texture2D" uid="uid://d0mea2b5pdefi" path="res://images/minigun.png" id="1_acpa0"]
-[ext_resource type="Script" path="res://components/mountable-weapon.gd" id="1_f25lk"]
+[ext_resource type="Script" uid="uid://c78smn4hhr2w5" path="res://components/mountable-weapon.gd" id="1_f25lk"]
 [ext_resource type="PackedScene" uid="uid://cn8cxmqc4klkd" path="res://prefabs/minigun/minigun-bullet.tscn" id="2_72a78"]
-[ext_resource type="Script" path="res://components/mount-point.gd" id="2_uuclo"]
+[ext_resource type="Script" uid="uid://0pndiof485y3" path="res://components/mount-point.gd" id="2_uuclo"]
 [ext_resource type="Resource" uid="uid://bxg3kiniypv6l" path="res://items/minigun-ammo.tres" id="3_4fr41"]
 [ext_resource type="Resource" uid="uid://bhrvhxm1dooog" path="res://items/minigun.tres" id="3_408ca"]
 [ext_resource type="AudioStream" uid="uid://bs1yoexmwj7op" path="res://sounds/minigun-shot.mp3" id="5_smrsu"]
@@ -13,7 +13,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_apxb2"]
 size = Vector2(70, 346)
 
-[node name="Minigun" type="RigidBody2D" node_paths=PackedStringArray("barrel", "sound", "empty_sound", "reload_sound")]
+[node name="Minigun" type="RigidBody2D" unique_id=1003743813 node_paths=PackedStringArray("barrel", "sound", "empty_sound", "reload_sound")]
 z_index = -1
 collision_layer = 2
 collision_mask = 8
@@ -33,35 +33,35 @@ ammo_max = 10000
 reload_time = 1.0
 item_type = ExtResource("3_408ca")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=497108951]
 rotation = 1.5708
 texture = ExtResource("1_acpa0")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=150773855]
 rotation = 1.5708
 shape = SubResource("RectangleShape2D_apxb2")
 
-[node name="MountPoint" type="Node2D" parent="."]
+[node name="MountPoint" type="Node2D" parent="." unique_id=1975166745]
 position = Vector2(-113, 2.08165e-12)
 script = ExtResource("2_uuclo")
 
-[node name="Barrel" type="Node2D" parent="."]
+[node name="Barrel" type="Node2D" parent="." unique_id=120597018]
 position = Vector2(250, 2.08165e-12)
 
-[node name="FireSound" type="AudioStreamPlayer2D" parent="."]
+[node name="FireSound" type="AudioStreamPlayer2D" parent="." unique_id=917688067]
 stream = ExtResource("5_smrsu")
 volume_db = -30.0
 max_distance = 50000.0
 max_polyphony = 6
 
-[node name="ReloadSound" type="AudioStreamPlayer2D" parent="."]
+[node name="ReloadSound" type="AudioStreamPlayer2D" parent="." unique_id=879862558]
 stream = ExtResource("7_s2xpc")
 volume_db = -20.0
 pitch_scale = 1.2
 max_distance = 20000.0
 max_polyphony = 3
 
-[node name="EmptySound" type="AudioStreamPlayer2D" parent="."]
+[node name="EmptySound" type="AudioStreamPlayer2D" parent="." unique_id=1394137145]
 stream = ExtResource("7_yjvrk")
 volume_db = -20.0
 max_distance = 20000.0
