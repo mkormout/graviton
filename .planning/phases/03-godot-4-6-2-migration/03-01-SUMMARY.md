@@ -103,6 +103,16 @@ None — all changes are pure syntax refactors with no new network endpoints, au
 - Linux export preset is Godot 4.3+ compatible
 - Ready for Plan 02: open project in Godot 4.6.2 editor and handle any conversion prompts
 
+## Self-Check: PASSED
+
+- SUMMARY.md: FOUND at .planning/phases/03-godot-4-6-2-migration/03-01-SUMMARY.md
+- Task 1 commit 2ff168c: FOUND
+- Task 2 commit 42ed7aa: FOUND
+- components/ship.gd: FOUND, contains `body_entered.connect(_on_body_entered)` and `func _on_body_entered`
+- components/bullet.gd: FOUND, contains `body_entered.connect(collision)`
+- components/mountable-weapon.gd: FOUND, contains `reload_timer.timeout.connect(reloaded, CONNECT_ONE_SHOT)`
+- export_presets.cfg: FOUND, contains `platform="Linux"` (no `platform="Linux/X11"`)
+
 ---
 *Phase: 03-godot-4-6-2-migration*
 *Completed: 2026-04-10*
