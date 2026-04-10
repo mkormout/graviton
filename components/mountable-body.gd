@@ -1,6 +1,15 @@
 class_name MountableBody
 extends Body
 
+enum Action {
+	FIRE,
+	RELOAD,
+	RECOIL,
+	GODMODE,
+	USE_AMMO,
+	USE_RATE
+}
+
 @export var item_type: ItemType
 
 var mounts = []
@@ -28,11 +37,11 @@ func unmount_weapon(where: String):
 	var mount = get_mount(where)
 	mount.unplug()
 
-func do(sender: MountableBody, action: String, where: String, meta = null):
+func do(sender: MountableBody, action: Action, where: String, meta = null):
 	if not sender:
 		sender = self
-	
-	if action == "recoil":
+
+	if action == Action.RECOIL:
 		var vector = -Vector2.from_angle(sender.global_rotation) * meta
 		var place = sender.global_position / 100
 		apply_impulse(vector, place)
@@ -46,8 +55,9 @@ func get_mounts():
 	return find_children("*", "MountPoint")
 	
 func get_mount(tag: String = "") -> MountPoint:
-	for mount in get_mounts():
+	var search = mounts if not mounts.is_empty() else get_mounts()
+	for mount in search:
 		if mount.tag == tag:
 			return mount
-	
+
 	return null

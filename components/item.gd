@@ -8,8 +8,9 @@ extends Body
 func pick():
 	if pick_sound:
 		pick_sound.play()
-		pick_sound.reparent(
-			get_tree().current_scene
-		)
-		
+		if spawn_parent:
+			pick_sound.reparent(spawn_parent)
+		else:
+			push_warning("spawn_parent not set on " + name)
+
 	die()

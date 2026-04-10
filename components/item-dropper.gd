@@ -2,11 +2,12 @@ class_name ItemDropper extends Node2D
 
 @export var models: Array[ItemDrop] = []
 @export var drop_count: int = 0
+@export var spawn_parent: Node
 
 func drop(radius: int = 200, speed: int = 1000) -> void:
 	for i in range(drop_count):
 		var model = roll()
-		
+
 		if model:
 			var node = model.instantiate()
 			node.global_position = global_position + Vector2(randi_range(-radius, radius), randi_range(-radius, radius))
@@ -15,7 +16,12 @@ func drop(radius: int = 200, speed: int = 1000) -> void:
 			node.angular_velocity = randi_range(-5, 5)
 			node.angular_damp = 0.2
 			node.linear_damp = 0.2
-			get_tree().current_scene.call_deferred("add_child", node)
+			if "spawn_parent" in node:
+				node.spawn_parent = spawn_parent
+			if spawn_parent:
+				spawn_parent.call_deferred("add_child", node)
+			else:
+				push_warning("spawn_parent not set on " + name)
 
 func roll() -> PackedScene:
 	var totalWeight = 0

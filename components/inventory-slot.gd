@@ -67,9 +67,7 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 		set_drag_preview(
 			make_drag_preview()
 		)
-	
-	print("_get_drag_data: ", data)
-	
+
 	return data
 
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:

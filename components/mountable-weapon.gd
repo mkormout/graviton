@@ -31,22 +31,22 @@ func _ready() -> void:
 	shot_timer.wait_time = rate
 	shot_timer.one_shot = true
 	add_child(shot_timer)
-	
+
 	reload_timer = Timer.new()
 	reload_timer.wait_time = reload_time
 	reload_timer.one_shot = true
 	add_child(reload_timer)
-	
+
 	magazine_current = magazine_max
 	ammo_current = ammo_max
 
 func get_ship():
 	var mount = get_mount()
 	var body = null
-	
+
 	if mount:
 		body = mount.body_opposite
-	
+
 	if body and body is Ship:
 		return body as Ship
 	else:
@@ -65,8 +65,10 @@ func can_shoot() -> bool:
 	return not is_cooldown() and not is_reloading() and has_ammo()
 
 func reload() -> void:
+	if is_reloading():
+		return
 	reload_timer.start()
-	reload_timer.connect("timeout", reloaded)
+	reload_timer.connect("timeout", reloaded, CONNECT_ONE_SHOT)
 	if reload_sound:
 		reload_sound.play()
 
@@ -74,29 +76,29 @@ func reloaded():
 	magazine_current = min(magazine_max, ammo_current)
 	ammo_current -= magazine_current
 
-func do(_sender: Node2D, action: String, _where: String, _meta = null):
-	if action == "fire":
+func do(_sender: Node2D, action: MountableBody.Action, _where: String, _meta = null):
+	if action == MountableBody.Action.FIRE:
 		fire()
-		
-	if action == "reload":
+
+	if action == MountableBody.Action.RELOAD:
 		reload()
-	
-	if action == "godmode":
+
+	if action == MountableBody.Action.GODMODE:
 		use_ammo = false
 		use_rate = false
-	
-	if action == "use_ammo":
+
+	if action == MountableBody.Action.USE_AMMO:
 		use_ammo = false
-		
-	if action == "use_rate":
+
+	if action == MountableBody.Action.USE_RATE:
 		use_rate = false
-		
+
 func fire():
 	if not has_ammo() and not is_reloading():
 		if empty_sound and not empty_sound.playing:
 			empty_sound.play()
 		return
-	
+
 	if can_shoot():
 		var instance = ammo.instantiate() as RigidBody2D
 		instance.position = barrel.global_position
@@ -106,16 +108,21 @@ func fire():
 				global_rotation + randf_range(-spread, spread)
 			) * velocity,
 		)
-		get_tree().current_scene.call_deferred("add_child", instance)
-		
+		if "spawn_parent" in instance:
+			instance.spawn_parent = spawn_parent
+		if spawn_parent:
+			spawn_parent.call_deferred("add_child", instance)
+		else:
+			push_warning("spawn_parent not set on " + name)
+
 		if sound:
 			sound.play()
-		
+
 		if use_rate:
 			shot_timer.start(rate)
-		
+
 		if use_ammo:
 			magazine_current -= 1
-		
+
 		var mount = get_mount("")
-		mount.do(self, "recoil", recoil)
+		mount.do(self, Action.RECOIL, recoil)

@@ -37,16 +37,23 @@ var camera_follow: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	setup_spawn_parent($ShipBFG23)
 	mount_weapon($ShipBFG23, minigun_model, "")
 	mount_weapon($ShipBFG23, minigun_model, "left")
 	mount_weapon($ShipBFG23, minigun_model, "right")
-	
+
 	spawn_asteroids(100)
 
-func notify_weapons(action: String):
+func setup_spawn_parent(node: Node):
+	if "spawn_parent" in node:
+		node.spawn_parent = self
+	for child in node.get_children():
+		setup_spawn_parent(child)
+
+func notify_weapons(action: MountableBody.Action):
 	if not $ShipBFG23:
 		return
-	
+
 	$ShipBFG23.do(null, action, "")
 	$ShipBFG23.do(null, action, "left")
 	$ShipBFG23.do(null, action, "right")
@@ -54,18 +61,18 @@ func notify_weapons(action: String):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if Input.is_key_pressed(KEY_SPACE):
-		notify_weapons("fire")
+		notify_weapons(MountableBody.Action.FIRE)
 
 func _input(_ev):
 	if not $ShipBFG23:
 		return
 		
 	if Input.is_key_pressed(KEY_Q):
-		$ShipBFG23.do(null, "fire", "left")
+		$ShipBFG23.do(null, MountableBody.Action.FIRE, "left")
 	if Input.is_key_pressed(KEY_W):
-		$ShipBFG23.do(null, "fire", "")
+		$ShipBFG23.do(null, MountableBody.Action.FIRE, "")
 	if Input.is_key_pressed(KEY_E):
-		$ShipBFG23.do(null, "fire", "right")
+		$ShipBFG23.do(null, MountableBody.Action.FIRE, "right")
 		
 	if Input.is_key_pressed(KEY_1):
 		mount_ship_weapons(minigun_model)
@@ -91,17 +98,17 @@ func _input(_ev):
 		spawn_asteroids(10)
 	
 	if Input.is_key_pressed(KEY_G):
-		notify_weapons("godmode")
+		notify_weapons(MountableBody.Action.GODMODE)
 		godmode = true
-	
+
 	if Input.is_key_pressed(KEY_H):
-		notify_weapons("use_ammo")
+		notify_weapons(MountableBody.Action.USE_AMMO)
 
 	if Input.is_key_pressed(KEY_J):
-		notify_weapons("use_rate")
-			
+		notify_weapons(MountableBody.Action.USE_RATE)
+
 	if Input.is_key_pressed(KEY_R):
-		notify_weapons("reload")
+		notify_weapons(MountableBody.Action.RELOAD)
 	
 	if Input.is_key_pressed(KEY_C):
 		camera_follow = not camera_follow
@@ -133,6 +140,8 @@ func spawn_asteroids(count: int):
 
 func mount_weapon(body: MountableBody, what: PackedScene, where: String):
 	var weapon = what.instantiate() if what else null
+	if weapon:
+		setup_spawn_parent(weapon)
 	body.mount_weapon(weapon, where)
 
 func mount_ship_weapons(what: PackedScene):
@@ -154,3 +163,4 @@ func add_asteroid(model: PackedScene):
 	asteroid.angular_damp = -1
 	asteroid.linear_damp = 0
 	add_child(asteroid)
+	setup_spawn_parent(asteroid)
