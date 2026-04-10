@@ -1,77 +1,50 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: executing
-stopped_at: Phase 3 context gathered
-last_updated: "2026-04-10T13:29:02.857Z"
-last_activity: 2026-04-07 -- Phase 2 planning complete
+milestone: v2.0
+milestone_name: Enemy AI
+status: planning
+stopped_at: v1.0 milestone complete — ready for next milestone
+last_updated: "2026-04-11T00:00:00.000Z"
+last_activity: 2026-04-11 -- v1.0 milestone archived, merged to main
 progress:
-  total_phases: 3
-  completed_phases: 2
-  total_plans: 5
-  completed_plans: 5
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-07)
+See: .planning/PROJECT.md (updated 2026-04-11)
 
 **Core value:** The mount-and-weapon system must work reliably — ships can equip, fire, and swap weapons without bugs or silent failures.
-**Current focus:** Phase 1 — Bug Fixes
+**Current focus:** Planning v2.0 Enemy AI milestone
 
 ## Current Position
 
-Phase: 1 of 3 (Bug Fixes)
-Plan: 0 of ? in current phase
-Status: Ready to execute
-Last activity: 2026-04-07 -- Phase 2 planning complete
+Phase: — (no phases defined yet)
+Status: v1.0 complete — run `/gsd-new-milestone` to define v2.0
 
 Progress: [░░░░░░░░░░] 0%
-
-## Performance Metrics
-
-**Velocity:**
-
-- Total plans completed: 0
-- Average duration: —
-- Total execution time: 0 hours
-
-**By Phase:**
-
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| - | - | - | - |
-
-**Recent Trend:**
-
-- Last 5 plans: —
-- Trend: —
-
-*Updated after each plan completion*
 
 ## Accumulated Context
 
 ### Decisions
 
 Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
-
-- Init: Fix bugs before migration — migration is easier on clean code
 
 ### Pending Todos
 
-None yet.
+None.
 
 ### Blockers/Concerns
 
-None yet.
+None.
 
 ## Session Continuity
 
-Last session: 2026-04-10T13:29:02.852Z
-Stopped at: Phase 3 context gathered
-Resume file: .planning/phases/03-godot-4-6-2-migration/03-CONTEXT.md
+Last session: 2026-04-11
+Stopped at: v1.0 milestone complete
