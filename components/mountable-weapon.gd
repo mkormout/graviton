@@ -125,4 +125,5 @@ func fire():
 			magazine_current -= 1
 
 		var mount = get_mount("")
-		mount.do(self, Action.RECOIL, recoil)
+		if mount:
+			mount.do(self, Action.RECOIL, recoil)
