@@ -14,8 +14,8 @@ var coins: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	connect("body_entered", body_entered)
-	picker.connect("body_entered", picker_body_entered)
+	body_entered.connect(_on_body_entered)
+	picker.body_entered.connect(picker_body_entered)
 	super()
 
 func pick_coin(item: Item):
@@ -34,7 +34,7 @@ func pick_health(item: Item):
 	storage.add_item(item)
 	item.pick()
 
-func body_entered(body):
+func _on_body_entered(body):
 	var ray = RayCast2D.new()
 	ray.target_position = to_local(body.global_position)
 	add_child(ray)
