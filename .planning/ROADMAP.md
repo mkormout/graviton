@@ -57,8 +57,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Fix deprecated string-based connect() calls and Linux export preset platform rename
-- [ ] 03-02-PLAN.md — Open project in Godot 4.6.2, run conversion, smoke test, and verify 4-platform export
+- [x] 03-01-PLAN.md — Fix deprecated string-based connect() calls and Linux export preset platform rename
+- [x] 03-02-PLAN.md — Open project in Godot 4.6.2, run conversion, smoke test, and verify 4-platform export
 
 ## Progress
 
