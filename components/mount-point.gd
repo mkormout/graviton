@@ -103,6 +103,8 @@ func _slot_item_adding(sender: InventorySlot, type: ItemType, quantity: int):
 		return
 
 	var body = type.instantiate()
+	if body_self:
+		body_self._propagate_spawn_parent(body)
 	plug(body.get_mount())
 
 func _slot_item_removing(sender: InventorySlot, type: ItemType, quantity: int):
