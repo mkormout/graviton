@@ -94,6 +94,10 @@ func do(_sender: Node2D, action: MountableBody.Action, _where: String, _meta = n
 		use_rate = false
 
 func fire():
+	if not ammo or not barrel:
+		push_warning("MountableWeapon %s: ammo or barrel not configured" % name)
+		return
+
 	if not has_ammo() and not is_reloading():
 		if empty_sound and not empty_sound.playing:
 			empty_sound.play()
