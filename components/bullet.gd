@@ -11,5 +11,8 @@ func _ready():
 
 func collision(body):
 	if body is Body:
-		body.damage(attack)
+		if attack:
+			body.damage(attack)
+		else:
+			push_warning("Bullet %s has no attack resource assigned" % name)
 	die(death_ttl)
