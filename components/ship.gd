@@ -54,7 +54,9 @@ func picker_body_entered(body):
 		IT.ItemTypes.AMMO: pick_ammo(item)
 		IT.ItemTypes.WEAPON: pick_weapon(item)
 		IT.ItemTypes.HEALTH: pick_health(item)
-	
+		_:
+			push_warning("Ship: unhandled item type %s" % item.type.type)
+
 func toggle_inventory():
 	if inventory_ui:
 		inventory_ui.visible = not inventory_ui.visible
