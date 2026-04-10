@@ -35,13 +35,6 @@ func pick_health(item: Item):
 	item.pick()
 
 func _on_body_entered(body):
-	var ray = RayCast2D.new()
-	ray.target_position = to_local(body.global_position)
-	add_child(ray)
-	ray.force_raycast_update()
-	var contact_point = ray.get_collision_point()
-	ray.queue_free()
-
 	var speed = body.linear_velocity.length() if body is RigidBody2D else 0.0
 	var attack = Damage.new()
 	attack.kinetic = speed / 10.0
