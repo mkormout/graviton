@@ -37,25 +37,26 @@ func plug(other: MountPoint):
 
 func unplug(free: bool = false):
 	if connection:
+		var departing_body = body_opposite  # cache before any signal
+
 		# throw away the body
-		body_opposite.apply_central_impulse(
-			Vector2.from_angle(body_opposite.rotation) * throw_force
+		departing_body.apply_central_impulse(
+			Vector2.from_angle(departing_body.rotation) * throw_force
 		)
 		if spawn_parent:
-			body_opposite.reparent(spawn_parent)
+			departing_body.reparent(spawn_parent)
 		else:
 			push_warning("spawn_parent not set on " + name)
 
 		unplugging.emit(self, connection)
 
-		if free and body_opposite:
-			body_opposite.queue_free()
+		if free and is_instance_valid(departing_body):
+			departing_body.queue_free()
 
 		call_slots(
 			func(slot: InventorySlot):
-				slot.dec(body_opposite.item_type)
+				slot.dec(departing_body.item_type)
 		)
-
 
 	connection = null
 
