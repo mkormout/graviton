@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://epfdus3x86sd"]
+[gd_scene format=3 uid="uid://epfdus3x86sd"]
 
-[ext_resource type="Script" path="res://components/item.gd" id="1_yroo7"]
+[ext_resource type="Script" uid="uid://6khmdkbwwqmr" path="res://components/item.gd" id="1_yroo7"]
 [ext_resource type="Resource" uid="uid://b6kbq3ho748c1" path="res://items/gravitygun.tres" id="2_1oi5s"]
 [ext_resource type="Texture2D" uid="uid://cl4f7nqrbwybk" path="res://images/gravitygun-item.png" id="2_j0agc"]
 [ext_resource type="AudioStream" uid="uid://bxgccs4e2ejvv" path="res://sounds/ammo-pick.mp3" id="3_6uw8h"]
@@ -12,25 +12,25 @@ size = Vector2(413, 413)
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_sp370"]
 polygon = PackedVector2Array(-205, 209, 207, 207, 207, -205, -206, -206)
 
-[node name="Gravitygun-item" type="RigidBody2D" node_paths=PackedStringArray("pick_sound")]
+[node name="Gravitygun-item" type="RigidBody2D" unique_id=1856679788 node_paths=PackedStringArray("pick_sound")]
 collision_layer = 128
 collision_mask = 0
-max_contacts_reported = 10
 contact_monitor = true
+max_contacts_reported = 10
 script = ExtResource("1_yroo7")
 pick_sound = NodePath("AudioStreamPlayer2D")
 type = ExtResource("2_1oi5s")
 death = ExtResource("3_r6num")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1636946395]
 texture = ExtResource("2_j0agc")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=258166355]
 position = Vector2(0.5, -0.5)
 shape = SubResource("RectangleShape2D_drdke")
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=63606786]
 occluder = SubResource("OccluderPolygon2D_sp370")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=978660762]
 stream = ExtResource("3_6uw8h")

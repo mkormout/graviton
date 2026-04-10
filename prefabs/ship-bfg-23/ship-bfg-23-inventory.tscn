@@ -1,13 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://c5n2g0g788e3r"]
+[gd_scene format=3 uid="uid://c5n2g0g788e3r"]
 
-[ext_resource type="Script" path="res://prefabs/ship-bfg-23/ship-bfg-23-inventory.gd" id="1_mhngw"]
+[ext_resource type="Script" uid="uid://c7ffmel1u0ef" path="res://prefabs/ship-bfg-23/ship-bfg-23-inventory.gd" id="1_mhngw"]
 [ext_resource type="Texture2D" uid="uid://b0vj1nsx0hpy6" path="res://images/ship-inventory.png" id="2_s8nkx"]
 [ext_resource type="PackedScene" uid="uid://cg0rnqqif7mao" path="res://prefabs/ui/inventory/inventory-slot.tscn" id="3_uuhwj"]
 
-[node name="Ship-bfg-23-inventory" type="CanvasLayer"]
+[node name="Ship-bfg-23-inventory" type="CanvasLayer" unique_id=407822087]
 script = ExtResource("1_mhngw")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1592308489]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -20,11 +20,11 @@ offset_bottom = 859.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer" unique_id=382847099]
 layout_mode = 2
 texture = ExtResource("2_s8nkx")
 
-[node name="GridContainer" type="GridContainer" parent="MarginContainer/TextureRect"]
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/TextureRect" unique_id=455183515]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.131
@@ -37,37 +37,37 @@ offset_right = -0.799988
 offset_bottom = 0.251953
 columns = 5
 
-[node name="Storage-slot-1" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+[node name="Storage-slot-1" parent="MarginContainer/TextureRect/GridContainer" unique_id=191070985 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 
-[node name="Storage-slot-2" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+[node name="Storage-slot-2" parent="MarginContainer/TextureRect/GridContainer" unique_id=1213743405 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 
-[node name="Storage-slot-3" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+[node name="Storage-slot-3" parent="MarginContainer/TextureRect/GridContainer" unique_id=115808733 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 
-[node name="Storage-slot-4" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+[node name="Storage-slot-4" parent="MarginContainer/TextureRect/GridContainer" unique_id=240624212 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 
-[node name="Storage-slot-5" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+[node name="Storage-slot-5" parent="MarginContainer/TextureRect/GridContainer" unique_id=1813384699 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 
-[node name="Storage-slot-6" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+[node name="Storage-slot-6" parent="MarginContainer/TextureRect/GridContainer" unique_id=668777410 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 
-[node name="Storage-slot-7" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+[node name="Storage-slot-7" parent="MarginContainer/TextureRect/GridContainer" unique_id=1443547550 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 
-[node name="Storage-slot-8" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+[node name="Storage-slot-8" parent="MarginContainer/TextureRect/GridContainer" unique_id=50324002 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 
-[node name="Storage-slot-9" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+[node name="Storage-slot-9" parent="MarginContainer/TextureRect/GridContainer" unique_id=1471560469 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 
-[node name="Storage-slot-10" parent="MarginContainer/TextureRect/GridContainer" instance=ExtResource("3_uuhwj")]
+[node name="Storage-slot-10" parent="MarginContainer/TextureRect/GridContainer" unique_id=76969857 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 
-[node name="Slot-util-1" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
+[node name="Slot-util-1" parent="MarginContainer/TextureRect" unique_id=479375863 instance=ExtResource("3_uuhwj")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.234
@@ -81,7 +81,7 @@ offset_bottom = -0.145996
 slot_type = 2
 max_items = 1
 
-[node name="Slot-util-2" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
+[node name="Slot-util-2" parent="MarginContainer/TextureRect" unique_id=8276631 instance=ExtResource("3_uuhwj")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.234
@@ -95,7 +95,7 @@ offset_bottom = 0.833862
 slot_type = 2
 max_items = 1
 
-[node name="Slot-weapon-left" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
+[node name="Slot-weapon-left" parent="MarginContainer/TextureRect" unique_id=537869342 instance=ExtResource("3_uuhwj")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.285
@@ -109,7 +109,7 @@ offset_bottom = -0.330078
 slot_type = 1
 max_items = 1
 
-[node name="Slot-weapon-right" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
+[node name="Slot-weapon-right" parent="MarginContainer/TextureRect" unique_id=273314411 instance=ExtResource("3_uuhwj")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.285
@@ -123,7 +123,7 @@ offset_bottom = -0.417999
 slot_type = 1
 max_items = 1
 
-[node name="Slot-weapon-front" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
+[node name="Slot-weapon-front" parent="MarginContainer/TextureRect" unique_id=117227123 instance=ExtResource("3_uuhwj")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.803
@@ -137,7 +137,7 @@ offset_bottom = 0.125916
 slot_type = 1
 max_items = 1
 
-[node name="Slot-engine-1" parent="MarginContainer/TextureRect" instance=ExtResource("3_uuhwj")]
+[node name="Slot-engine-1" parent="MarginContainer/TextureRect" unique_id=399950819 instance=ExtResource("3_uuhwj")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.006
@@ -151,7 +151,7 @@ offset_bottom = 0.843933
 slot_type = 3
 max_items = 1
 
-[node name="GridContainer2" type="GridContainer" parent="MarginContainer/TextureRect"]
+[node name="GridContainer2" type="GridContainer" parent="MarginContainer/TextureRect" unique_id=1193843336]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.577
@@ -164,39 +164,39 @@ offset_right = -0.400146
 offset_bottom = 0.449982
 columns = 4
 
-[node name="Drop-slot-1" parent="MarginContainer/TextureRect/GridContainer2" instance=ExtResource("3_uuhwj")]
+[node name="Drop-slot-1" parent="MarginContainer/TextureRect/GridContainer2" unique_id=1513481149 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 slot_type = 4
 
-[node name="Drop-slot-2" parent="MarginContainer/TextureRect/GridContainer2" instance=ExtResource("3_uuhwj")]
+[node name="Drop-slot-2" parent="MarginContainer/TextureRect/GridContainer2" unique_id=225856749 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 slot_type = 4
 
-[node name="Drop-slot-3" parent="MarginContainer/TextureRect/GridContainer2" instance=ExtResource("3_uuhwj")]
+[node name="Drop-slot-3" parent="MarginContainer/TextureRect/GridContainer2" unique_id=1547054540 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 slot_type = 4
 
-[node name="Drop-slot-4" parent="MarginContainer/TextureRect/GridContainer2" instance=ExtResource("3_uuhwj")]
+[node name="Drop-slot-4" parent="MarginContainer/TextureRect/GridContainer2" unique_id=531739077 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 slot_type = 4
 
-[node name="Drop-slot-5" parent="MarginContainer/TextureRect/GridContainer2" instance=ExtResource("3_uuhwj")]
+[node name="Drop-slot-5" parent="MarginContainer/TextureRect/GridContainer2" unique_id=1361987746 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 slot_type = 4
 
-[node name="Drop-slot-6" parent="MarginContainer/TextureRect/GridContainer2" instance=ExtResource("3_uuhwj")]
+[node name="Drop-slot-6" parent="MarginContainer/TextureRect/GridContainer2" unique_id=723911131 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 slot_type = 4
 
-[node name="Drop-slot-7" parent="MarginContainer/TextureRect/GridContainer2" instance=ExtResource("3_uuhwj")]
+[node name="Drop-slot-7" parent="MarginContainer/TextureRect/GridContainer2" unique_id=982361319 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 slot_type = 4
 
-[node name="Drop-slot-8" parent="MarginContainer/TextureRect/GridContainer2" instance=ExtResource("3_uuhwj")]
+[node name="Drop-slot-8" parent="MarginContainer/TextureRect/GridContainer2" unique_id=1120833180 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 slot_type = 4
 
-[node name="GridContainer3" type="GridContainer" parent="MarginContainer/TextureRect"]
+[node name="GridContainer3" type="GridContainer" parent="MarginContainer/TextureRect" unique_id=1374118053]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.538
@@ -209,22 +209,22 @@ offset_right = 0.399902
 offset_bottom = -0.404053
 columns = 5
 
-[node name="Ammo-slot-1" parent="MarginContainer/TextureRect/GridContainer3" instance=ExtResource("3_uuhwj")]
+[node name="Ammo-slot-1" parent="MarginContainer/TextureRect/GridContainer3" unique_id=1996680913 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 slot_type = 5
 
-[node name="Ammo-slot-2" parent="MarginContainer/TextureRect/GridContainer3" instance=ExtResource("3_uuhwj")]
+[node name="Ammo-slot-2" parent="MarginContainer/TextureRect/GridContainer3" unique_id=380921682 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 slot_type = 5
 
-[node name="Ammo-slot-3" parent="MarginContainer/TextureRect/GridContainer3" instance=ExtResource("3_uuhwj")]
+[node name="Ammo-slot-3" parent="MarginContainer/TextureRect/GridContainer3" unique_id=1790433829 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 slot_type = 5
 
-[node name="Ammo-slot-4" parent="MarginContainer/TextureRect/GridContainer3" instance=ExtResource("3_uuhwj")]
+[node name="Ammo-slot-4" parent="MarginContainer/TextureRect/GridContainer3" unique_id=1849200294 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 slot_type = 5
 
-[node name="Ammo-slot-5" parent="MarginContainer/TextureRect/GridContainer3" instance=ExtResource("3_uuhwj")]
+[node name="Ammo-slot-5" parent="MarginContainer/TextureRect/GridContainer3" unique_id=1348250647 instance=ExtResource("3_uuhwj")]
 layout_mode = 2
 slot_type = 5

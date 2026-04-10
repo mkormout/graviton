@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dy8c1mmutnbql"]
 
-[node name="Controls-hint" type="CanvasLayer"]
+[node name="Controls-hint" type="CanvasLayer" unique_id=883985119]
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1314025216]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -14,10 +14,10 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="Panel" type="Panel" parent="MarginContainer"]
+[node name="Panel" type="Panel" parent="MarginContainer" unique_id=1337076221]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/Panel"]
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/Panel" unique_id=64628238]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -27,8 +27,8 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/normal_font_size = 20
 theme_override_font_sizes/bold_font_size = 20
-theme_override_font_sizes/italics_font_size = 20
 theme_override_font_sizes/bold_italics_font_size = 20
+theme_override_font_sizes/italics_font_size = 20
 theme_override_font_sizes/mono_font_size = 20
 bbcode_enabled = true
 text = "[b]Controls[/b]

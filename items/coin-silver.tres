@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="ItemType" load_steps=3 format=3 uid="uid://dlemk2yq2ywjc"]
+[gd_resource type="Resource" script_class="ItemType" format=3 uid="uid://dlemk2yq2ywjc"]
 
-[ext_resource type="Script" path="res://components/item-type.gd" id="1_7suv8"]
+[ext_resource type="Script" uid="uid://dclxl44j4opab" path="res://components/item-type.gd" id="1_7suv8"]
 [ext_resource type="Texture2D" uid="uid://bcex6ks87vkmr" path="res://images/coin_silver.png" id="1_34wvp"]
 
 [resource]
@@ -9,4 +9,3 @@ name = "coin-silver"
 title = "Silver Coin"
 price = 2
 image = ExtResource("1_34wvp")
-type = 0

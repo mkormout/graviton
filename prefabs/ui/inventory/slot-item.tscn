@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://di5lbyuwykp6t"]
 
-[node name="Slot-item" type="CanvasLayer"]
+[node name="Slot-item" type="CanvasLayer" unique_id=830631288]
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=359697665]
 custom_minimum_size = Vector2(90, 90)
 offset_right = 40.0
 offset_bottom = 40.0
@@ -11,10 +11,10 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="Panel" type="Panel" parent="MarginContainer"]
+[node name="Panel" type="Panel" parent="MarginContainer" unique_id=351787784]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/Panel"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/Panel" unique_id=453211784]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

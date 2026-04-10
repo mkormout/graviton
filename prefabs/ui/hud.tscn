@@ -1,12 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://beanxs20fe7qx"]
+[gd_scene format=3 uid="uid://beanxs20fe7qx"]
 
-[ext_resource type="Script" path="res://prefabs/ui/hud.gd" id="1_yqfv3"]
+[ext_resource type="Script" uid="uid://3cpmtdwpjxbg" path="res://prefabs/ui/hud.gd" id="1_yqfv3"]
 [ext_resource type="PackedScene" uid="uid://ie1un8jx1lxk" path="res://prefabs/ui/weapon-debug-panel.tscn" id="2_gnmvx"]
 
-[node name="Hud" type="CanvasLayer"]
+[node name="Hud" type="CanvasLayer" unique_id=194258862]
 script = ExtResource("1_yqfv3")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=240006057]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -17,7 +17,7 @@ offset_top = -344.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1819005216]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,38 +29,38 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="GridContainer" type="GridContainer" parent="Panel/MarginContainer"]
+[node name="GridContainer" type="GridContainer" parent="Panel/MarginContainer" unique_id=421246064]
 custom_minimum_size = Vector2(2.08165e-12, 280)
 layout_mode = 2
 size_flags_vertical = 8
 columns = 3
 
-[node name="WeaponLeftDebug" parent="Panel/MarginContainer/GridContainer" instance=ExtResource("2_gnmvx")]
+[node name="WeaponLeftDebug" parent="Panel/MarginContainer/GridContainer" unique_id=1512035376 instance=ExtResource("2_gnmvx")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="WeaponFrontDebug" parent="Panel/MarginContainer/GridContainer" instance=ExtResource("2_gnmvx")]
+[node name="WeaponFrontDebug" parent="Panel/MarginContainer/GridContainer" unique_id=2085880454 instance=ExtResource("2_gnmvx")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="WeaponRightDebug" parent="Panel/MarginContainer/GridContainer" instance=ExtResource("2_gnmvx")]
+[node name="WeaponRightDebug" parent="Panel/MarginContainer/GridContainer" unique_id=1078280578 instance=ExtResource("2_gnmvx")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=1354423572]
 custom_minimum_size = Vector2(2.08165e-12, 60)
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="Panel" type="Panel" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="Panel" type="Panel" parent="Panel/MarginContainer/VBoxContainer" unique_id=1900376937]
 custom_minimum_size = Vector2(2.08165e-12, 30)
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="HealthTitle" type="Label" parent="Panel/MarginContainer/VBoxContainer/Panel"]
+[node name="HealthTitle" type="Label" parent="Panel/MarginContainer/VBoxContainer/Panel" unique_id=1855532795]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -72,7 +72,7 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 16
 text = "Health"
 
-[node name="HealthValue" type="ProgressBar" parent="Panel/MarginContainer/VBoxContainer/Panel"]
+[node name="HealthValue" type="ProgressBar" parent="Panel/MarginContainer/VBoxContainer/Panel" unique_id=1160013546]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -87,12 +87,12 @@ grow_vertical = 2
 size_flags_horizontal = 3
 rounded = true
 
-[node name="Panel2" type="Panel" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="Panel2" type="Panel" parent="Panel/MarginContainer/VBoxContainer" unique_id=1854527207]
 custom_minimum_size = Vector2(2.08165e-12, 30)
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="CoinsTitle" type="Label" parent="Panel/MarginContainer/VBoxContainer/Panel2"]
+[node name="CoinsTitle" type="Label" parent="Panel/MarginContainer/VBoxContainer/Panel2" unique_id=1695937169]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -105,7 +105,7 @@ theme_override_colors/font_color = Color(1, 0.866667, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = "Coins"
 
-[node name="CoinsValue" type="Label" parent="Panel/MarginContainer/VBoxContainer/Panel2"]
+[node name="CoinsValue" type="Label" parent="Panel/MarginContainer/VBoxContainer/Panel2" unique_id=2095312172]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0

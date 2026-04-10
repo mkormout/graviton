@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://ie1un8jx1lxk"]
+[gd_scene format=3 uid="uid://ie1un8jx1lxk"]
 
-[ext_resource type="Script" path="res://prefabs/ui/weapon-debug-panel.gd" id="1_5o4uu"]
+[ext_resource type="Script" uid="uid://dsqgm32xy1v7r" path="res://prefabs/ui/weapon-debug-panel.gd" id="1_5o4uu"]
 
-[node name="WeaponDebugPanel" type="Panel"]
+[node name="WeaponDebugPanel" type="Panel" unique_id=1152999806]
 anchors_preset = -1
 anchor_right = 0.095
 anchor_bottom = 0.242
@@ -12,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_5o4uu")
 
-[node name="MarginPanel" type="MarginContainer" parent="."]
+[node name="MarginPanel" type="MarginContainer" parent="." unique_id=2012694471]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,10 +24,10 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginPanel" unique_id=2008552442]
 layout_mode = 2
 
-[node name="LabelWeaponName" type="Label" parent="MarginPanel/VBoxContainer"]
+[node name="LabelWeaponName" type="Label" parent="MarginPanel/VBoxContainer" unique_id=1964867725]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
@@ -35,18 +35,18 @@ text = "Weapon Name"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="MarginPanel/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="MarginPanel/VBoxContainer" unique_id=624356212]
 layout_mode = 2
 columns = 2
 
-[node name="LabelMagazineAmmoTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelMagazineAmmoTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=1393346874]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
 text = "Ammo Magazine"
 vertical_alignment = 1
 
-[node name="LabelMagazineAmmoValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelMagazineAmmoValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=996839884]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
@@ -54,14 +54,14 @@ text = "<value>"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LabelTotalAmmoTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelTotalAmmoTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=951183918]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
 text = "Ammo Total"
 vertical_alignment = 1
 
-[node name="LabelTotalAmmoValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelTotalAmmoValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=973246724]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
@@ -69,7 +69,7 @@ text = "<value>"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LabelHealthTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelHealthTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=1553469882]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
@@ -77,7 +77,7 @@ text = "Health
 "
 vertical_alignment = 1
 
-[node name="LabelHealthValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelHealthValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=1892980494]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
@@ -85,14 +85,14 @@ text = "<value>"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LabelRecoilTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelRecoilTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=921490338]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
 text = "Recoil"
 vertical_alignment = 1
 
-[node name="LabelRecoilValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelRecoilValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=2057227849]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
@@ -100,14 +100,14 @@ text = "<value>"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LabelVelocityTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelVelocityTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=881898353]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
 text = "Power"
 vertical_alignment = 1
 
-[node name="LabelVelocityValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelVelocityValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=1598955615]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
@@ -115,14 +115,14 @@ text = "<value>"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LabelReloadTimerTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelReloadTimerTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=1251848192]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
 text = "Time Reload"
 vertical_alignment = 1
 
-[node name="LabelReloadTimerValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelReloadTimerValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=1079956802]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
@@ -130,7 +130,7 @@ text = "<value>"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LabelCooldownTimerTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelCooldownTimerTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=1793807147]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
@@ -138,7 +138,7 @@ text = "Time Cooldown
 "
 vertical_alignment = 1
 
-[node name="LabelCooldownTimerValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelCooldownTimerValue" type="Label" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=1066576307]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
@@ -146,7 +146,7 @@ text = "<value>"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LabelUseAmmoTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelUseAmmoTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=1332961915]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
@@ -154,13 +154,13 @@ text = "Use Ammo
 "
 vertical_alignment = 1
 
-[node name="LabelUseAmmoValue" type="CheckBox" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelUseAmmoValue" type="CheckBox" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=416370262]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
 disabled = true
 
-[node name="LabelUseRateTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelUseRateTitle" type="Label" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=1363887013]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
@@ -168,7 +168,7 @@ text = "Use Rate
 "
 vertical_alignment = 1
 
-[node name="LabelUseRateValue" type="CheckBox" parent="MarginPanel/VBoxContainer/GridContainer"]
+[node name="LabelUseRateValue" type="CheckBox" parent="MarginPanel/VBoxContainer/GridContainer" unique_id=705559651]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14

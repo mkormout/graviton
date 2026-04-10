@@ -1,14 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://c5w67ija55whr"]
+[gd_scene format=3 uid="uid://c5w67ija55whr"]
 
-[ext_resource type="Script" path="res://components/explosion.gd" id="1_ff4k2"]
-[ext_resource type="Script" path="res://components/damage.gd" id="2_3lcn1"]
-[ext_resource type="Script" path="res://components/random-audio-player.gd" id="3_jnxae"]
+[ext_resource type="Script" uid="uid://drkuv3ul7es3i" path="res://components/explosion.gd" id="1_ff4k2"]
+[ext_resource type="Script" uid="uid://bm8vrr4oi1o18" path="res://components/damage.gd" id="2_3lcn1"]
+[ext_resource type="Script" uid="uid://pqgx4pknqje3" path="res://components/random-audio-player.gd" id="3_jnxae"]
 [ext_resource type="AudioStream" uid="uid://c68sjlvhek3f0" path="res://sounds/minigun-impact.mp3" id="4_m8x1l"]
 
 [sub_resource type="Resource" id="Resource_klxyw"]
 script = ExtResource("2_3lcn1")
-energy = 0.0
-kinetic = 0.0
 
 [sub_resource type="Curve" id="Curve_1kpr4"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0901849), 0.0, 0.0, 0, 0]
@@ -31,7 +29,7 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 1)
 
-[node name="Weapon-explosion" type="Node2D" node_paths=PackedStringArray("particles", "light", "audio")]
+[node name="Weapon-explosion" type="Node2D" unique_id=1920092963 node_paths=PackedStringArray("particles", "light", "audio")]
 script = ExtResource("1_ff4k2")
 particles = NodePath("CPUParticles2D")
 light = NodePath("PointLight2D")
@@ -39,7 +37,7 @@ audio = NodePath("RandomAudioPlayer")
 time = 0.5
 attack = SubResource("Resource_klxyw")
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=922955544]
 scale = Vector2(10, 10)
 emitting = false
 amount = 20
@@ -56,7 +54,7 @@ scale_amount_max = 10.0
 scale_amount_curve = SubResource("Curve_1kpr4")
 color_ramp = SubResource("Gradient_08bl8")
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1774822404]
 z_index = 10
 color = Color(1, 0.784314, 0.572549, 1)
 energy = 0.5
@@ -67,6 +65,6 @@ texture = SubResource("GradientTexture2D_tulp4")
 texture_scale = 5.0
 height = 100.0
 
-[node name="RandomAudioPlayer" type="Node2D" parent="."]
+[node name="RandomAudioPlayer" type="Node2D" parent="." unique_id=1613977007]
 script = ExtResource("3_jnxae")
 resources = Array[AudioStream]([ExtResource("4_m8x1l")])

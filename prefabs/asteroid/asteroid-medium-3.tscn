@@ -1,6 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://3i76im636d0y"]
+[gd_scene format=3 uid="uid://3i76im636d0y"]
 
-[ext_resource type="Script" path="res://components/asteroid.gd" id="1_2pcbl"]
+[ext_resource type="Script" uid="uid://cjvmk20s72pin" path="res://components/asteroid.gd" id="1_2pcbl"]
 [ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-explosion.tscn" id="2_3bgy2"]
 [ext_resource type="PackedScene" uid="uid://bcugkd5de5gob" path="res://prefabs/asteroid/asteroid-small-3.tscn" id="3_btrb3"]
 [ext_resource type="PackedScene" uid="uid://clgvd7qry3vdk" path="res://prefabs/asteroid/asteroid-small-4.tscn" id="4_lfpyw"]
@@ -18,28 +18,28 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.495726, 0)
 
-[node name="Asteroid-medium-3" type="RigidBody2D"]
+[node name="Asteroid-medium-3" type="RigidBody2D" unique_id=1564189203]
 collision_layer = 8
 collision_mask = 8
 mass = 50000.0
-max_contacts_reported = 10
 contact_monitor = true
+max_contacts_reported = 10
 script = ExtResource("1_2pcbl")
 max_health = 800
 death = ExtResource("2_3bgy2")
 successors = Array[PackedScene]([ExtResource("3_btrb3"), ExtResource("4_lfpyw")])
 successors_count = 6
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=677259601]
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("5_by4wl")
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=1496611168]
 occluder = SubResource("OccluderPolygon2D_uxoky")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1070515251]
 polygon = PackedVector2Array(-258, -409, -324, -317, -360, -205, -380, -29, -350, 175, -324, 335, -202, 453, -62, 505, 98, 459, 228, 361, 284, 217, 392, 17, 376, -85, 364, -257, 286, -375, 148, -475, -38, -501, -184, -463)
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1877803199]
 texture = SubResource("GradientTexture2D_wd3ek")
 texture_scale = 20.0

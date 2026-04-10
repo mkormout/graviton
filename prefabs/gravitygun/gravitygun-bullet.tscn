@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://btge3o3l7u07w"]
+[gd_scene format=3 uid="uid://btge3o3l7u07w"]
 
-[ext_resource type="Script" path="res://components/bullet.gd" id="1_3qhnn"]
+[ext_resource type="Script" uid="uid://bpqtbvkdqqr77" path="res://components/bullet.gd" id="1_3qhnn"]
 [ext_resource type="Texture2D" uid="uid://cpptu026cfcc7" path="res://images/gravitygun-bullet.png" id="2_isbr0"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_blath"]
@@ -27,20 +27,20 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.118519, 0.218519, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 0.854902, 1, 1, 0.999054, 0.419104, 1, 1, 0.600406, 0.000277, 0.604114, 1)
 
-[node name="Gravitygun-bullet" type="RigidBody2D"]
+[node name="Gravitygun-bullet" type="RigidBody2D" unique_id=203370045]
 collision_layer = 4
 collision_mask = 0
 script = ExtResource("1_3qhnn")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1791634167]
 self_modulate = Color(2, 2, 2, 1)
 rotation = 1.5708
 texture = ExtResource("2_isbr0")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=730546356]
 shape = SubResource("CircleShape2D_blath")
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=917139352]
 z_index = 10
 scale = Vector2(2, 2)
 color = Color(0.94902, 0, 1, 1)
@@ -53,7 +53,7 @@ texture = SubResource("GradientTexture2D_sdy5p")
 texture_scale = 50.0
 height = 100.0
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=968025006]
 scale = Vector2(5, 5)
 amount = 100
 lifetime = 2.0

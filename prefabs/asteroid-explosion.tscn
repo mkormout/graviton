@@ -1,8 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://c31rv1yymd6gv"]
+[gd_scene format=3 uid="uid://c31rv1yymd6gv"]
 
-[ext_resource type="Script" path="res://components/explosion.gd" id="1_p4wyu"]
-[ext_resource type="Script" path="res://components/damage.gd" id="2_3yu73"]
-[ext_resource type="Script" path="res://components/random-audio-player.gd" id="3_o4psx"]
+[ext_resource type="Script" uid="uid://drkuv3ul7es3i" path="res://components/explosion.gd" id="1_p4wyu"]
+[ext_resource type="Script" uid="uid://bm8vrr4oi1o18" path="res://components/damage.gd" id="2_3yu73"]
+[ext_resource type="Script" uid="uid://pqgx4pknqje3" path="res://components/random-audio-player.gd" id="3_o4psx"]
 [ext_resource type="AudioStream" uid="uid://7wuqk2kqrxs2" path="res://sounds/explosion-1.wav" id="4_gte2r"]
 [ext_resource type="AudioStream" uid="uid://l6jfw80adfj8" path="res://sounds/explosion-2.wav" id="5_c884h"]
 [ext_resource type="AudioStream" uid="uid://c0o0nycma3ye1" path="res://sounds/explosion-3.wav" id="6_voyeu"]
@@ -10,7 +10,6 @@
 
 [sub_resource type="Resource" id="Resource_062r6"]
 script = ExtResource("2_3yu73")
-energy = 0.0
 kinetic = 50.0
 
 [sub_resource type="Curve" id="Curve_nhauv"]
@@ -34,7 +33,7 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 1)
 
-[node name="Asteroid-explosion" type="Node2D" node_paths=PackedStringArray("particles", "light", "audio")]
+[node name="Asteroid-explosion" type="Node2D" unique_id=1819240461 node_paths=PackedStringArray("particles", "light", "audio")]
 script = ExtResource("1_p4wyu")
 radius = 1000.0
 particles = NodePath("CPUParticles2D")
@@ -44,7 +43,7 @@ time = 2.0
 power = 1000
 attack = SubResource("Resource_062r6")
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1850083361]
 z_index = -1
 scale = Vector2(10, 10)
 emitting = false
@@ -66,7 +65,7 @@ scale_amount_max = 300.0
 scale_amount_curve = SubResource("Curve_nhauv")
 color_ramp = SubResource("Gradient_inhcr")
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=281729363]
 z_index = 10
 color = Color(1, 0.635294, 0, 1)
 energy = 2.0
@@ -77,7 +76,7 @@ texture = SubResource("GradientTexture2D_sva77")
 texture_scale = 40.0
 height = 100.0
 
-[node name="RandomAudioPlayer" type="Node2D" parent="."]
+[node name="RandomAudioPlayer" type="Node2D" parent="." unique_id=2129055059]
 script = ExtResource("3_o4psx")
 autoplay = false
 resources = Array[AudioStream]([ExtResource("4_gte2r"), ExtResource("5_c884h"), ExtResource("6_voyeu"), ExtResource("7_44b0n")])

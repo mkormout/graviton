@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="ItemType" load_steps=3 format=3 uid="uid://c1iigd6ec20sn"]
+[gd_resource type="Resource" script_class="ItemType" format=3 uid="uid://c1iigd6ec20sn"]
 
 [ext_resource type="Texture2D" uid="uid://62ioxknfi178" path="res://images/gausscannon-item.png" id="1_iyheg"]
-[ext_resource type="Script" path="res://components/item-type.gd" id="2_bej7d"]
+[ext_resource type="Script" uid="uid://dclxl44j4opab" path="res://components/item-type.gd" id="2_bej7d"]
 
 [resource]
 script = ExtResource("2_bej7d")

@@ -1,12 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://bea8xntn1kx3l"]
+[gd_scene format=3 uid="uid://bea8xntn1kx3l"]
 
-[ext_resource type="Script" path="res://components/explosion.gd" id="1_vib36"]
-[ext_resource type="Script" path="res://components/damage.gd" id="2_2flkg"]
+[ext_resource type="Script" uid="uid://drkuv3ul7es3i" path="res://components/explosion.gd" id="1_vib36"]
+[ext_resource type="Script" uid="uid://bm8vrr4oi1o18" path="res://components/damage.gd" id="2_2flkg"]
 
 [sub_resource type="Resource" id="Resource_cslja"]
 script = ExtResource("2_2flkg")
 energy = 1.0
-kinetic = 0.0
 
 [sub_resource type="Curve" id="Curve_kqsga"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0901849), 0.0, 0.0, 0, 0]
@@ -29,7 +28,7 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 1)
 
-[node name="Laser-bullet-explosion" type="Node2D" node_paths=PackedStringArray("particles", "light")]
+[node name="Laser-bullet-explosion" type="Node2D" unique_id=321283399 node_paths=PackedStringArray("particles", "light")]
 script = ExtResource("1_vib36")
 radius = 200.0
 particles = NodePath("CPUParticles2D")
@@ -38,7 +37,7 @@ time = 0.5
 power = 200
 attack = SubResource("Resource_cslja")
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1372413431]
 scale = Vector2(10, 10)
 emitting = false
 amount = 100
@@ -57,7 +56,7 @@ scale_amount_max = 30.0
 scale_amount_curve = SubResource("Curve_kqsga")
 color_ramp = SubResource("Gradient_stfm5")
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1782550486]
 z_index = 10
 color = Color(0, 1, 0.498039, 1)
 energy = 1.1

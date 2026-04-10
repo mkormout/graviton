@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://dy7xaj3ele8dl"]
+[gd_scene format=3 uid="uid://dy7xaj3ele8dl"]
 
-[ext_resource type="Script" path="res://components/ammo.gd" id="1_gjstf"]
+[ext_resource type="Script" uid="uid://806snm4xg2rl" path="res://components/ammo.gd" id="1_gjstf"]
 [ext_resource type="PackedScene" uid="uid://bex5u7fwgdwf4" path="res://prefabs/ammo-explosion.tscn" id="2_87e48"]
 [ext_resource type="Texture2D" uid="uid://ca8mwrfvvhsdf" path="res://images/gravitygun-ammo.png" id="2_f05y2"]
 [ext_resource type="Resource" uid="uid://besvh5hp7cj2q" path="res://items/gravitygun-ammo.tres" id="2_okelu"]
@@ -12,29 +12,29 @@ size = Vector2(502, 419)
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_q2me4"]
 polygon = PackedVector2Array(-252, 228, 255, 228, 255, -192, -252, -192)
 
-[node name="Gravitygun-ammo" type="RigidBody2D" node_paths=PackedStringArray("pick_sound")]
+[node name="Gravitygun-ammo" type="RigidBody2D" unique_id=460784672 node_paths=PackedStringArray("pick_sound")]
 collision_layer = 64
 collision_mask = 0
-max_contacts_reported = 10
 contact_monitor = true
+max_contacts_reported = 10
 script = ExtResource("1_gjstf")
 amount = 5
 pick_sound = NodePath("AudioStreamPlayer2D")
 type = ExtResource("2_okelu")
 death = ExtResource("2_87e48")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=329584180]
 texture = ExtResource("2_f05y2")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=98334135]
 position = Vector2(1, 76.5)
 shape = SubResource("RectangleShape2D_fnglq")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1893625652]
 stream = ExtResource("3_y6fst")
 volume_db = -20.0
 max_distance = 20000.0
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=174160617]
 position = Vector2(-2, 59)
 occluder = SubResource("OccluderPolygon2D_q2me4")

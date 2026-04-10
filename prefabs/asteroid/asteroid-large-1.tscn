@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://bs6g3mnrmhoii"]
+[gd_scene format=3 uid="uid://bs6g3mnrmhoii"]
 
-[ext_resource type="Script" path="res://components/asteroid.gd" id="1_2vepp"]
+[ext_resource type="Script" uid="uid://cjvmk20s72pin" path="res://components/asteroid.gd" id="1_2vepp"]
 [ext_resource type="PackedScene" uid="uid://c31rv1yymd6gv" path="res://prefabs/asteroid-explosion.tscn" id="2_8kvip"]
 [ext_resource type="PackedScene" uid="uid://bsbom0yj1xcx2" path="res://prefabs/asteroid/asteroid-medium-1.tscn" id="3_2et0p"]
 [ext_resource type="PackedScene" uid="uid://b8b07kcxmxfw1" path="res://prefabs/asteroid/asteroid-medium-2.tscn" id="4_ke1gt"]
@@ -10,22 +10,22 @@
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_q2mew"]
 polygon = PackedVector2Array(-250, 808, 42, 853, 412, 854, 667, 803, 814, 721, 939, 572, 1041, 389, 1089, 182, 1096, 7, 1068, -149, 1012, -274, 930, -406, 793, -500, 594, -542, 456, -578, 303, -660, 85, -789, -42, -833, -340, -864, -580, -842, -777, -762, -913, -639, -1009, -467, -1072, -178, -1093, 110, -1056, 311, -969, 446, -777, 605, -600, 700, -417, 763)
 
-[node name="Asteroid-large-1" type="RigidBody2D"]
+[node name="Asteroid-large-1" type="RigidBody2D" unique_id=355178280]
 collision_layer = 8
 collision_mask = 8
 mass = 150000.0
-max_contacts_reported = 10
 contact_monitor = true
+max_contacts_reported = 10
 script = ExtResource("1_2vepp")
 max_health = 1000
 death = ExtResource("2_8kvip")
 successors = Array[PackedScene]([ExtResource("3_2et0p"), ExtResource("4_ke1gt"), ExtResource("5_pql33")])
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=704246635]
 texture = ExtResource("5_s1wtx")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=167918495]
 polygon = PackedVector2Array(-744, 632, -493, 740, -144, 830, 106, 859, 399, 857, 657, 806, 811, 713, 921, 596, 1035, 392, 1089, 191, 1090, -35, 1033, -236, 934, -401, 754, -514, 475, -566, 270, -675, 45, -813, -243, -858, -555, -842, -801, -746, -933, -617, -1020, -436, -1089, -91, -1089, 169, -1044, 343, -901, 512)
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=2035358562]
 occluder = SubResource("OccluderPolygon2D_q2mew")

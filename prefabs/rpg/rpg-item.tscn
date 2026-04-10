@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://dwyp6ckhkvla6"]
+[gd_scene format=3 uid="uid://dwyp6ckhkvla6"]
 
-[ext_resource type="Script" path="res://components/item.gd" id="1_y3tju"]
+[ext_resource type="Script" uid="uid://6khmdkbwwqmr" path="res://components/item.gd" id="1_y3tju"]
 [ext_resource type="PackedScene" uid="uid://c5w67ija55whr" path="res://prefabs/weapon-explosion.tscn" id="2_mfps8"]
 [ext_resource type="Resource" uid="uid://bjja6sues7s3s" path="res://items/rpg.tres" id="2_r6i52"]
 [ext_resource type="Texture2D" uid="uid://ctj46g5b8547d" path="res://images/rpg-item.png" id="2_tsmua"]
@@ -12,25 +12,25 @@ size = Vector2(413, 413)
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_ttfjd"]
 polygon = PackedVector2Array(-205, 209, 207, 207, 207, -205, -206, -206)
 
-[node name="Rpg-item" type="RigidBody2D" node_paths=PackedStringArray("pick_sound")]
+[node name="Rpg-item" type="RigidBody2D" unique_id=169925507 node_paths=PackedStringArray("pick_sound")]
 collision_layer = 128
 collision_mask = 0
-max_contacts_reported = 10
 contact_monitor = true
+max_contacts_reported = 10
 script = ExtResource("1_y3tju")
 pick_sound = NodePath("AudioStreamPlayer2D")
 type = ExtResource("2_r6i52")
 death = ExtResource("2_mfps8")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=100188192]
 texture = ExtResource("2_tsmua")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1803241323]
 position = Vector2(0.5, -0.5)
 shape = SubResource("RectangleShape2D_pe5a2")
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=134132734]
 occluder = SubResource("OccluderPolygon2D_ttfjd")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1403922961]
 stream = ExtResource("3_g830t")

@@ -1,7 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://cis3fbeacp7l1"]
+[gd_scene format=3 uid="uid://cis3fbeacp7l1"]
 
-[ext_resource type="Script" path="res://world.gd" id="1_pt5pr"]
-[ext_resource type="Script" path="res://components/body_camera.gd" id="2_bv2fa"]
+[ext_resource type="Script" uid="uid://ctpfltwtt26n6" path="res://world.gd" id="1_pt5pr"]
+[ext_resource type="Script" uid="uid://dkilm0hmdapgh" path="res://components/body_camera.gd" id="2_bv2fa"]
 [ext_resource type="PackedScene" uid="uid://beanxs20fe7qx" path="res://prefabs/ui/hud.tscn" id="2_g6ofe"]
 [ext_resource type="PackedScene" uid="uid://dy8c1mmutnbql" path="res://prefabs/ui/controls-hint.tscn" id="3_0o1pf"]
 [ext_resource type="PackedScene" uid="uid://diqfcg5rnk5rq" path="res://prefabs/ship-bfg-23/ship-bfg-23.tscn" id="5_auikb"]
@@ -25,10 +25,10 @@ gradient = SubResource("Gradient_0iis8")
 width = 200
 height = 200
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Node2D" unique_id=629406114]
 script = ExtResource("1_pt5pr")
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1989633595]
 z_index = -1
 amount = 50000
 lifetime = 10.0
@@ -45,7 +45,7 @@ scale_amount_max = 160.0
 scale_amount_curve = SubResource("Curve_51lj4")
 color_ramp = SubResource("Gradient_e8tuq")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1265614612]
 z_index = -500
 z_as_relative = false
 anchors_preset = 9
@@ -57,19 +57,19 @@ offset_bottom = 50000.0
 grow_vertical = 2
 color = Color(0.172549, 0.172549, 0.172549, 1)
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=348856568]
 zoom = Vector2(0.1, 0.1)
 position_smoothing_enabled = true
 
-[node name="ShipCamera" type="Camera2D" parent="." node_paths=PackedStringArray("body")]
+[node name="ShipCamera" type="Camera2D" parent="." unique_id=1181069458 node_paths=PackedStringArray("body")]
 position_smoothing_enabled = true
 script = ExtResource("2_bv2fa")
 body = NodePath("../ShipBFG23")
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=645390407]
 color = Color(0.223529, 0.223529, 0.223529, 1)
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=108083501]
 position = Vector2(375.52, 938.805)
 rotation = 4.71239
 scale = Vector2(15.9066, 15.0852)
@@ -78,12 +78,12 @@ shadow_item_cull_mask = 3
 texture = SubResource("GradientTexture2D_wr6eu")
 texture_scale = 50.0
 
-[node name="Hud" parent="." node_paths=PackedStringArray("ship") instance=ExtResource("2_g6ofe")]
+[node name="Hud" parent="." unique_id=1619363946 node_paths=PackedStringArray("ship") instance=ExtResource("2_g6ofe")]
 ship = NodePath("../ShipBFG23")
 
-[node name="Controls-hint" parent="." instance=ExtResource("3_0o1pf")]
+[node name="Controls-hint" parent="." unique_id=46544957 instance=ExtResource("3_0o1pf")]
 
-[node name="ShipBFG23" parent="." instance=ExtResource("5_auikb")]
+[node name="ShipBFG23" parent="." unique_id=801594124 instance=ExtResource("5_auikb")]
 
-[node name="Coins" parent="." node_paths=PackedStringArray("ship") instance=ExtResource("6_gtmcj")]
+[node name="Coins" parent="." unique_id=2145144835 node_paths=PackedStringArray("ship") instance=ExtResource("6_gtmcj")]
 ship = NodePath("../ShipBFG23")
