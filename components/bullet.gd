@@ -6,7 +6,7 @@ extends Body
 @export var death_ttl: float = 0.1
 
 func _ready():
-	connect("body_entered", collision)
+	body_entered.connect(collision)
 	die(life)
 
 func collision(body):

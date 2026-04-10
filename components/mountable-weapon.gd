@@ -68,7 +68,7 @@ func reload() -> void:
 	if is_reloading():
 		return
 	reload_timer.start()
-	reload_timer.connect("timeout", reloaded, CONNECT_ONE_SHOT)
+	reload_timer.timeout.connect(reloaded, CONNECT_ONE_SHOT)
 	if reload_sound:
 		reload_sound.play()
 
