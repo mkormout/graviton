@@ -63,19 +63,24 @@ func steer_toward(target_position: Vector2) -> void:
 	apply_central_force(direction * thrust)
 
 func _draw() -> void:
-	# Physical collision boundary — full opacity
-	draw_arc(Vector2.ZERO, 30.0, 0.0, TAU, 32, Color(1.0, 0.2, 0.2, 1.0), 3.0)
-	# Debug boundary — red filled circle + outline at half opacity
-	draw_circle(Vector2.ZERO, 300.0, Color(1.0, 0.2, 0.2, 0.15))
-	draw_arc(Vector2.ZERO, 300.0, 0.0, TAU, 64, Color(1.0, 0.2, 0.2, 0.5), 4.0)
-	# Direction indicator — yellow arrow pointing forward (+X) at half opacity
-	draw_line(Vector2.ZERO, Vector2(500, 0), Color(1.0, 1.0, 0.0, 0.5), 4.0)
-	draw_line(Vector2(500, 0), Vector2(360, -100), Color(1.0, 1.0, 0.0, 0.5), 4.0)
-	draw_line(Vector2(500, 0), Vector2(360, 100), Color(1.0, 1.0, 0.0, 0.5), 4.0)
-	# State label — white text above center at half opacity
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	# Physical collision boundary
+	draw_arc(Vector2.ZERO, 30.0, 0.0, TAU, 32, Color(1.0, 0.2, 0.2, 1.0), 5.0)
+	# Debug body fill + outline — boosted opacity to survive CanvasModulate dimming
+	draw_circle(Vector2.ZERO, 300.0, Color(1.0, 0.2, 0.2, 0.45))
+	draw_arc(Vector2.ZERO, 300.0, 0.0, TAU, 64, Color(1.0, 0.2, 0.2, 1.0), 6.0)
+	# HitBox boundary — green arc showing actual bullet hit area
+	var hb_shape_node := get_node_or_null("HitBox/HitBoxShape")
+	if hb_shape_node and hb_shape_node.shape is CircleShape2D:
+		draw_arc(Vector2.ZERO, hb_shape_node.shape.radius, 0.0, TAU, 64, Color(0.1, 1.0, 0.1, 1.0), 5.0)
+	# Direction indicator — bright yellow arrow
+	draw_line(Vector2.ZERO, Vector2(500, 0), Color(1.0, 1.0, 0.0, 1.0), 6.0)
+	draw_line(Vector2(500, 0), Vector2(360, -100), Color(1.0, 1.0, 0.0, 1.0), 6.0)
+	draw_line(Vector2(500, 0), Vector2(360, 100), Color(1.0, 1.0, 0.0, 1.0), 6.0)
+	# State label — bright white text
 	var font := ThemeDB.fallback_font
 	var state_label := "STATE: %s" % State.keys()[current_state]
-	draw_string(font, Vector2(-120, -340), state_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 48, Color(1.0, 1.0, 1.0, 0.5))
+	draw_string(font, Vector2(-120, -340), state_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 48, Color(1.0, 1.0, 1.0, 1.0))
 
 func _on_hitbox_body_entered(body: Node2D) -> void:
 	if dying:

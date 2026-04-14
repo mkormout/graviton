@@ -46,12 +46,15 @@ Plans:
 **Goal**: A wave of Beeliners spawns, charges the player, fires, dies, drops loot, and the WaveManager correctly registers wave completion
 **Depends on**: Phase 4
 **Requirements**: ENM-07, ENM-12, ENM-13, ENM-14
+**Plans**: 2 plans
+Plans:
+- [x] 05-01-PLAN.md — Beeliner enemy type (script + bullet scene + inherited scene with loot)
+- [x] 05-02-PLAN.md — WaveManager script + world.gd integration + human verification
 **Success Criteria** (what must be TRUE):
   1. Triggering a wave spawns the configured number of Beeliners outside the visible area with no physics-separation launch on the first frame
   2. Each Beeliner seeks the player, transitions to FIGHTING when in range, and fires projectiles that damage the player
   3. After all Beeliners in a wave are destroyed, the WaveManager detects wave completion and can trigger the next wave — even when enemies are freed via deferred queue
   4. Dead Beeliners drop loot items that the player can pick up
-**Plans**: TBD
 
 ### Phase 6: Sniper
 **Goal**: The Sniper keeps a preferred standoff distance, fires slow heavy shots, and retreats when the player closes in
@@ -101,7 +104,7 @@ Plans:
 | 2. Code Quality | v1.0 | 2/2 | Complete | 2026-04-07 |
 | 3. Godot 4.6.2 Migration | v1.0 | 2/2 | Complete | 2026-04-10 |
 | 4. EnemyShip Infrastructure | v2.0 | 0/2 | Planning | - |
-| 5. Beeliner + WaveManager | v2.0 | 0/? | Not started | - |
+| 5. Beeliner + WaveManager | v2.0 | 0/2 | Planning | - |
 | 6. Sniper | v2.0 | 0/? | Not started | - |
 | 7. Flanker | v2.0 | 0/? | Not started | - |
 | 8. Swarmer | v2.0 | 0/? | Not started | - |

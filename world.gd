@@ -7,6 +7,7 @@ var rpg_model = preload("res://prefabs/rpg/rpg.tscn")
 var gravitygun_model = preload("res://prefabs/gravitygun/gravitygun.tscn")
 var laser_model = preload("res://prefabs/laser/laser.tscn")
 var enemy_model = preload("res://prefabs/enemies/base-enemy-ship.tscn")
+var beeliner_model = preload("res://prefabs/enemies/beeliner/beeliner.tscn")
 
 var asteroids_small_model = [
 	preload("res://prefabs/asteroid/asteroid-small-1.tscn"),
@@ -38,13 +39,17 @@ var camera_follow: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$ShipBFG23.add_to_group("player")
 	setup_spawn_parent($ShipBFG23)
 	mount_weapon($ShipBFG23, minigun_model, "")
 	mount_weapon($ShipBFG23, minigun_model, "left")
 	mount_weapon($ShipBFG23, minigun_model, "right")
 
-	spawn_asteroids(100)
-	spawn_test_enemy()
+	spawn_asteroids(10)
+	$WaveManager.waves = [
+		{ "enemy_scene": beeliner_model, "count": 3 },
+		{ "enemy_scene": beeliner_model, "count": 5 },
+	]
 
 func setup_spawn_parent(node: Node):
 	if "spawn_parent" in node:
@@ -132,6 +137,9 @@ func _input(event):
 
 	if event is InputEventKey and event.pressed and event.keycode == KEY_T:
 		spawn_test_enemy()
+
+	if event is InputEventKey and event.pressed and event.keycode == KEY_F:
+		$WaveManager.trigger_wave()
 
 func spawn_asteroids(count: int):
 	for x in range(count * 0.5):
