@@ -1,12 +1,17 @@
 class_name WaveManager
 extends Node
 
+signal wave_started(wave_number: int, enemy_count: int)
+signal enemy_count_changed(remaining: int, total: int)
+signal all_waves_complete()
+
 ## Array of wave definitions. Each Dictionary: { "enemy_scene": PackedScene, "count": int }
 @export var waves: Array = []
 @export var spawn_radius_margin: float = 1000.0
 
 var _current_wave_index: int = 0
 var _enemies_alive: int = 0
+var _wave_total: int = 0
 var _player: Node2D = null
 
 func _ready() -> void:
@@ -38,7 +43,9 @@ func trigger_wave() -> void:
 
 	print("[WaveManager] Starting wave %d: %d enemies" % [_current_wave_index, count])
 	_enemies_alive = count
+	_wave_total = count
 	_current_wave_index += 1
+	wave_started.emit(_current_wave_index, count)
 
 	for i in range(count):
 		_spawn_enemy(enemy_scene)
@@ -49,6 +56,8 @@ func _spawn_enemy(enemy_scene: PackedScene) -> void:
 	# Connect tree_exiting BEFORE add_child to avoid race condition
 	# (if enemy dies in _ready, signal still fires)
 	enemy.tree_exiting.connect(_on_enemy_tree_exiting)
+
+	enemy.add_to_group("enemy")
 
 	# Add to world (WaveManager's parent)
 	get_parent().add_child(enemy)
@@ -73,8 +82,11 @@ func _get_spawn_position() -> Vector2:
 func _on_enemy_tree_exiting() -> void:
 	_enemies_alive = max(0, _enemies_alive - 1)
 	print("[WaveManager] Enemy died, remaining: %d" % _enemies_alive)
+	enemy_count_changed.emit(_enemies_alive, _wave_total)
 	if _enemies_alive == 0:
 		_on_wave_complete()
 
 func _on_wave_complete() -> void:
 	print("[WaveManager] Wave %d complete!" % (_current_wave_index))
+	if _current_wave_index >= waves.size():
+		all_waves_complete.emit()

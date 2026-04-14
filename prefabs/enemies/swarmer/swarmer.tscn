@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://swarmer_scene_001"]
+
+[ext_resource type="Script" path="res://components/swarmer.gd" id="1_swarmer"]
+[ext_resource type="Script" uid="uid://ds8aojueywua2" path="res://components/item-dropper.gd" id="2_itemdropper"]
+[ext_resource type="Script" uid="uid://bcw213vwlscqh" path="res://components/item-drop.gd" id="3_itemdrop"]
+[ext_resource type="PackedScene" uid="uid://c16el8k73hxjn" path="res://prefabs/coin/coin-copper.tscn" id="4_coincop"]
+[ext_resource type="PackedScene" uid="uid://5m634maqwghw" path="res://prefabs/minigun/minigun-ammo.tscn" id="5_ammo"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
+radius = 300.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_detection"]
+radius = 10000.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hitbox"]
+radius = 300.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cohesion"]
+radius = 700.0
+
+[sub_resource type="Resource" id="Resource_coin_drop"]
+script = ExtResource("3_itemdrop")
+model = ExtResource("4_coincop")
+chance = 1.0
+
+[sub_resource type="Resource" id="Resource_ammo_drop"]
+script = ExtResource("3_itemdrop")
+model = ExtResource("5_ammo")
+chance = 0.4
+
+[sub_resource type="Resource" id="Resource_no_drop"]
+script = ExtResource("3_itemdrop")
+chance = 0.6
+
+[node name="Swarmer" type="RigidBody2D" node_paths=PackedStringArray("item_dropper")]
+collision_mask = 3
+gravity_scale = 0.0
+can_sleep = false
+script = ExtResource("1_swarmer")
+max_speed = 1800.0
+thrust = 1200.0
+detection_radius = 10000.0
+max_health = 15
+item_dropper = NodePath("CoinDropper")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_collision")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 0
+monitorable = false
+
+[node name="DetectionShape" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_detection")
+
+[node name="HitBox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="HitBoxShape" type="CollisionShape2D" parent="HitBox"]
+shape = SubResource("CircleShape2D_hitbox")
+
+[node name="Barrel" type="Node2D" parent="."]
+position = Vector2(350, 0)
+
+[node name="CoinDropper" type="Node2D" parent="."]
+script = ExtResource("2_itemdropper")
+models = Array[ExtResource("3_itemdrop")]([SubResource("Resource_coin_drop")])
+drop_count = 1
+
+[node name="FireTimer" type="Timer" parent="."]
+wait_time = 0.8
+
+[node name="AmmoDropper" type="Node2D" parent="."]
+script = ExtResource("2_itemdropper")
+models = Array[ExtResource("3_itemdrop")]([SubResource("Resource_ammo_drop"), SubResource("Resource_no_drop")])
+drop_count = 1
+
+[node name="CohesionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitorable = false
+
+[node name="CohesionShape" type="CollisionShape2D" parent="CohesionArea"]
+shape = SubResource("CircleShape2D_cohesion")

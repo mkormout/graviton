@@ -10,6 +10,9 @@ var enemy_model = preload("res://prefabs/enemies/base-enemy-ship.tscn")
 var beeliner_model = preload("res://prefabs/enemies/beeliner/beeliner.tscn")
 var sniper_model = preload("res://prefabs/enemies/sniper/sniper.tscn")
 var flanker_model = preload("res://prefabs/enemies/flanker/flanker.tscn")
+var swarmer_model = preload("res://prefabs/enemies/swarmer/swarmer.tscn")
+var wave_hud_model = preload("res://prefabs/ui/wave-hud.tscn")
+var enemy_radar_model = preload("res://prefabs/ui/enemy-radar.tscn")
 
 var asteroids_small_model = [
 	preload("res://prefabs/asteroid/asteroid-small-1.tscn"),
@@ -47,9 +50,16 @@ func _ready():
 	mount_weapon($ShipBFG23, minigun_model, "left")
 	mount_weapon($ShipBFG23, minigun_model, "right")
 
+	var wave_hud: WaveHud = wave_hud_model.instantiate()
+	add_child(wave_hud)
+	wave_hud.connect_to_wave_manager($WaveManager)
+
+	add_child(enemy_radar_model.instantiate())
+
 	spawn_asteroids(10)
 	$WaveManager.waves = [
 		{ "enemy_scene": flanker_model, "count": 10 },
+		{ "enemy_scene": swarmer_model, "count": 5 },
 		{ "enemy_scene": beeliner_model, "count": 3 },
 		{ "enemy_scene": sniper_model, "count": 2 },
 		{ "enemy_scene": beeliner_model, "count": 5 },

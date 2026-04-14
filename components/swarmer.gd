@@ -1,0 +1,169 @@
+class_name Swarmer
+extends EnemyShip
+
+@export var fight_range: float = 5000.0
+@export var cohesion_radius: float = 900.0
+@export var cohesion_thrust_scale: float = 0.4
+@export var cohesion_force: float = 700.0
+@export var separation_force: float = 1800.0
+@export var bullet_speed: float = 3500.0
+
+var _target: Node2D = null
+var _angle_offset: float = 0.0
+var _nearby_swarmers: Array[EnemyShip] = []
+
+var _bullet_scene := preload("res://prefabs/enemies/swarmer/swarmer-bullet.tscn")
+
+@onready var _fire_timer: Timer = $FireTimer
+@onready var _ammo_dropper: ItemDropper = $AmmoDropper
+@onready var _barrel: Node2D = $Barrel
+@onready var _cohesion_area: Area2D = $CohesionArea
+
+func _ready() -> void:
+	super()
+	thrust *= randf_range(0.8, 1.2)
+	max_speed *= randf_range(0.8, 1.2)
+	_angle_offset = deg_to_rad(randf_range(-40.0, 40.0))
+	_cohesion_area.collision_layer = 0
+	_cohesion_area.collision_mask = 1
+	_cohesion_area.body_entered.connect(_on_cohesion_area_body_entered)
+	_cohesion_area.body_exited.connect(_on_cohesion_area_body_exited)
+	_fire_timer.timeout.connect(_on_fire_timer_timeout)
+	detection_area.body_exited.connect(_on_detection_area_body_exited)
+
+func _on_cohesion_area_body_entered(body: Node2D) -> void:
+	if dying:
+		return
+	if body is Swarmer and body != self:
+		_nearby_swarmers.append(body)
+
+func _on_cohesion_area_body_exited(body: Node2D) -> void:
+	_nearby_swarmers.erase(body)
+
+func _on_detection_area_body_entered(body: Node2D) -> void:
+	if dying:
+		return
+	if body is PlayerShip and current_state == State.IDLING:
+		_target = body
+		_change_state(State.SEEKING)
+
+func _on_detection_area_body_exited(body: Node2D) -> void:
+	if body == _target:
+		_target = null
+		_change_state(State.IDLING)
+
+func _tick_state(_delta: float) -> void:
+	if not is_instance_valid(_target):
+		_target = null
+		_change_state(State.IDLING)
+		return
+
+	var to_target: Vector2 = _target.global_position - global_position
+	var dist: float = to_target.length()
+	var force_scale: float = _compute_force_scale()
+
+	match current_state:
+		State.SEEKING:
+			if dist <= fight_range:
+				_change_state(State.FIGHTING)
+			else:
+				# Apply angle offset to steering direction (D-04)
+				var raw_dir := to_target / dist
+				var offset_dir := raw_dir.rotated(_angle_offset)
+				apply_central_force(offset_dir * thrust * force_scale)
+				if linear_velocity.length_squared() > 100.0:
+					rotation = lerp_angle(rotation, linear_velocity.angle(), 5.0 * _delta)
+		State.FIGHTING:
+			var target_angle := to_target.angle()
+			rotation = lerp_angle(rotation, target_angle, 5.0 * _delta)
+			apply_central_force((to_target / dist) * thrust * force_scale)
+			# Hysteresis: 1.2x fight_range to prevent oscillation (D-12)
+			if dist > fight_range * 1.2:
+				_change_state(State.SEEKING)
+
+func _compute_force_scale() -> float:
+	if _nearby_swarmers.is_empty():
+		return 1.0
+	var closest := cohesion_radius
+	for s in _nearby_swarmers:
+		if is_instance_valid(s):
+			var d := global_position.distance_to(s.global_position)
+			if d < closest:
+				closest = d
+	# Smooth ramp: 1.0 at edge of cohesion zone → cohesion_thrust_scale at center
+	var proximity_t := 1.0 - clampf(closest / cohesion_radius, 0.0, 1.0)
+	return lerp(1.0, cohesion_thrust_scale, proximity_t)
+
+func _physics_process(delta: float) -> void:
+	super(delta)
+	if dying:
+		return
+	_apply_separation()
+	_apply_cohesion()
+
+func _apply_separation() -> void:
+	for swarmer in _nearby_swarmers:
+		if not is_instance_valid(swarmer):
+			continue
+		var away: Vector2 = global_position - swarmer.global_position
+		var dist: float = away.length()
+		if dist < 1.0:
+			continue  # Coincident -- skip to avoid NaN
+		# Linear falloff: max force at dist=0, zero force at dist=cohesion_radius
+		var strength: float = separation_force * (1.0 - clampf(dist / cohesion_radius, 0.0, 1.0))
+		apply_central_force(away.normalized() * strength)
+
+func _apply_cohesion() -> void:
+	if _nearby_swarmers.is_empty():
+		return
+	var center := Vector2.ZERO
+	var valid_count := 0
+	for s in _nearby_swarmers:
+		if is_instance_valid(s):
+			center += s.global_position
+			valid_count += 1
+	if valid_count == 0:
+		return
+	center /= float(valid_count)
+	var toward_center := center - global_position
+	var dist := toward_center.length()
+	if dist < 1.0:
+		return
+	# Pull toward group center; force ramps up with distance from center
+	var strength := cohesion_force * clampf(dist / cohesion_radius, 0.0, 1.0)
+	apply_central_force(toward_center.normalized() * strength)
+
+func _enter_state(new_state: State) -> void:
+	print("[Swarmer] _enter_state: %s" % State.keys()[new_state])
+	if new_state == State.FIGHTING:
+		_fire()
+		_fire_timer.start()
+
+func _exit_state(old_state: State) -> void:
+	if old_state == State.FIGHTING:
+		_fire_timer.stop()
+
+func _fire() -> void:
+	if dying:
+		return
+	var bullet := _bullet_scene.instantiate() as RigidBody2D
+	var fire_dir := Vector2.from_angle(global_rotation)
+	bullet.rotation = global_rotation
+	bullet.linear_velocity = fire_dir * bullet_speed
+	if spawn_parent:
+		spawn_parent.add_child(bullet)
+		bullet.global_position = _barrel.global_position
+	else:
+		push_warning("Swarmer: spawn_parent not set")
+
+func _on_fire_timer_timeout() -> void:
+	if dying or current_state != State.FIGHTING:
+		return
+	_fire()
+
+func die(delay: float = 0.0) -> void:
+	if dying:
+		return
+	_fire_timer.stop()
+	_ammo_dropper.drop()
+	super(delay)

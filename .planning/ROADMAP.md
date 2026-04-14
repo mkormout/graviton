@@ -86,11 +86,14 @@ Plans:
 **Goal**: A cluster of Swarmers spawns together, spreads to attack from multiple angles, and slows down when crowded by groupmates
 **Depends on**: Phase 7
 **Requirements**: ENM-10
+**Plans**: 2 plans
+Plans:
+- [x] 08-01-PLAN.md — Swarmer script (swarmer.gd) + bullet scene (swarmer-bullet.tscn)
+- [x] 08-02-PLAN.md — Swarmer scene + world.gd WaveManager integration + playtest
 **Success Criteria** (what must be TRUE):
   1. A wave spawns multiple Swarmers in a cluster with no individual launching off screen due to spawn overlap
   2. Swarmers approach the player from different angles rather than all piling onto the same vector
   3. A Swarmer visibly reduces thrust when another Swarmer is within the proximity cohesion radius — the cluster does not pass through itself
-**Plans**: TBD
 
 ### Phase 9: Suicider
 **Goal**: The Suicider charges the player and detonates on contact, dealing explosion-radius damage, and also explodes when shot to death
@@ -113,5 +116,5 @@ Plans:
 | 5. Beeliner + WaveManager | v2.0 | 0/2 | Planning | - |
 | 6. Sniper | v2.0 | 0/2 | Planning | - |
 | 7. Flanker | v2.0 | 0/2 | Planning | - |
-| 8. Swarmer | v2.0 | 0/? | Not started | - |
+| 8. Swarmer | v2.0 | 0/2 | Planning | - |
 | 9. Suicider | v2.0 | 0/? | Not started | - |
