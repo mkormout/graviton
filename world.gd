@@ -31,7 +31,7 @@ var asteroids_large_model = [
 ]
 
 var godmode: bool = false
-var camera_follow: bool = false
+var camera_follow: bool = true
 
 # PHYSICAL LAYERS DESCRIPTION:
 # 1. Ship
@@ -57,18 +57,167 @@ func _ready():
 
 	add_child(enemy_radar_model.instantiate())
 
+	$ShipCamera.make_current()
+
 	spawn_asteroids(10)
 	$WaveManager.waves = [
-		{ "enemy_scene": suicider_model, "count": 3 },
-		{ "enemy_scene": flanker_model, "count": 10 },
-		{ "enemy_scene": swarmer_model, "count": 5 },
-		{ "enemy_scene": beeliner_model, "count": 3 },
-		{ "enemy_scene": sniper_model, "count": 2 },
-		{ "enemy_scene": beeliner_model, "count": 5 },
-		{ "enemy_scene": beeliner_model, "count": 8 },
-		{ "enemy_scene": beeliner_model, "count": 13 },
-		{ "enemy_scene": beeliner_model, "count": 21 },
-		{ "enemy_scene": beeliner_model, "count": 34 },
+		# Wave 1
+		{
+			"label": "Suiciders",
+			"groups": [{ "enemy_scene": suicider_model, "count": 3 }]
+		},
+		# Wave 2
+		{
+			"label": "Beelines",
+			"groups": [{ "enemy_scene": beeliner_model, "count": 4 }]
+		},
+		# Wave 3
+		{
+			"label": "Flankers",
+			"groups": [{ "enemy_scene": flanker_model, "count": 3 }]
+		},
+		# Wave 4
+		{
+			"label": "Suiciders + Beelines",
+			"groups": [
+				{ "enemy_scene": suicider_model, "count": 4 },
+				{ "enemy_scene": beeliner_model, "count": 3 },
+			]
+		},
+		# Wave 5
+		{
+			"label": "Swarm",
+			"groups": [{ "enemy_scene": swarmer_model, "count": 6 }]
+		},
+		# Wave 6
+		{
+			"label": "Snipers",
+			"groups": [{ "enemy_scene": sniper_model, "count": 3 }]
+		},
+		# Wave 7
+		{
+			"label": "Flankers + Suiciders",
+			"groups": [
+				{ "enemy_scene": flanker_model, "count": 4 },
+				{ "enemy_scene": suicider_model, "count": 3 },
+			]
+		},
+		# Wave 8
+		{
+			"label": "Beelines + Swarm",
+			"groups": [
+				{ "enemy_scene": beeliner_model, "count": 6 },
+				{ "enemy_scene": swarmer_model, "count": 4 },
+			]
+		},
+		# Wave 9
+		{
+			"label": "Snipers + Flankers",
+			"groups": [
+				{ "enemy_scene": sniper_model, "count": 4 },
+				{ "enemy_scene": flanker_model, "count": 3 },
+			]
+		},
+		# Wave 10
+		{
+			"label": "Suiciders + Swarm + Beelines",
+			"groups": [
+				{ "enemy_scene": suicider_model, "count": 5 },
+				{ "enemy_scene": swarmer_model, "count": 6 },
+				{ "enemy_scene": beeliner_model, "count": 4 },
+			]
+		},
+		# Wave 11
+		{
+			"label": "Flankers + Snipers",
+			"groups": [
+				{ "enemy_scene": flanker_model, "count": 6 },
+				{ "enemy_scene": sniper_model, "count": 4 },
+			]
+		},
+		# Wave 12
+		{
+			"label": "Swarm + Suiciders",
+			"groups": [
+				{ "enemy_scene": swarmer_model, "count": 10 },
+				{ "enemy_scene": suicider_model, "count": 4 },
+			]
+		},
+		# Wave 13
+		{
+			"label": "Beelines + Flankers + Snipers",
+			"groups": [
+				{ "enemy_scene": beeliner_model, "count": 8 },
+				{ "enemy_scene": flanker_model, "count": 5 },
+				{ "enemy_scene": sniper_model, "count": 3 },
+			]
+		},
+		# Wave 14
+		{
+			"label": "Suiciders + Swarm",
+			"groups": [
+				{ "enemy_scene": suicider_model, "count": 6 },
+				{ "enemy_scene": swarmer_model, "count": 8 },
+			]
+		},
+		# Wave 15
+		{
+			"label": "Snipers + Flankers + Beelines",
+			"groups": [
+				{ "enemy_scene": sniper_model, "count": 6 },
+				{ "enemy_scene": flanker_model, "count": 6 },
+				{ "enemy_scene": beeliner_model, "count": 6 },
+			]
+		},
+		# Wave 16
+		{
+			"label": "Swarm + Suiciders + Snipers",
+			"groups": [
+				{ "enemy_scene": swarmer_model, "count": 12 },
+				{ "enemy_scene": suicider_model, "count": 6 },
+				{ "enemy_scene": sniper_model, "count": 4 },
+			]
+		},
+		# Wave 17
+		{
+			"label": "Flankers + Beelines + Suiciders",
+			"groups": [
+				{ "enemy_scene": flanker_model, "count": 8 },
+				{ "enemy_scene": beeliner_model, "count": 10 },
+				{ "enemy_scene": suicider_model, "count": 5 },
+			]
+		},
+		# Wave 18
+		{
+			"label": "Snipers + Swarm + Flankers",
+			"groups": [
+				{ "enemy_scene": sniper_model, "count": 8 },
+				{ "enemy_scene": swarmer_model, "count": 14 },
+				{ "enemy_scene": flanker_model, "count": 6 },
+			]
+		},
+		# Wave 19 — Full Assault
+		{
+			"label": "Full Assault",
+			"groups": [
+				{ "enemy_scene": beeliner_model, "count": 8 },
+				{ "enemy_scene": flanker_model, "count": 8 },
+				{ "enemy_scene": swarmer_model, "count": 10 },
+				{ "enemy_scene": sniper_model, "count": 6 },
+				{ "enemy_scene": suicider_model, "count": 6 },
+			]
+		},
+		# Wave 20 — Final Wave
+		{
+			"label": "Final Wave",
+			"groups": [
+				{ "enemy_scene": beeliner_model, "count": 12 },
+				{ "enemy_scene": flanker_model, "count": 10 },
+				{ "enemy_scene": swarmer_model, "count": 16 },
+				{ "enemy_scene": sniper_model, "count": 8 },
+				{ "enemy_scene": suicider_model, "count": 8 },
+			]
+		},
 	]
 
 func setup_spawn_parent(node: Node):
