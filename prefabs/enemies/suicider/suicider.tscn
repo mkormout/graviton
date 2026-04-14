@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://suicider_scene_001"]
+
+[ext_resource type="Script" path="res://components/suicider.gd" id="1_suicider"]
+[ext_resource type="PackedScene" uid="uid://suicider_explosion_1" path="res://prefabs/enemies/suicider/suicider-explosion.tscn" id="2_death"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
+radius = 300.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_detection"]
+radius = 10000.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hitbox"]
+radius = 300.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_contact"]
+radius = 330.0
+
+[node name="Suicider" type="RigidBody2D"]
+collision_layer = 1
+collision_mask = 3
+gravity_scale = 0.0
+can_sleep = false
+script = ExtResource("1_suicider")
+max_health = 20
+max_speed = 4000.0
+thrust = 2000.0
+detection_radius = 10000.0
+death = ExtResource("2_death")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_collision")
+
+[node name="Shape" type="Polygon2D" parent="."]
+color = Color(1, 0.1, 0.1, 1)
+polygon = PackedVector2Array(250, 0, 231, 96, 177, 177, 96, 231, 0, 250, -96, 231, -177, 177, -231, 96, -250, 0, -231, -96, -177, -177, -96, -231, 0, -250, 96, -231, 177, -177, 231, -96)
+
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+monitorable = false
+
+[node name="DetectionShape" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_detection")
+
+[node name="HitBox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+monitoring = true
+monitorable = false
+
+[node name="HitBoxShape" type="CollisionShape2D" parent="HitBox"]
+shape = SubResource("CircleShape2D_hitbox")
+
+[node name="ContactArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+monitorable = false
+
+[node name="ContactShape" type="CollisionShape2D" parent="ContactArea"]
+shape = SubResource("CircleShape2D_contact")

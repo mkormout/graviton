@@ -11,6 +11,7 @@ var beeliner_model = preload("res://prefabs/enemies/beeliner/beeliner.tscn")
 var sniper_model = preload("res://prefabs/enemies/sniper/sniper.tscn")
 var flanker_model = preload("res://prefabs/enemies/flanker/flanker.tscn")
 var swarmer_model = preload("res://prefabs/enemies/swarmer/swarmer.tscn")
+var suicider_model = preload("res://prefabs/enemies/suicider/suicider.tscn")
 var wave_hud_model = preload("res://prefabs/ui/wave-hud.tscn")
 var enemy_radar_model = preload("res://prefabs/ui/enemy-radar.tscn")
 
@@ -58,6 +59,7 @@ func _ready():
 
 	spawn_asteroids(10)
 	$WaveManager.waves = [
+		{ "enemy_scene": suicider_model, "count": 3 },
 		{ "enemy_scene": flanker_model, "count": 10 },
 		{ "enemy_scene": swarmer_model, "count": 5 },
 		{ "enemy_scene": beeliner_model, "count": 3 },

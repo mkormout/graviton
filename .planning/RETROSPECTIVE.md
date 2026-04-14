@@ -43,6 +43,51 @@
 
 ---
 
+## Milestone: v2.0 — Enemy AI
+
+**Shipped:** 2026-04-13
+**Phases:** 6 | **Plans:** 12
+
+### What Was Built
+
+- EnemyShip base class — 8-state machine, dying guard, `apply_central_force` steering, DetectionArea wiring
+- Beeliner + WaveManager — full pipeline: spawn → seek → fight → die → drop loot → wave complete; `tree_exiting` signal handles deferred queue_free safely
+- Sniper — three-band distance management, two-timer aim-up telegraph, FLEEING with safe_range recovery
+- Flanker — tangential+radial orbital LURKING with per-instance CW/CCW/radius randomization, hysteresis-gated FIGHTING bursts
+- Swarmer — angle-offset approach vectors, proximity CohesionArea, linear-falloff separation; Wave HUD + screen-border enemy radar UI added as bonus
+- Suicider — locked-vector torpedo, ContactArea2D detonation, backward-compatible `hit_ships` export on explosion.gd; Polygon2D visual identity added for all 5 types during playtest
+
+### What Worked
+
+- One enemy type per phase kept complexity manageable — each type built cleanly on the last
+- `tree_exiting` for wave counting was the right call — caught during Phase 5 research, prevented a subtle deferred-free bug
+- Iterative playtest tuning committed atomically (Phase 9 had 9 tuning commits) — easy to bisect if needed
+- HitBox Area2D pattern (mask=4) for bullet detection avoided touching all bullet scenes
+- Phase 9 was the fastest execution (2 min for 09-01) — base patterns fully established by then
+
+### What Was Inefficient
+
+- REQUIREMENTS.md traceability again never updated during execution (same issue as v1.0)
+- Visual identity (Polygon2D) was not planned — discovered during Phase 9 playtest; had to retroactively add shapes to all enemy scenes. Should be part of the scene scaffold for v3.0 enemies
+- No formal verification/audit before milestone close — proceeded with known gaps flag
+
+### Patterns Established
+
+- Enemy scene pattern: flat scene (not Godot inheritance) extending base-enemy-ship.tscn, script override, FireTimer + CoinDropper + AmmoDropper, no picker Area2D
+- Enemy bullet layer: collision_layer=256 (Layer 9), collision_mask=1 (Ship) — prevents friendly fire without modifying existing bullet scenes
+- Two-timer fire pattern (FireTimer → AimTimer → _fire()) for telegraphed shots
+- `_reacquire_target()` bypass for EnemyShip idempotency guard when re-locking without state change
+- Polygon2D as visual identity per enemy type — distinct shape + color per type, no texture needed
+
+### Key Lessons
+
+1. Traceability table needs to be updated *during* execution, not at milestone close — consider adding to phase summary template
+2. Enemy visual identity (shape/color) should be scaffolded in base-enemy-ship.tscn for v3.0, not added retroactively
+3. The dying guard pattern (early return in _physics_process + all signal handlers) is essential — add it to any future AI base class immediately
+4. `tree_exiting` > `get_children().size()` for any counter that must survive deferred frees
+
+---
+
 ## Cross-Milestone Trends
 
 ### Process Evolution
@@ -50,7 +95,10 @@
 | Milestone | Phases | Plans | Key Change |
 |-----------|--------|-------|------------|
 | v1.0 | 3 | 7 | First milestone — established base patterns |
+| v2.0 | 6 | 12 | Enemy AI system — one-type-per-phase cadence |
 
 ### Top Lessons (Verified Across Milestones)
 
 1. Small, focused plans (one concern per plan) complete faster and are easier to review
+2. Keep traceability tables updated during execution — both milestones closed with all requirements "Pending"
+3. Scaffold visual/debug identity early — retroactive additions cost extra commits across all scenes

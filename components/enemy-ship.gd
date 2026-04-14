@@ -67,9 +67,8 @@ func _draw() -> void:
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	# Physical collision boundary
 	draw_arc(Vector2.ZERO, 30.0, 0.0, TAU, 32, Color(1.0, 0.2, 0.2, 1.0), 5.0)
-	# Debug body fill + outline — boosted opacity to survive CanvasModulate dimming
-	draw_circle(Vector2.ZERO, 300.0, Color(1.0, 0.2, 0.2, 0.75))
-	draw_arc(Vector2.ZERO, 300.0, 0.0, TAU, 64, Color(1.0, 0.2, 0.2, 1.0), 8.0)
+	# Debug body outline
+	draw_arc(Vector2.ZERO, 300.0, 0.0, TAU, 64, Color(1.0, 0.2, 0.2, 0.5), 8.0)
 	# HitBox boundary — green arc showing actual bullet hit area
 	var hb_shape_node := get_node_or_null("HitBox/HitBoxShape")
 	if hb_shape_node and hb_shape_node.shape is CircleShape2D:

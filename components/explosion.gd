@@ -11,6 +11,7 @@ extends Node2D
 @export var debris: Array[PackedScene] = []
 @export var debris_count: int = 0
 @export var debris_damp: float = 0
+@export var hit_ships: bool = false
 @export var spawn_parent: Node
 
 var area: Area2D
@@ -37,6 +38,8 @@ func initialize():
 	area.set_collision_mask_value(2, false)
 	area.set_collision_mask_value(3, false)
 	area.set_collision_mask_value(4, true)
+	if hit_ships:
+		area.set_collision_mask_value(1, true)
 
 	call_deferred("add_child", area)
 
