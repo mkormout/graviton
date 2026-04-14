@@ -1,20 +1,32 @@
 class_name WaveManager
 extends Node
 
-signal wave_started(wave_number: int, enemy_count: int)
+signal wave_started(wave_number: int, enemy_count: int, label_text: String)
 signal enemy_count_changed(remaining: int, total: int)
 signal all_waves_complete()
+signal countdown_tick(seconds_remaining: int)
 
-## Array of wave definitions. Each Dictionary: { "enemy_scene": PackedScene, "count": int }
+## Array of wave definitions.
+## New format: { "label": String, "groups": [{ "enemy_scene": PackedScene, "count": int }, ...] }
+## Legacy format also accepted: { "enemy_scene": PackedScene, "count": int }
 @export var waves: Array = []
 @export var spawn_radius_margin: float = 1000.0
+@export var countdown_seconds: float = 5.0
 
 var _current_wave_index: int = 0
 var _enemies_alive: int = 0
 var _wave_total: int = 0
 var _player: Node2D = null
+var _countdown_remaining: int = 0
+var _countdown_timer: Timer = null
 
 func _ready() -> void:
+	_countdown_timer = Timer.new()
+	_countdown_timer.wait_time = 1.0
+	_countdown_timer.one_shot = false
+	_countdown_timer.autostart = false
+	_countdown_timer.timeout.connect(_on_countdown_tick)
+	add_child(_countdown_timer)
 	call_deferred("_find_player")
 
 func _find_player() -> void:
@@ -33,22 +45,50 @@ func trigger_wave() -> void:
 		print("[WaveManager] Wave still in progress (%d enemies alive)" % _enemies_alive)
 		return
 
-	var wave: Dictionary = waves[_current_wave_index]
-	var enemy_scene: PackedScene = wave.get("enemy_scene")
-	var count: int = wave.get("count", 1)
+	# Stop countdown if it was running
+	if _countdown_timer.is_inside_tree() and not _countdown_timer.is_stopped():
+		_countdown_timer.stop()
 
-	if not enemy_scene:
-		push_warning("[WaveManager] Wave %d has no enemy_scene" % _current_wave_index)
+	var wave: Dictionary = waves[_current_wave_index]
+
+	# Backwards-compat: single enemy_scene format
+	var groups: Array = []
+	if wave.has("enemy_scene"):
+		groups = [{ "enemy_scene": wave.get("enemy_scene"), "count": wave.get("count", 1) }]
+	else:
+		groups = wave.get("groups", [])
+
+	if groups.is_empty():
+		push_warning("[WaveManager] Wave %d has no groups or enemy_scene" % _current_wave_index)
 		return
 
-	print("[WaveManager] Starting wave %d: %d enemies" % [_current_wave_index, count])
-	_enemies_alive = count
-	_wave_total = count
-	_current_wave_index += 1
-	wave_started.emit(_current_wave_index, count)
+	var total_count: int = 0
+	for group in groups:
+		total_count += group.get("count", 0)
 
-	for i in range(count):
-		_spawn_enemy(enemy_scene)
+	if total_count == 0:
+		push_warning("[WaveManager] Wave %d has zero enemies" % _current_wave_index)
+		return
+
+	# Build label text
+	var label_text: String = wave.get("label", "")
+	if label_text.is_empty():
+		label_text = "Wave %d" % (_current_wave_index + 1)
+
+	print("[WaveManager] Starting wave %d: %d enemies — %s" % [_current_wave_index, total_count, label_text])
+	_enemies_alive = total_count
+	_wave_total = total_count
+	_current_wave_index += 1
+	wave_started.emit(_current_wave_index, total_count, label_text)
+
+	for group in groups:
+		var enemy_scene: PackedScene = group.get("enemy_scene")
+		var count: int = group.get("count", 0)
+		if not enemy_scene:
+			push_warning("[WaveManager] Group in wave %d has no enemy_scene" % (_current_wave_index - 1))
+			continue
+		for i in range(count):
+			_spawn_enemy(enemy_scene)
 
 func _spawn_enemy(enemy_scene: PackedScene) -> void:
 	var enemy := enemy_scene.instantiate()
@@ -90,3 +130,15 @@ func _on_wave_complete() -> void:
 	print("[WaveManager] Wave %d complete!" % (_current_wave_index))
 	if _current_wave_index >= waves.size():
 		all_waves_complete.emit()
+	else:
+		# Start countdown to next wave
+		_countdown_remaining = int(countdown_seconds)
+		countdown_tick.emit(_countdown_remaining)
+		_countdown_timer.start()
+
+func _on_countdown_tick() -> void:
+	_countdown_remaining -= 1
+	countdown_tick.emit(_countdown_remaining)
+	if _countdown_remaining <= 0:
+		_countdown_timer.stop()
+		trigger_wave()
