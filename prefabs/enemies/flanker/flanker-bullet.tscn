@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://flanker_bullet_001"]
+
+[ext_resource type="Script" path="res://components/enemy-bullet.gd" id="1_bullet"]
+[ext_resource type="PackedScene" uid="uid://b8d4dssoxnkg2" path="res://prefabs/minigun/minigun-bullet-explosion.tscn" id="2_explosion"]
+[ext_resource type="Script" path="res://components/damage.gd" id="3_damage"]
+
+[sub_resource type="Resource" id="Resource_damage"]
+script = ExtResource("3_damage")
+energy = 5.0
+kinetic = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_shape"]
+size = Vector2(10, 70)
+
+[node name="FlankerBullet" type="RigidBody2D"]
+collision_layer = 256
+collision_mask = 1
+gravity_scale = 0.0
+mass = 30.0
+max_contacts_reported = 100
+contact_monitor = true
+script = ExtResource("1_bullet")
+attack = SubResource("Resource_damage")
+death = ExtResource("2_explosion")
+life = 2.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = 1.5708
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_shape")

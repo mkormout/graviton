@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://oov28ddmv4ef"]
+
+[ext_resource type="Script" uid="uid://ciums7w7l7mif" path="res://components/flanker.gd" id="1_flanker"]
+[ext_resource type="Script" uid="uid://ds8aojueywua2" path="res://components/item-dropper.gd" id="2_itemdropper"]
+[ext_resource type="Script" uid="uid://bcw213vwlscqh" path="res://components/item-drop.gd" id="3_itemdrop"]
+[ext_resource type="PackedScene" uid="uid://c16el8k73hxjn" path="res://prefabs/coin/coin-copper.tscn" id="4_coincop"]
+[ext_resource type="PackedScene" uid="uid://5m634maqwghw" path="res://prefabs/minigun/minigun-ammo.tscn" id="5_ammo"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
+radius = 300.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_detection"]
+radius = 10000.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hitbox"]
+radius = 300.0
+
+[sub_resource type="Resource" id="Resource_coin_drop"]
+script = ExtResource("3_itemdrop")
+model = ExtResource("4_coincop")
+chance = 1.0
+
+[sub_resource type="Resource" id="Resource_ammo_drop"]
+script = ExtResource("3_itemdrop")
+model = ExtResource("5_ammo")
+chance = 0.5
+
+[sub_resource type="Resource" id="Resource_no_drop"]
+script = ExtResource("3_itemdrop")
+chance = 0.5
+
+[node name="Flanker" type="RigidBody2D" unique_id=1934742864 node_paths=PackedStringArray("item_dropper")]
+collision_mask = 3
+gravity_scale = 0.0
+can_sleep = false
+script = ExtResource("1_flanker")
+max_speed = 2000.0
+thrust = 1500.0
+detection_radius = 10000.0
+max_health = 40
+item_dropper = NodePath("CoinDropper")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2035801802]
+shape = SubResource("CircleShape2D_collision")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1986563087]
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=667361830]
+collision_layer = 0
+monitorable = false
+
+[node name="DetectionShape" type="CollisionShape2D" parent="DetectionArea" unique_id=1180732945]
+shape = SubResource("CircleShape2D_detection")
+
+[node name="HitBox" type="Area2D" parent="." unique_id=589036284]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="HitBoxShape" type="CollisionShape2D" parent="HitBox" unique_id=1528785592]
+shape = SubResource("CircleShape2D_hitbox")
+
+[node name="Barrel" type="Node2D" parent="." unique_id=549621046]
+position = Vector2(40, 0)
+
+[node name="CoinDropper" type="Node2D" parent="." unique_id=119506830]
+script = ExtResource("2_itemdropper")
+models = Array[ExtResource("3_itemdrop")]([SubResource("Resource_coin_drop")])
+drop_count = 2
+
+[node name="FireTimer" type="Timer" parent="." unique_id=312134957]
+wait_time = 0.25
+
+[node name="AmmoDropper" type="Node2D" parent="." unique_id=1578121834]
+script = ExtResource("2_itemdropper")
+models = Array[ExtResource("3_itemdrop")]([SubResource("Resource_ammo_drop"), SubResource("Resource_no_drop")])
+drop_count = 1

@@ -73,11 +73,14 @@ Plans:
 **Goal**: The Flanker orbits the player at a consistent radius before breaking into an attack burst, then returns to orbit
 **Depends on**: Phase 6
 **Requirements**: ENM-09
+**Plans**: 2 plans
+Plans:
+- [x] 07-01-PLAN.md — Flanker script (flanker.gd) + bullet scene (flanker-bullet.tscn)
+- [x] 07-02-PLAN.md — Flanker inherited scene + world.gd WaveManager integration + playtest
 **Success Criteria** (what must be TRUE):
   1. The Flanker visibly circles the player at a roughly constant radius rather than charging straight in
   2. After orbiting, the Flanker transitions to FIGHTING, fires a burst, then returns to the orbit pattern
   3. Orbit direction and radius vary between Flanker instances — not every Flanker circles identically
-**Plans**: TBD
 
 ### Phase 8: Swarmer
 **Goal**: A cluster of Swarmers spawns together, spreads to attack from multiple angles, and slows down when crowded by groupmates
@@ -109,6 +112,6 @@ Plans:
 | 4. EnemyShip Infrastructure | v2.0 | 0/2 | Planning | - |
 | 5. Beeliner + WaveManager | v2.0 | 0/2 | Planning | - |
 | 6. Sniper | v2.0 | 0/2 | Planning | - |
-| 7. Flanker | v2.0 | 0/? | Not started | - |
+| 7. Flanker | v2.0 | 0/2 | Planning | - |
 | 8. Swarmer | v2.0 | 0/? | Not started | - |
 | 9. Suicider | v2.0 | 0/? | Not started | - |

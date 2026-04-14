@@ -1,37 +1,31 @@
 {
   "version": "1.0",
-  "timestamp": "2026-04-12T19:52:59.535Z",
-  "phase": "06",
-  "phase_name": "sniper",
-  "phase_dir": ".planning/phases/06-sniper",
+  "timestamp": "2026-04-12T22:42:58.872Z",
+  "phase": "07",
+  "phase_name": "flanker",
+  "phase_dir": ".planning/phases/07-flanker",
   "plan": 2,
   "task": 3,
   "total_tasks": 5,
-  "status": "paused",
+  "status": "complete",
   "completed_tasks": [
-    {"id": "06-01-T01", "name": "Create Sniper AI script (sniper.gd)", "status": "done", "commit": "877ef54"},
-    {"id": "06-01-T02", "name": "Create sniper-bullet.tscn", "status": "done", "commit": "a3d5803"},
-    {"id": "06-02-T01", "name": "Create sniper.tscn inherited scene", "status": "done", "commit": "e60ccb1"},
-    {"id": "06-02-T02", "name": "Wire Sniper into WaveManager via world.gd", "status": "done", "commit": "cf19d1e"},
-    {"id": "06-02-T03", "name": "Playtest Sniper behavior", "status": "done", "commit": "587c1c6", "note": "Human approved"}
+    {"id": 1, "name": "Create Flanker AI script (flanker.gd)", "status": "done", "commit": "134854b"},
+    {"id": 2, "name": "Create flanker bullet scene (flanker-bullet.tscn)", "status": "done", "commit": "136471d"},
+    {"id": 3, "name": "Create Flanker inherited scene (flanker.tscn)", "status": "done", "commit": "e55a92e"},
+    {"id": 4, "name": "Wire Flanker into WaveManager (world.gd)", "status": "done", "commit": "afd2f38"},
+    {"id": 5, "name": "Playtest Flanker orbit + attack behavior", "status": "done", "commit": "40d8f21"}
   ],
   "remaining_tasks": [],
   "blockers": [],
   "human_actions_pending": [],
   "decisions": [
-    {"decision": "Sniper ranges calibrated against Beeliner scene value (fight_range=8000, not script default 400)", "rationale": "Scene overrides trump script defaults — must compare scene files not script defaults", "phase": "06"},
-    {"decision": "bullet_speed=10000, FIGHTING_THRUST_MULT=1.5 — user tuned via editor", "rationale": "User playtested and settled on these values", "phase": "06"},
-    {"decision": "Scene overrides cleared from sniper.tscn — all values use script defaults", "rationale": "Eliminates confusion between scene overrides and script defaults", "phase": "06"},
-    {"decision": "Enemy bullets r=50 fully opaque, enemy debug labels 128/96pt cyan/white", "rationale": "Better visibility during playtesting", "phase": "06"}
+    {"decision": "Free-drift orbit over P-controller", "rationale": "Rigid P-controller orbit never naturally reached fight_range — orbit radius too large", "phase": "07"},
+    {"decision": "Timer-based FIGHTING exit (2.5s + 5s cooldown)", "rationale": "Distance-based return felt disconnected; hit-and-run timer feels intentional", "phase": "07"},
+    {"decision": "Velocity-based facing outside FIGHTING, lerp_angle inside", "rationale": "Smooth aim-then-fire feel; velocity facing breaks during aiming rotation", "phase": "07"},
+    {"decision": "bullet_speed 5500 → 6050 (+10%)", "rationale": "User request", "phase": "07"},
+    {"decision": "turn_speed base 3.0 → 5.0 rad/s", "rationale": "User raised after playtest — snappier aim", "phase": "07"}
   ],
-  "uncommitted_files": [
-    "components/beeliner.gd (modified — user's uncommitted changes)",
-    "world.tscn (modified — user's uncommitted changes)",
-    "components/beeliner.gd.uid (untracked)",
-    "components/enemy-bullet.gd.uid (untracked)",
-    "components/sniper.gd.uid (untracked)",
-    "components/wave-manager.gd.uid (untracked)"
-  ],
-  "next_action": "Run /gsd-code-review 06 then /gsd-verify-work 06 to complete the phase",
-  "context_notes": "Phase 06 both plans complete, playtest approved. Remaining steps are code review and phase verification. There are uncommitted user edits to beeliner.gd and world.tscn — check before proceeding."
+  "uncommitted_files": [],
+  "next_action": "Run /gsd-complete-milestone or /gsd-ship to close out v2.0 Enemy AI milestone",
+  "context_notes": "Phase 07 fully complete. Milestone v2.0 Enemy AI done — 7/7 phases. Branch: milestone/v2.0-enemy-ai. All code reviewed and warnings fixed. Verification report written."
 }

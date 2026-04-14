@@ -9,6 +9,7 @@ var laser_model = preload("res://prefabs/laser/laser.tscn")
 var enemy_model = preload("res://prefabs/enemies/base-enemy-ship.tscn")
 var beeliner_model = preload("res://prefabs/enemies/beeliner/beeliner.tscn")
 var sniper_model = preload("res://prefabs/enemies/sniper/sniper.tscn")
+var flanker_model = preload("res://prefabs/enemies/flanker/flanker.tscn")
 
 var asteroids_small_model = [
 	preload("res://prefabs/asteroid/asteroid-small-1.tscn"),
@@ -48,6 +49,7 @@ func _ready():
 
 	spawn_asteroids(10)
 	$WaveManager.waves = [
+		{ "enemy_scene": flanker_model, "count": 10 },
 		{ "enemy_scene": beeliner_model, "count": 3 },
 		{ "enemy_scene": sniper_model, "count": 2 },
 		{ "enemy_scene": beeliner_model, "count": 5 },
