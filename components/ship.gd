@@ -15,7 +15,8 @@ var coins: int = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	body_entered.connect(_on_body_entered)
-	picker.body_entered.connect(picker_body_entered)
+	if picker:
+		picker.body_entered.connect(picker_body_entered)
 	super()
 
 func pick_coin(item: Item):

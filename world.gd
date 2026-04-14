@@ -6,6 +6,7 @@ var gausscannon_model = preload("res://prefabs/gausscannon/gausscannon.tscn")
 var rpg_model = preload("res://prefabs/rpg/rpg.tscn")
 var gravitygun_model = preload("res://prefabs/gravitygun/gravitygun.tscn")
 var laser_model = preload("res://prefabs/laser/laser.tscn")
+var enemy_model = preload("res://prefabs/enemies/base-enemy-ship.tscn")
 
 var asteroids_small_model = [
 	preload("res://prefabs/asteroid/asteroid-small-1.tscn"),
@@ -43,6 +44,7 @@ func _ready():
 	mount_weapon($ShipBFG23, minigun_model, "right")
 
 	spawn_asteroids(100)
+	spawn_test_enemy()
 
 func setup_spawn_parent(node: Node):
 	if "spawn_parent" in node:
@@ -63,7 +65,7 @@ func _process(_delta):
 	if Input.is_key_pressed(KEY_SPACE):
 		notify_weapons(MountableBody.Action.FIRE)
 
-func _input(_ev):
+func _input(event):
 	if not $ShipBFG23:
 		return
 		
@@ -128,6 +130,9 @@ func _input(_ev):
 	if Input.is_key_pressed(KEY_I):
 		$ShipBFG23.toggle_inventory()
 
+	if event is InputEventKey and event.pressed and event.keycode == KEY_T:
+		spawn_test_enemy()
+
 func spawn_asteroids(count: int):
 	for x in range(count * 0.5):
 		add_asteroid(asteroids_small_model.pick_random())
@@ -137,6 +142,13 @@ func spawn_asteroids(count: int):
 
 	for x in range(count * 0.1):
 		add_asteroid(asteroids_large_model.pick_random())
+
+func spawn_test_enemy() -> void:
+	var enemy = enemy_model.instantiate()
+	enemy.global_position = $ShipBFG23.global_position + Vector2(600, 0)
+	add_child(enemy)
+	setup_spawn_parent(enemy)
+	print("[World] Test enemy spawned at %s" % enemy.global_position)
 
 func mount_weapon(body: MountableBody, what: PackedScene, where: String):
 	var weapon = what.instantiate() if what else null

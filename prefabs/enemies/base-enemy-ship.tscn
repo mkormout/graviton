@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=3 uid="uid://base_enemy_ship"]
+
+[ext_resource type="Script" path="res://components/enemy-ship.gd" id="1_enemyship"]
+[ext_resource type="Script" path="res://components/item-dropper.gd" id="2_itemdropper"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
+radius = 30.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_detection"]
+radius = 800.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hitbox"]
+radius = 30.0
+
+[node name="EnemyShip" type="RigidBody2D"]
+collision_layer = 1
+collision_mask = 3
+gravity_scale = 0.0
+script = ExtResource("1_enemyship")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_collision")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+monitorable = false
+
+[node name="DetectionShape" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_detection")
+
+[node name="HitBox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+monitoring = true
+monitorable = false
+
+[node name="HitBoxShape" type="CollisionShape2D" parent="HitBox"]
+shape = SubResource("CircleShape2D_hitbox")
+
+[node name="Barrel" type="Node2D" parent="."]
+position = Vector2(40, 0)
+
+[node name="ItemDropper" type="Node2D" parent="."]
+script = ExtResource("2_itemdropper")

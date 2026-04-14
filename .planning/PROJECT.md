@@ -2,11 +2,23 @@
 
 ## What This Is
 
-A 2D space shooter built in Godot 4.6.2, featuring a component-based ship architecture with hot-swappable weapon mounts, an inventory system, and procedurally scattered asteroids. The player pilots a ship, equips weapons from inventory, and destroys asteroids. The codebase is now stabilized and running on the current engine version, ready for new gameplay features.
+A 2D space shooter built in Godot 4.6.2, featuring a component-based ship architecture with hot-swappable weapon mounts, an inventory system, procedurally scattered asteroids, and wave-based enemy ships with state-machine-driven AI. The player pilots a ship, equips weapons from inventory, and battles enemies and asteroids.
 
 ## Core Value
 
 The mount-and-weapon system must work reliably — ships can equip, fire, and swap weapons without bugs or silent failures.
+
+## Current Milestone: v2.0 Enemies
+
+**Goal:** Implement a state-machine-driven enemy AI system with an abstract EnemyShip base class and five concrete enemy types that spawn in waves and fight the player.
+
+**Target features:**
+- Abstract EnemyShip with virtual state-machine methods
+- 8-state machine (idling, seeking, lurking, fighting, fleeing, patrolling, evading, escorting) — each enemy type implements the subset that fits its behavior
+- 5 enemy types: Beeliner, Flanker, Sniper, Swarmer, Suicider
+- Simplified fire logic (no MountableWeapon/inventory layer)
+- Wave-based spawning system
+- All enemies integrate with existing Body/health/death/item-drop pipeline
 
 ## Requirements
 
@@ -29,16 +41,22 @@ The mount-and-weapon system must work reliably — ships can equip, fire, and sw
 
 ### Active
 
-- [ ] EnemyShip moves toward or patrols around a target (ENM-01)
-- [ ] EnemyShip fires weapons when player is in range (ENM-02)
-- [ ] EnemyShip can be destroyed and drops items (ENM-03)
-- [ ] Enemy ships spawn in the world scene (ENM-04)
+- [ ] Abstract EnemyShip base class with virtual state-machine methods (v2.0)
+- [ ] State machine with 8 states; concrete enemies implement their relevant subset (v2.0)
+- [ ] Beeliner enemy — charges and fires at player (v2.0)
+- [ ] Flanker enemy — circles player before engaging (v2.0)
+- [ ] Sniper enemy — keeps distance, fires slow heavy shots, flees when approached (v2.0)
+- [ ] Swarmer enemy — weak alone, designed for group behavior (v2.0)
+- [ ] Suicider enemy — charges and explodes on contact (v2.0)
+- [ ] Simplified enemy fire logic (independent of MountableWeapon/inventory) (v2.0)
+- [ ] Wave-based enemy spawning system (v2.0)
 
 ### Out of Scope
 
 - Multiplayer — not planned
 - Procedural level generation — not planned
 - Automated test suite (GUT) — user opted for manual playtesting
+- Flocking / Boids behavior — deferred to v2.1 or v3.0
 
 ## Context
 
@@ -46,12 +64,13 @@ Godot 4.6.2 project (migrated from 4.2.1 in v1.0). The codebase uses a scene-tre
 
 `world.gd` is currently a developer test harness with all input hardcoded (keys Q/W/E/1-6/etc.). This is the main scene and serves as the game entry point.
 
-All v1.0 bugs are fixed. Known issues carried forward: none.
+All v1.0 bugs are fixed. `EnemyShip` class exists at `components/enemy-ship.gd` as a stub — ready to be built out.
 
 ## Constraints
 
 - **Engine**: Godot 4.6.2 (GDScript) — no C# or other language targets
-- **Scope**: Enemy AI implementation is next milestone
+- **Enemy fire**: Simplified, not using MountableWeapon/inventory layer
+- **Spawning**: Wave-based
 
 ## Key Decisions
 
@@ -63,6 +82,8 @@ All v1.0 bugs are fixed. Known issues carried forward: none.
 | CONNECT_ONE_SHOT for reload signal | Simpler than manual disconnect; idiomatic Godot 4 | ✓ Good |
 | @export spawn_parent propagation | Stable scene reference; null guards + push_warning for safety | ✓ Good |
 | MountableBody.Action enum | Parse-time typo detection vs. silent string mismatch | ✓ Good |
+| Enemy fire simplified (no MountableWeapon) | Reduces coupling; easier to balance enemy difficulty independently | — Pending |
+| Wave-based spawning | Classic arcade feel; predictable difficulty scaling | — Pending |
 
 ## Evolution
 
@@ -82,4 +103,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-11 after v1.0 milestone*
+*Last updated: 2026-04-11 after v2.0 milestone start*
