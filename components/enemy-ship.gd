@@ -32,6 +32,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	super(delta)
+	queue_redraw()
 	if dying:
 		return
 	_tick_state(delta)
@@ -67,8 +68,8 @@ func _draw() -> void:
 	# Physical collision boundary
 	draw_arc(Vector2.ZERO, 30.0, 0.0, TAU, 32, Color(1.0, 0.2, 0.2, 1.0), 5.0)
 	# Debug body fill + outline — boosted opacity to survive CanvasModulate dimming
-	draw_circle(Vector2.ZERO, 300.0, Color(1.0, 0.2, 0.2, 0.45))
-	draw_arc(Vector2.ZERO, 300.0, 0.0, TAU, 64, Color(1.0, 0.2, 0.2, 1.0), 6.0)
+	draw_circle(Vector2.ZERO, 300.0, Color(1.0, 0.2, 0.2, 0.75))
+	draw_arc(Vector2.ZERO, 300.0, 0.0, TAU, 64, Color(1.0, 0.2, 0.2, 1.0), 8.0)
 	# HitBox boundary — green arc showing actual bullet hit area
 	var hb_shape_node := get_node_or_null("HitBox/HitBoxShape")
 	if hb_shape_node and hb_shape_node.shape is CircleShape2D:
@@ -77,10 +78,13 @@ func _draw() -> void:
 	draw_line(Vector2.ZERO, Vector2(500, 0), Color(1.0, 1.0, 0.0, 1.0), 6.0)
 	draw_line(Vector2(500, 0), Vector2(360, -100), Color(1.0, 1.0, 0.0, 1.0), 6.0)
 	draw_line(Vector2(500, 0), Vector2(360, 100), Color(1.0, 1.0, 0.0, 1.0), 6.0)
-	# State label — bright white text
 	var font := ThemeDB.fallback_font
+	# Enemy type label — large cyan text above state
+	var type_name: String = get_script().get_global_name() if get_script() else "ENEMY"
+	draw_string(font, Vector2(-240, -760), type_name, HORIZONTAL_ALIGNMENT_LEFT, -1, 128, Color(0.0, 1.0, 1.0, 1.0))
+	# State label — bright white text
 	var state_label := "STATE: %s" % State.keys()[current_state]
-	draw_string(font, Vector2(-120, -340), state_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 48, Color(1.0, 1.0, 1.0, 1.0))
+	draw_string(font, Vector2(-240, -600), state_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 96, Color(1.0, 1.0, 1.0, 1.0))
 
 func _on_hitbox_body_entered(body: Node2D) -> void:
 	if dying:

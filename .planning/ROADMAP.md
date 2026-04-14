@@ -60,11 +60,14 @@ Plans:
 **Goal**: The Sniper keeps a preferred standoff distance, fires slow heavy shots, and retreats when the player closes in
 **Depends on**: Phase 5
 **Requirements**: ENM-08
+**Plans**: 2 plans
+Plans:
+- [x] 06-01-PLAN.md — Sniper script (sniper.gd) + bullet scene (sniper-bullet.tscn)
+- [x] 06-02-PLAN.md — Sniper inherited scene + world.gd WaveManager integration + playtest
 **Success Criteria** (what must be TRUE):
   1. The Sniper maintains a visible separation gap from the player rather than closing to melee range
   2. When the player moves inside the Sniper's close-range threshold, the Sniper transitions to FLEEING and moves away
   3. Sniper projectiles are visually and mechanically distinct from Beeliner shots — slower travel speed, higher damage per hit
-**Plans**: TBD
 
 ### Phase 7: Flanker
 **Goal**: The Flanker orbits the player at a consistent radius before breaking into an attack burst, then returns to orbit
@@ -105,7 +108,7 @@ Plans:
 | 3. Godot 4.6.2 Migration | v1.0 | 2/2 | Complete | 2026-04-10 |
 | 4. EnemyShip Infrastructure | v2.0 | 0/2 | Planning | - |
 | 5. Beeliner + WaveManager | v2.0 | 0/2 | Planning | - |
-| 6. Sniper | v2.0 | 0/? | Not started | - |
+| 6. Sniper | v2.0 | 0/2 | Planning | - |
 | 7. Flanker | v2.0 | 0/? | Not started | - |
 | 8. Swarmer | v2.0 | 0/? | Not started | - |
 | 9. Suicider | v2.0 | 0/? | Not started | - |

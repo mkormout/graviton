@@ -7,15 +7,15 @@ extends EnemyShip
 var _target: Node2D = null
 var _bullet_scene := preload("res://prefabs/enemies/beeliner/beeliner-bullet.tscn")
 
-const SPREAD_ANGLES := [-0.131, 0.0, 0.131]  # radians: -7.5 deg, 0 deg, +7.5 deg
+const SPREAD_ANGLES := [-0.1, 0.0, 0.1]  # radians: -7.5 deg, 0 deg, +7.5 deg
 
 @onready var _fire_timer: Timer = $FireTimer
 @onready var _ammo_dropper: ItemDropper = $AmmoDropper
 
 func _ready() -> void:
 	super()
-	thrust *= randf_range(0.9, 1.1)
-	max_speed *= randf_range(0.9, 1.1)
+	thrust *= randf_range(0.8, 1.2)
+	max_speed *= randf_range(0.8, 1.2)
 	_fire_timer.timeout.connect(_on_fire_timer_timeout)
 
 func _tick_state(_delta: float) -> void:

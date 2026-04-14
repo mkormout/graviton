@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dy8c1mmutnbql" path="res://prefabs/ui/controls-hint.tscn" id="3_0o1pf"]
 [ext_resource type="PackedScene" uid="uid://diqfcg5rnk5rq" path="res://prefabs/ship-bfg-23/ship-bfg-23.tscn" id="5_auikb"]
 [ext_resource type="PackedScene" uid="uid://cdueiyx71afgd" path="res://prefabs/ui/status-bar.tscn" id="6_gtmcj"]
-[ext_resource type="Script" path="res://components/wave-manager.gd" id="7_wavemgr"]
+[ext_resource type="Script" uid="uid://c5ss7fhsj7nj" path="res://components/wave-manager.gd" id="7_wavemgr"]
 
 [sub_resource type="Curve" id="Curve_51lj4"]
 bake_resolution = 1000
@@ -89,5 +89,5 @@ ship = NodePath("../ShipBFG23")
 [node name="Coins" parent="." unique_id=2145144835 node_paths=PackedStringArray("ship") instance=ExtResource("6_gtmcj")]
 ship = NodePath("../ShipBFG23")
 
-[node name="WaveManager" type="Node" parent="."]
+[node name="WaveManager" type="Node" parent="." unique_id=349914382]
 script = ExtResource("7_wavemgr")

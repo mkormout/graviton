@@ -8,6 +8,7 @@ var gravitygun_model = preload("res://prefabs/gravitygun/gravitygun.tscn")
 var laser_model = preload("res://prefabs/laser/laser.tscn")
 var enemy_model = preload("res://prefabs/enemies/base-enemy-ship.tscn")
 var beeliner_model = preload("res://prefabs/enemies/beeliner/beeliner.tscn")
+var sniper_model = preload("res://prefabs/enemies/sniper/sniper.tscn")
 
 var asteroids_small_model = [
 	preload("res://prefabs/asteroid/asteroid-small-1.tscn"),
@@ -48,7 +49,12 @@ func _ready():
 	spawn_asteroids(10)
 	$WaveManager.waves = [
 		{ "enemy_scene": beeliner_model, "count": 3 },
+		{ "enemy_scene": sniper_model, "count": 2 },
 		{ "enemy_scene": beeliner_model, "count": 5 },
+		{ "enemy_scene": beeliner_model, "count": 8 },
+		{ "enemy_scene": beeliner_model, "count": 13 },
+		{ "enemy_scene": beeliner_model, "count": 21 },
+		{ "enemy_scene": beeliner_model, "count": 34 },
 	]
 
 func setup_spawn_parent(node: Node):
