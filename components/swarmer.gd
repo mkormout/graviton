@@ -190,8 +190,11 @@ func _setup_sprite() -> void:
 	sprite.texture = atlas
 	sprite.region_enabled = true
 	sprite.region_rect = sprite_region
-	sprite.rotation_degrees = -90.0  # atlas art points +Y; Godot facing is +X
+	sprite.rotation_degrees = 90.0  # atlas ships face up (-Y); rotate CW so nose aligns with +X (look_at direction)
 	sprite.scale = sprite_scale
+	var mat := ShaderMaterial.new()
+	mat.shader = load("res://components/enemy-sprite.gdshader")
+	sprite.material = mat
 	$Shape.visible = false
 
 # SPR-04: Wire viewport culling, start infinite pulse tween on gem light.
