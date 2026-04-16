@@ -1,364 +1,216 @@
-# Feature Landscape: Enemy AI
+# Feature Research
 
-**Domain:** 2D arcade space shooter — wave-based enemy AI
-**Project:** Graviton v2.0 Enemies
-**Researched:** 2026-04-11
-**Overall confidence:** HIGH (core behaviors), MEDIUM (specific tuning values)
+**Domain:** Godot 4 arcade space shooter — dynamic music, sprite sheets with fallbacks, in-game restart
+**Researched:** 2026-04-16
+**Confidence:** HIGH (Godot 4.6 official docs verified via Context7)
 
 ---
 
-## Table Stakes
+## Feature Landscape
 
-Features every enemy must have. Missing any of these and the enemy feels broken or unfinished.
+### Game Restart
+
+#### Table Stakes (Users Expect These)
 
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| Detects player within a range | Without detection, enemy ignores player entirely | Low | Single `Area2D` or distance check per physics frame |
-| Moves toward or away from player | Core combat expectation for any enemy | Low | Steering seek/flee; already have `apply_central_force` on `RigidBody2D` |
-| Fires projectiles or deals damage on collision | Must deal threat to player | Low–Med | Simplified fire bypasses MountableWeapon; instantiate bullet scene + apply velocity impulse |
-| Has health and dies | Integrates with existing `Body` health/death pipeline | Low | Already implemented in base class; just ensure `ItemDropper` is configured per type |
-| Drops loot on death | Player reward loop | Low | Already implemented via `ItemDropper`; configure drop tables per type |
-| Visual state feedback | Player must read intent (charging, attacking, fleeing) | Med | Modulate color or play animation tied to state; e.g. red tint on aggro |
-| Does not clip through asteroids | Physically believable movement | Low–Med | RigidBody2D handles collision automatically; steering needs to avoid getting stuck |
+| Restart resets wave to Wave 1 | Standard arcade expectation — game starts fresh | LOW | WaveManager._current_wave_index = 0; _enemies_alive = 0; _wave_total = 0 |
+| Restart resets score/kills/multiplier to 0 | Any leaderboard game resets stats on replay | LOW | ScoreManager.total_score, kill_count, wave_multiplier, combo_count all zeroed |
+| Living enemies cleared before restart | Ghost enemies firing at newly-spawned player would be a bug | LOW | get_tree().get_nodes_in_group("enemy") loop → queue_free() each |
+| Player health restored to max_health | Starting at 1 HP is not a restart | LOW | Body.health = Body.max_health; dying = false; linear_velocity = Vector2.ZERO |
+| Death screen hides on restart | Obvious UX requirement | LOW | DeathScreen.visible = false |
+| Combo timer cancelled | Audio pitch-scaling combo artifact from previous run | LOW | ScoreManager._combo_timer.stop(); combo_count = 0; emit combo_updated(0) |
+| Player ship repositioned to (or near) origin | Edge-of-map start is disorienting | LOW | $ShipBFG23.global_position = Vector2.ZERO; linear_velocity = Vector2.ZERO |
+| Wave HUD / Score HUD reset visually | Stale "x16" multiplier label persists without an explicit signal | LOW | Emit multiplier_changed(1) and score_changed(0, 0) after state reset |
+
+#### Differentiators (Competitive Advantage)
+
+| Feature | Value Proposition | Complexity | Notes |
+|---------|-------------------|------------|-------|
+| Restart WITHOUT get_tree().reload_current_scene() | Preserves audio continuity; avoids autoload side-effects; faster UX (no scene stutter) | MEDIUM | Manual state reset per system. reload_current_scene IS tempting as a one-liner — avoid it to preserve music playback and prevent duplicate Timer/AudioStreamPlayer children in ScoreManager |
+| Smooth fade-to-black transition wrapping the reset | Brief fade-to-black then fade-in feels pro-polish | LOW | Tween CanvasLayer modulate.a 1.0→0.0 (0.3s), reset state, then 0.0→1.0 (0.3s) |
+| Restart preserves leaderboard session | Name pre-fill still works; avoids ConfigFile disk re-read on hot path | LOW | Already handled naturally: _load_last_name() reads ConfigFile; ConfigFile data is on disk, not in-memory state |
+
+#### Anti-Features (Commonly Requested, Often Problematic)
+
+| Feature | Why Requested | Why Problematic | Alternative |
+|---------|---------------|-----------------|-------------|
+| get_tree().reload_current_scene() | Simple one-liner restart | Re-runs ScoreManager._ready() — creates duplicate Timer and AudioStreamPlayer nodes (memory leak risk); cuts audio mid-fade; causes frame stutter on scene reload | Manual reset: zero ScoreManager vars, reset WaveManager counters, kill enemy group nodes, restore player health |
+| "Resume from last wave" checkpoint | Convenience for long runs | Contradicts arcade score-chase design; invalidates combo chain meaning; out of scope for v3.5 | Full restart only |
+| Confirm dialog before restart | Prevents accidental restart | Adds friction in an arcade shooter where restart should feel snappy; leaderboard was already submitted at death screen step | Single "Restart" button with no confirmation |
 
 ---
 
-## Enemy Type Details
+### Dynamic Music System
 
-### Beeliner
+#### Table Stakes (Users Expect These)
 
-**Archetype:** Grunt / Rusher — the simplest enemy and best first build
+| Feature | Why Expected | Complexity | Notes |
+|---------|--------------|------------|-------|
+| Background music plays on game start | Silent game feels unfinished | LOW | Single AudioStreamPlayer (non-positional) started in world._ready() or MusicManager autoload _ready() |
+| Music loops without gap | Track cutting off mid-loop is jarring | LOW | Set loop = true on AudioStreamMP3/OGG resource in .import, or stream.loop = true; AudioStreamPlayer handles seamless loop |
+| Volume sits under SFX in mix | Music at 0 dB drowns out combat sounds | LOW | music_player.volume_db = -12.0 (or named constant); SFX remain at default |
+| Music does not stack on restart | Old player keeps playing when restart triggers a new one | LOW | Stop previous AudioStreamPlayer before starting new; guard with is_playing() check |
 
-**Core role:** Direct-charge attacker. No tactics, no hesitation. Creates immediate pressure and teaches the player that staying still is dangerous.
+#### Differentiators (Competitive Advantage)
 
-**States used:** `seeking` → `fighting` → (optionally) `fleeing` at low health
+| Feature | Value Proposition | Complexity | Notes |
+|---------|-------------------|------------|-------|
+| Category-based selection (Ambient / Combat / High-Intensity) | Music reacts to wave escalation; players feel the tension curve | MEDIUM | Three arrays keyed by enum; threshold on WaveManager._current_wave_index (e.g., waves 1-5 = Ambient, 6-14 = Combat, 15-20 = High-Intensity); connect to wave_started or wave_completed signal |
+| Auto-scan /music folder at startup | New tracks drop in without code changes; future-proof | MEDIUM | DirAccess.open("res://music/").get_files() → filter by .mp3/.ogg/.wav extension → ResourceLoader.load() each; categorize by filename prefix convention (e.g., "ambient_", "combat_", "intense_") |
+| Smooth A/B cross-fade on category transition | Abrupt cut is amateurish; cross-fade is the expected behavior in games post-2010 | MEDIUM | Two AudioStreamPlayers (player_a, player_b); Tween volume_db from -80→0 on incoming, 0→-80 on outgoing over 1.5s; swap active reference after fade completes |
+| Filename-prefix category detection | No metadata .cfg file needed; drop "combat_03.mp3" and it works | LOW | Parse filename prefix before first underscore character; default to Ambient if no recognized prefix found |
 
-**Table Stakes**
+#### Anti-Features (Commonly Requested, Often Problematic)
 
-| Behavior | Why Required | Complexity |
-|----------|--------------|------------|
-| Charges directly at player | Defines the archetype entirely | Low |
-| Fires in a straight line while charging | Adds threat during approach so player cannot just dodge and wait | Low |
-| High thrust, low health | Makes it dangerous fast but destroyable quickly | Low (tuning) |
-| Enters `fighting` when within firing range | Without this it either rams or never shoots | Low |
-
-**Differentiators**
-
-| Behavior | Value | Complexity |
-|----------|-------|------------|
-| Overshoot and correct course | Adds physical believability; RigidBody2D inertia makes this natural | Low (free from physics) |
-| Brief hesitation before re-locking onto player | Feels like a creature "deciding" rather than a homing missile | Low (add a 0.5s cooldown on seek re-evaluation) |
-| Fires a burst of shots when in `fighting` range, then re-charges | Rhythm of pressure + pause prevents trivial kiting | Low |
-| Flees at 15% health | Gives player a satisfying "mop-up" moment | Low |
-
-**Anti-Features**
-
-| Anti-Feature | Why Avoid |
-|--------------|-----------|
-| Complex pathfinding | Beeliner is defined by directness; routing around asteroids loses identity |
-| High health | Drags out what should be a quick, punchy encounter |
-
-**State Transitions (recommended)**
-
-```
-IDLING → SEEKING:    player enters detection range (e.g. 600px)
-SEEKING → FIGHTING:  player within firing range (e.g. 250px)
-FIGHTING → SEEKING:  player exits firing range
-FIGHTING → FLEEING:  health <= 15% (optional, configurable)
-FLEEING → SEEKING:   health regenerated (skip if no regen; can just flee to death)
-```
-
-**Detection / fire / movement parameters (starting values for playtesting)**
-
-- Detection range: 600 px
-- Firing range: 300 px
-- Thrust: high (e.g., 1.5x player's main propeller thrust)
-- Fire rate: fast burst (3 shots, 0.15s apart), then 1.5s cooldown
-- Health: low (e.g., 40 HP vs player's 100)
-
-**Build order position:** Build first. Establishes all shared infrastructure: `EnemyShip` base class, state machine skeleton, simplified fire logic, wave spawner hookup. Every other type builds on this.
+| Feature | Why Requested | Why Problematic | Alternative |
+|---------|---------------|-----------------|-------------|
+| AudioStreamInteractive (Godot 4.3+) | Purpose-built Godot node for adaptive music | Requires .tres resource authoring per track in the editor; incompatible with runtime file scanning; overkill for 3 fixed categories | Manual A/B AudioStreamPlayers with Tween cross-fade — simpler, dynamically loadable |
+| Beat-synced transitions | Professional cinematic feel | Requires BPM metadata per track and tracks authored specifically for sync points; no BPM metadata exists for /music assets | Transition at wave boundary events (already discrete game events) |
+| Separate AudioBusLayout with a Music bus | Fine-grained mixing control | Overkill for 3 categories; requires editor bus layout setup that is fragile to export; volume_db on the player node is sufficient | Direct volume_db on AudioStreamPlayer nodes |
+| Per-enemy-type audio stingers | Hollywood-style dynamic cues | Requires 5 additional short audio assets not yet created; out of scope for v3.5 | Wave category transitions already communicate intensity changes |
+| Randomized track order within a category | Adds variety on repeat plays | Must guard against repeating the last track; must handle single-track categories (only one file); adds stateful logic for marginal value | pick_random() with a single-entry guard (if array.size() == 1: return array[0]) |
 
 ---
 
-### Flanker
+### Enemy Sprites
 
-**Archetype:** Circler / Tactical — orbits before engaging, then attacks
+#### Table Stakes (Users Expect These)
 
-**Core role:** Creates a feeling that enemies are "smart." The orbit phase denies player the easy "just shoot it" response and forces them to track a moving target. Rewards lead-aiming skill.
+| Feature | Why Expected | Complexity | Notes |
+|---------|--------------|------------|-------|
+| Each enemy shows a distinct ship sprite | Debug Polygon2D shapes convey no identity at a glance during combat | MEDIUM | Sprite2D node added as child in each enemy .tscn; region_enabled = true; region_rect set per enemy type using measured coordinates from ships_assests.png |
+| Sprites face forward (correct rotation axis) | Backward sprite is a visual bug | LOW | Sprite2D inherits parent RigidBody2D rotation; ships_assets.png art faces upward (+Y); game forward = +X; set Sprite2D.rotation_degrees = 90 (or flip in region offset) — confirm during implementation |
+| Sprite scale matches player ship approximate size | Tiny enemies at large combat range are invisible; oversized enemies clip each other | LOW | Player ShipBFG23 is approximately 120px visual width in scene; measure each sprite region and set Sprite2D.scale = Vector2(target_px / sprite_region_width) |
+| Fallback to Polygon2D when sprite unavailable | Graceful degradation; game remains playable if asset is missing or corrupted | LOW | if ResourceLoader.exists("res://ships_assests.png"): show Sprite2D, hide Polygon2D; else: hide Sprite2D, show Polygon2D |
 
-**States used:** `seeking` → `lurking` (orbit) → `fighting` → optionally `evading`
+#### Differentiators (Competitive Advantage)
 
-**Table Stakes**
+| Feature | Value Proposition | Complexity | Notes |
+|---------|-------------------|------------|-------|
+| Per-enemy gem glow PointLight2D with pulsing energy | Distinct per-type color identity readable instantly during combat; costs no gameplay design work | MEDIUM | PointLight2D child node per enemy; energy sinusoidally animated in _process: energy = base + amplitude * sin(Time.get_ticks_msec() * 0.001 * freq); gem colors from image — ENM-07 green, ENM-08 purple, ENM-09 orange, ENM-10 gold/cream, ENM-11 red |
+| Sprite sheet sliced programmatically (not via editor import) | No per-sprite editor click-work; region coords live in code as constants | MEDIUM | AtlasTexture constructed in GDScript: var at = AtlasTexture.new(); at.atlas = preload("res://ships_assests.png"); at.region = Rect2(x, y, w, h); sprite.texture = at; region coordinates must be manually measured from the PNG (no auto-slice metadata exists in the file) |
+| Sprite orientation correction as a constant | Clean code — no magic rotation in _process every frame | LOW | ships_assests.png art faces upward; set Sprite2D.rotation_degrees = 90 as a constant in each enemy _ready(); does not affect physics rotation |
 
-| Behavior | Why Required | Complexity |
-|----------|--------------|------------|
-| Approaches player and begins orbiting at mid-range | Defines the archetype | Med |
-| Fires during orbit after a timed delay | Without firing it is just an annoyance | Low |
-| Orbits at constant radius, not drifting in/out | Predictable orbit lets players learn and lead shots | Med |
-| Breaks orbit and closes in for attack burst | Must have a payoff moment, not orbit forever | Low |
+#### Anti-Features (Commonly Requested, Often Problematic)
 
-**Differentiators**
-
-| Behavior | Value | Complexity |
-|----------|-------|------------|
-| Randomizes clockwise vs. counter-clockwise orbit | Removes exploitable repetition | Low (random sign on angular velocity) |
-| Varies orbit radius per instance (220–350px) | Multiple flankers don't all sit on the same ring | Low (randomized on spawn) |
-| Plays attack burst then re-enters orbit | Creates a "dance" rhythm the player learns to punish | Low |
-| Evades (dodges perpendicular) when player shoots | Feels reactive and alive | Med (requires detecting incoming projectiles via Area2D) |
-
-**Anti-Features**
-
-| Anti-Feature | Why Avoid |
-|--------------|-----------|
-| Orbit that never breaks | Player will just wait; no payoff |
-| Firing constantly during orbit | Orbit becomes indistinguishable from Beeliner |
-
-**State Transitions (recommended)**
-
-```
-SEEKING → LURKING:   within orbit entry range (e.g. 400px)
-LURKING → FIGHTING:  orbit timer expires (e.g. 3–5s) OR player health < threshold
-FIGHTING → LURKING:  attack burst complete (return to orbit)
-LURKING → EVADING:   incoming projectile detected within evasion radius (optional, v2.1)
-```
-
-**Implementation note:** Orbit via angular velocity applied each `_physics_process`: compute tangential direction perpendicular to player-to-enemy vector, apply force. Radius maintained by a spring-like correction force (seek toward orbit radius, flee from inside it).
-
-**Build order position:** Build second. Reuses Beeliner's base class and fire logic. Adds only the `lurking` (orbit) state — which is the first state requiring non-trivial steering math.
-
----
-
-### Sniper
-
-**Archetype:** Ranged / Retreater — high damage, slow shots, avoids close contact
-
-**Core role:** Forces the player to close distance aggressively rather than staying still. Changes the combat tempo entirely. The slow, visible projectile rewards skilled evasion and punishes standing still.
-
-**States used:** `seeking` (approach to preferred range) → `fighting` → `fleeing` (when player is too close)
-
-**Table Stakes**
-
-| Behavior | Why Required | Complexity |
-|----------|--------------|------------|
-| Maintains preferred engagement distance from player | Defines the archetype | Low–Med |
-| Fires slow, high-damage projectile | The core threat that makes ranged play dangerous | Low (bullet with low velocity, high damage stat) |
-| Flees when player enters minimum range | Without flee, it becomes a slow Beeliner | Low |
-| Telegraphs shot with a visible charge-up delay | Slow projectile needs visual warning so evasion is possible | Low (timer before fire + visual effect) |
-
-**Differentiators**
-
-| Behavior | Value | Complexity |
-|----------|-------|------------|
-| Aims ahead of player's position (predictive targeting) | Rewards player dodging skill; not hitscan so misses are possible | Med (predict target pos = current_pos + velocity * time_to_impact) |
-| Repositions laterally to maintain line of sight | Adds dynamic feel; doesn't just back-pedal in a straight line | Med |
-| Fires a second "warning shot" at lower damage to bait dodges | Advanced — creates mind-game counterplay | High (save for v2.1) |
-| Panics and fires rapidly when in flee state | Desperate fire pattern reads emotionally as "cornered" | Low |
-
-**Anti-Features**
-
-| Anti-Feature | Why Avoid |
-|--------------|-----------|
-| Hitscan (instant hit) shots | Removes player agency; impossible to dodge |
-| Aggressive close-range attacks | Undermines the retreat identity |
-| Same bullet speed as other enemies | Sniper shots must be visually distinct — slow and large |
-
-**State Transitions (recommended)**
-
-```
-SEEKING → FIGHTING:  player within preferred range (e.g. 400–700px band)
-FIGHTING → SEEKING:  player drifts outside max range (> 700px) — re-approach
-FIGHTING → FLEEING:  player enters minimum range (< 250px)
-FLEEING → FIGHTING:  distance restored to preferred range
-```
-
-**Bullet design:** Large/visible sprite, slow velocity (e.g. 200 px/s vs. minigun 800 px/s), high damage (e.g. 40 per hit). Travel time gives player ~1s to dodge from 200px.
-
-**Build order position:** Build third. Flee state is new infrastructure. Predictive targeting is the only genuinely new steering calculation. Otherwise reuses fire logic.
-
----
-
-### Swarmer
-
-**Archetype:** Mob / Pack — individually trivial, dangerous in groups
-
-**Core role:** Creates panic through numbers and attack angles the player cannot defend simultaneously. Solo swarmers are a non-threat by design; three or more become dangerous. Teaches the player to prioritize and use area-effect weapons.
-
-**States used:** `seeking` → `fighting` → optional `evading` (from heavier weapons)
-
-**States NOT used:** `lurking`, `fleeing` (swarmers do not retreat; they press until dead)
-
-**Table Stakes**
-
-| Behavior | Why Required | Complexity |
-|----------|--------------|------------|
-| Very low health — dies in 1–2 hits | Justifies spawning in groups | Low (tuning) |
-| Low individual damage | Solo swarmer must feel manageable | Low (tuning) |
-| Attacks from multiple approach angles | Core group mechanic; needs spawn formation logic | Med |
-| Fast movement | Makes them hard to track individually | Low (tuning) |
-| Groups approach together (proximity-aware) | Without this they are just fast Beeliners | Med |
-
-**Differentiators**
-
-| Behavior | Value | Complexity |
-|----------|-------|------------|
-| Nearest-neighbor cohesion: slow slightly when outrunning group | Makes the swarm feel like a coordinated organism | Med |
-| Erratic jitter movement (small random force each frame) | Individual paths are unpredictable; hard to lead-aim | Low |
-| Sound design: more swarmers = more audio layers | Escalating audio builds dread | Low (existing RandomAudioPlayer) |
-| Split-fire: different swarmers fire from different angles | With 4+ swarmers, safe angles don't exist | Low (each fires independently, geometry does the work) |
-
-**Anti-Features**
-
-| Anti-Feature | Why Avoid |
-|--------------|-----------|
-| Boids/full flocking (alignment, separation, cohesion) | Out of scope per PROJECT.md; too complex for v2.0 |
-| High individual health | Destroys the "satisfying to kill" feel of clearing a swarm |
-| Centralized leader unit | Too much coordination complexity; save for v3.0 |
-
-**Group awareness implementation (v2.0 scope):** Each swarmer independently steers toward player. The "group feel" comes from: (a) spawn formation (spawn in a cluster 50–100px apart), (b) partial proximity slow (if within 80px of another swarmer, reduce thrust 30%), (c) independent random offset to aim direction (±15 degrees). No shared state required — emergence from simple rules. True Boids deferred to v2.1.
-
-**State Transitions (recommended)**
-
-```
-SEEKING → FIGHTING:  within firing range (150px — closer than other types)
-FIGHTING → SEEKING:  player exits range
-```
-
-**Build order position:** Build fourth. No new states beyond what Beeliner established. Complexity is in the spawn formation logic (wave spawner must place them in clusters) and the proximity-slow mechanic. The wave spawner needs cluster-spawn support before Swarmer waves feel right.
-
----
-
-### Suicider
-
-**Archetype:** Kamikaze / Charger — no weapons, explodes on contact
-
-**Core role:** Creates a different threat category — you cannot shoot at it slowly. It demands immediate evasive action or burst damage to kill before contact. Teaches the player that some threats require priority response.
-
-**States used:** `seeking` (immediate, no hesitation) → contact triggers explosion
-
-**States NOT used:** `fighting`, `lurking`, `fleeing` — Suicider has no firing state
-
-**Table Stakes**
-
-| Behavior | Why Required | Complexity |
-|----------|--------------|------------|
-| Charges directly at player at high speed | Defines the archetype entirely | Low |
-| Explodes on player contact dealing large damage | The payoff — death must hurt | Low (trigger `Explosion` on `body_entered`) |
-| Also explodes when health reaches zero (from being shot) | Shooting it to death still detonates it; rewards pre-emptive engagement | Low |
-| Explosion radius hurts nearby enemies too | Creates interesting tactical choices (kite into other enemies) | Low (existing Explosion component with Area2D) |
-| Visual warning: turns red / flashes as it accelerates | Player must read "this is coming for me" at a glance | Low |
-
-**Differentiators**
-
-| Behavior | Value | Complexity |
-|----------|-------|------------|
-| Slight tracking lag: re-evaluates direction every 0.3s rather than every frame | Gives player a tiny window to break line of sight | Low |
-| Screams on detection (audio cue) | Audio-visual warning combo; pure tension | Low (RandomAudioPlayer) |
-| Variable speed: starts medium, accelerates over 2s to max speed | Ramp-up creates dread; player sees it accelerate toward them | Low |
-| Detonates mid-air if killed at distance (no contact explosion) | Skilled players can destroy it safely by leading shots | Low |
-
-**Anti-Features**
-
-| Anti-Feature | Why Avoid |
-|--------------|-----------|
-| Perfect tracking (pixel-perfect prediction) | Impossible to dodge; removes player agency |
-| Tiny explosion radius | Removes consequence of failure; must punish near-misses |
-| High health | Should be killable with 3–5 hits; it is fast, health shouldn't stack on top |
-
-**Explosion parameters (starting values)**
-
-- Contact damage: 80 HP (very high — near one-shot for player)
-- Explosion radius: 200px
-- Explosion falloff: linear (existing Explosion component supports this)
-- Health: very low (30 HP) — designed to be killable but requires commitment
-
-**Build order position:** Build fifth/last. Simplest state machine of all five (one state: seek). New piece is the on-death / on-contact explosion trigger — but the `Explosion` component already exists. Integration is straightforward.
-
----
-
-## Anti-Features (Project-Wide)
-
-| Anti-Feature | Why Avoid | What to Do Instead |
-|--------------|-----------|-------------------|
-| Pathfinding (NavigationAgent2D) | Overkill for open-space shooter; adds node overhead with no terrain benefit | Steering forces: seek/flee/orbit via `apply_central_force` |
-| Shared mutable state between enemies | Creates subtle bugs when enemies reference each other across frames | Each enemy is fully self-contained; group effects emerge from local rules |
-| Inventory/MountableWeapon layer for enemy fire | Confirmed out of scope in PROJECT.md; increases coupling | Simplified fire: instantiate bullet scene, apply velocity impulse, done |
-| True Boids flocking | Explicitly out of scope (PROJECT.md); complex, diminishing returns for v2.0 | Proximity-slow + cluster spawning approximates the feel |
-| Health bars above enemies | Slows down arcade pace; adds UI complexity | Color modulation on damage (e.g., red flash) is sufficient |
-| Healing / respawning enemies | Frustrating in arcade shooters; breaks "kill it and it's dead" contract | Enemies do not regenerate health |
+| Feature | Why Requested | Why Problematic | Alternative |
+|---------|---------------|-----------------|-------------|
+| AnimatedSprite2D with SpriteFrames | Enables idle/thrust/damage frame animations | No animation frames exist in ships_assests.png; one static sprite per ship; SpriteFrames resource adds overhead with zero visual benefit | Sprite2D with region_enabled for single-frame sprite display |
+| Editor-side SpriteSheet import (atlas slice in .import file) | GUI-friendly workflow in the Godot editor | Requires manual per-sprite setup in the editor; not reproducible in code; fragile on asset path change; cannot be driven by region constants | AtlasTexture constructed in GDScript — region Rect2 values as named constants per enemy type |
+| Exporting separate PNGs per enemy from the atlas | Cleaner per-file asset management | Requires an external tooling step outside Godot; ships_assests.png is the canonical source; adds CI asset maintenance burden | Single atlas, Rect2 region constants in code |
+| Replacing Polygon2D nodes in .tscn files | Cleaner scene tree | Polygon2D provides collision shape debug feedback and is the existing fallback; removing it breaks the fallback requirement; modifying 5 .tscn files increases regression risk | Add Sprite2D as a sibling child node; toggle .visible in _ready() conditionally |
+| Gem glow via CanvasItemMaterial shader | More sophisticated visual pulse effect | Requires custom shader authoring and material assignment; PointLight2D.energy animation achieves the same perceived visual effect at zero shader complexity | PointLight2D with energy animated via sin() in _process |
 
 ---
 
 ## Feature Dependencies
 
 ```
-EnemyShip base class (abstract)
-    └── State machine skeleton (states: idling, seeking, fighting, fleeing, lurking)
-        └── Beeliner          [needs: seek, fight]
-            └── Flanker       [needs: lurking/orbit — new steering]
-                └── Sniper    [needs: flee — new state logic]
-                    └── Swarmer [needs: cluster spawn from wave system]
-                        └── Suicider [needs: on-contact explosion integration]
+[Game Restart]
+    └── clears   --> [Enemy group nodes]   (get_tree().get_nodes_in_group("enemy") → queue_free each)
+    └── resets   --> [ScoreManager state]  (total_score=0, kill_count=0, wave_multiplier=1, combo_count=0, _combo_timer.stop())
+    └── resets   --> [WaveManager state]   (_current_wave_index=0, _enemies_alive=0, _wave_total=0)
+    └── restores --> [PlayerShip state]    (health=max_health, dying=false, position=Vector2.ZERO, velocity=Vector2.ZERO)
+    └── hides    --> [DeathScreen]         (visible = false)
+    └── refreshes--> [Score HUD, Wave HUD] (emit multiplier_changed(1), score_changed(0,0) to trigger label refresh)
 
-Simplified fire logic (independent module)
-    └── All types except Suicider
+[Dynamic Music System]
+    └── reads    --> [WaveManager.wave_started or wave_completed signal] (wave number → category threshold evaluation)
+    └── reads    --> [WaveManager._current_wave_index]                   (1-5 = Ambient, 6-14 = Combat, 15-20 = High-Intensity)
+    └── survives --> [Game Restart]                                       (music node persists if in autoload or above scene root; no interruption)
 
-Wave spawner
-    └── All enemy types (Swarmer specifically needs cluster-spawn mode)
+[Enemy Sprites]
+    └── requires --> [ships_assests.png present at res://]  (already in project root — confirmed)
+    └── coexists --> [Polygon2D fallback]                   (Polygon2D.visible toggled, not removed from scene)
+    └── adds     --> [PointLight2D per enemy type]          (new child node; no dependency on any other system)
+    └── scale-matches --> [PlayerShip visual size]          (~120px reference width from ship-bfg-23.tscn)
+
+[Game Restart] --must-not-interrupt--> [Dynamic Music System]
+    (restart is a state reset, not get_tree().reload_current_scene(); music node and state persist)
 ```
 
----
+### Dependency Notes
 
-## Shared Infrastructure Needed Before Any Enemy Works
-
-These must exist before the first enemy type (Beeliner) is playable:
-
-1. `EnemyShip` base class with virtual `_tick_state()` and state enum
-2. Simplified `fire(direction: Vector2)` method on `EnemyShip` (bullet scene + impulse)
-3. `_physics_process` loop calling `_tick_state()` each frame
-4. Wave spawner: basic instantiate-at-position, queue up wave definitions
+- **Game Restart requires ScoreManager.reset():** ScoreManager is an autoload singleton. Its vars (total_score, kill_count, wave_multiplier, combo_count) persist across reload_current_scene. A dedicated reset() method must be called explicitly. Using reload_current_scene causes ScoreManager._ready() to re-execute, creating duplicate Timer and AudioStreamPlayer child nodes — the primary reason to avoid reload_current_scene.
+- **Game Restart requires WaveManager counter reset:** WaveManager is a scene node (not an autoload), so reload_current_scene would reset it naturally — but enemies spawned in the world do not get cleaned up by scene reload. Manual enemy group clear + counter reset is therefore consistent with the manual-reset approach.
+- **Music must survive restart:** If MusicManager is implemented as an autoload or a node parented to an above-scene container, it outlives the world scene state reset and does not interrupt. Manual restart trivially preserves music without any special handling.
+- **Enemy Sprites coexist with Polygon2D fallback:** Sprite2D is added as a sibling child alongside the existing Polygon2D, not replacing it. The Polygon2D also serves as the collision debug overlay and visual orientation reference — keeping it satisfies the fallback requirement and preserves debugging utility.
 
 ---
 
-## MVP Recommendation
+## MVP Definition
 
-Prioritize in this order:
+### Launch With (v3.5)
 
-1. Shared infrastructure (EnemyShip base, state machine, simplified fire, wave spawner)
-2. **Beeliner** — validates the entire pipeline; simplest enemy
-3. **Sniper** — introduces flee state; changes combat tempo fundamentally
-4. **Flanker** — introduces orbit; most mechanically interesting to fight
-5. **Swarmer** — requires cluster spawn support; needs wave spawner mature enough to place groups
-6. **Suicider** — simplest logic, but save last so explosion integration is clean
+All nine requirements are in scope for this milestone. No deferral is appropriate.
 
-Defer:
-- Predictive aiming for Sniper (v2.1): complex math, low necessity for first pass
-- Evasion / incoming-projectile detection for Flanker (v2.1): requires projectile tracking
-- True Boids for Swarmer (v3.0): explicitly out of scope in PROJECT.md
+- [ ] **Game Restart** — "Restart" button on death screen leaderboard view; manual state reset (no reload_current_scene); enemy group cleared; ScoreManager.reset(); WaveManager counters zeroed; player health and position restored
+- [ ] **Music auto-plays on start** — at least one track playing immediately on game start; loop enabled
+- [ ] **Music scans /music folder** — DirAccess scan at startup; loads all .mp3/.ogg/.wav files found
+- [ ] **Music category transitions on wave** — three category arrays; threshold logic on wave_started/wave_completed signal; category change triggers cross-fade
+- [ ] **Cross-fade between tracks** — A/B AudioStreamPlayers; Tween volume_db 1.5s duration
+- [ ] **Enemy Sprite2D from ships_assests.png** — AtlasTexture with Rect2 region constants per enemy type; Sprite2D child added in each enemy .tscn
+- [ ] **Sprite fallback to Polygon2D** — ResourceLoader.exists() guard; Polygon2D.visible toggled off when sprite available
+- [ ] **Gem glow PointLight2D** — per-enemy color constant; energy animated with sin() in _process
+- [ ] **Sprite scale matches player** — scale Vector2 constant per enemy type; measured against player ship reference
+
+### Add After Validation (post-v3.5)
+
+- [ ] Smooth fade-to-black restart transition — trigger: player feedback requests it; implementation is LOW complexity when base restart works
+- [ ] Beat-synced music transitions — trigger: music tracks authored with BPM metadata
+- [ ] Per-enemy death audio stingers — trigger: short audio assets provided
+
+### Future Consideration (v4+)
+
+- [ ] AnimatedSprite2D per enemy with idle/thrust/damage animations — requires multi-frame art assets per enemy type
+- [ ] AudioStreamInteractive adaptive music — requires tracks authored as stems/loops with sync points
 
 ---
 
-## Wave Spawning — What Makes It Feel Good
+## Feature Prioritization Matrix
 
-| Property | Why It Matters | Implementation Note |
-|----------|----------------|---------------------|
-| 8–12s breathing room between waves | Prevents fatigue; players reposition and heal | Timer-based gap after last enemy in wave dies |
-| Wave announcement (counter + audio sting) | Tension and anticipation before first spawn | HUD text + audio cue 3s before spawn |
-| Spawn off-screen at random edge positions | Enemies appear from "out there" — maintains space theme | Spawn 200px beyond viewport edge |
-| Escalating composition, not just more enemies | Wave 1: Beeliners only. Wave 3: Beeliners + Snipers. Wave 5: add Swarmers | Wave definition as data (Array of enemy type + count pairs) |
-| First enemy of a new type introduced alone or in a small group | Player learns the new enemy without being overwhelmed | Structure first appearance in wave data, not random |
-| Cluster spawning for Swarmers | Swarmers arriving spread apart lose their group identity | `spawn_cluster(type, count, center, radius)` helper on spawner |
-| Optional: bonus wave (all-Suiciders) | High-intensity curveball; keeps late-game surprising | Flag in wave definition data |
+| Feature | User Value | Implementation Cost | Priority |
+|---------|------------|---------------------|----------|
+| Game Restart | HIGH | LOW | P1 |
+| Music auto-plays + loops | HIGH | LOW | P1 |
+| Music folder scan | MEDIUM | LOW | P1 |
+| Music category/wave transition | HIGH | MEDIUM | P1 |
+| Cross-fade A/B | MEDIUM | MEDIUM | P1 |
+| Enemy Sprite2D (atlas region) | HIGH | MEDIUM | P1 |
+| Sprite fallback to Polygon2D | MEDIUM | LOW | P1 |
+| Gem glow PointLight2D | MEDIUM | LOW | P1 |
+| Sprite scale match | MEDIUM | LOW | P1 |
+| Restart fade-to-black transition | LOW | LOW | P2 |
+
+**Priority key:**
+- P1: Required for v3.5 milestone
+- P2: Add if time allows within v3.5
+- P3: Future milestone
+
+---
+
+## Competitor Feature Analysis
+
+Reference patterns from Godot 4 arcade shooters (design patterns, not competing products):
+
+| Feature | Standard Godot tutorial pattern | Geometry Wars / arcade pattern | Our Approach |
+|---------|--------------------------------|-------------------------------|--------------|
+| Restart | get_tree().reload_current_scene() | Same | Manual state reset — preserves music, avoids autoload Timer/AudioStreamPlayer side-effects |
+| Music | Single AudioStreamPlayer in scene | Looping background track, no dynamics | A/B AudioStreamPlayers in persistent node; cross-fade via Tween; category driven by wave index thresholds |
+| Sprite sheets | Sprite2D hframes/vframes for uniform grids | AtlasTexture for non-uniform art | AtlasTexture with explicit Rect2 per ship — ships_assests.png is non-uniform layout |
+| Fallback visuals | Not a common pattern | Not applicable | Polygon2D sibling; visibility toggled in _ready() via ResourceLoader.exists() |
+| Gem glow pulsing | AnimationPlayer on PointLight2D | Not applicable | PointLight2D energy with sin(Time.get_ticks_msec()) in _process — avoids AnimationPlayer complexity |
 
 ---
 
 ## Sources
 
-- [Enemy design — The Level Design Book](https://book.leveldesignbook.com/process/combat/enemy) — HIGH confidence, comprehensive archetype design principles
-- [Roles of Monsters: The Swarmer — Rather Ghastly Gaming](https://ghastlygaming.wordpress.com/2012/09/13/roles-of-monsters-the-swarmer/) — MEDIUM confidence, design analysis
-- [Battle Circle AI — Tutsplus/Envato](https://code.tutsplus.com/battle-circle-ai-let-your-player-feel-like-theyre-fighting-lots-of-enemies--gamedev-13535t) — HIGH confidence, implementation-level orbit AI
-- [Dynamic Maneuvers: Circular Movement for Space Shooter Enemies — Medium](https://medium.com/@victormct/dynamic-maneuvers-implementing-circular-movement-for-enemies-in-a-space-shooter-game-c0085570c5c1) — MEDIUM confidence
-- [Space Shooter Aggressive Enemy Type: Ramming — Medium](https://medium.com/@victormct/space-shooter-aggressive-enemy-type-ramming-the-player-b1a62428d399) — MEDIUM confidence, kamikaze-specific implementation
-- [Unleashing Chaos: Mastering Enemy Waves — Medium](https://medium.com/@victormct/unleashing-chaos-mastering-enemy-waves-9be16f92e673) — MEDIUM confidence, wave design principles
-- [Keys to Rational Enemy Design — GDKeys](https://gdkeys.com/keys-to-rational-enemy-design/) — HIGH confidence, design philosophy
-- [Enemy NPC Design Patterns in Shooter Games — ACM DL](https://dl.acm.org/doi/10.1145/2427116.2427122) — HIGH confidence (academic)
-- [Steering Behaviors Godot 4 — GitHub konbel](https://github.com/konbel/steering-behaviors-godot-4) — HIGH confidence, Godot-specific seek/flee implementation
+- Godot 4.6 official documentation via Context7 (/websites/godotengine_en_4_6): AudioStreamPlayer, Tween, DirAccess, ResourceLoader, AtlasTexture, Sprite2D, PointLight2D, get_tree().reload_current_scene() — HIGH confidence
+- Project source files: `/components/score-manager.gd`, `/components/wave-manager.gd`, `/prefabs/ui/death-screen.gd`, `/world.gd`, `/components/beeliner.gd`, `/components/enemy-ship.gd`, `/components/random-audio-player.gd` — HIGH confidence (direct read)
+- Project assets: `ships_assests.png` (visually inspected — 5 ships ENM-07 through ENM-11 with distinct gem colors, non-uniform layout on white background), `/music/Gravimetric Dawn.mp3` (one track present) — HIGH confidence (direct read)
+- Project context: `.planning/PROJECT.md`, `MILESTONE_V35.md` — HIGH confidence (direct read)
+
+---
+*Feature research for: Graviton v3.5 — dynamic music, sprite sheets with fallbacks, game restart*
+*Researched: 2026-04-16*

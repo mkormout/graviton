@@ -1,346 +1,440 @@
-# Architecture Patterns: Enemy AI Integration
+# Architecture Research
 
-**Domain:** 2D space shooter — enemy AI layered onto existing Body/Ship hierarchy
-**Researched:** 2026-04-11
+**Domain:** Godot 4.6.2 single-scene 2D space shooter — v3.5 feature integration
+**Researched:** 2026-04-16
 **Confidence:** HIGH — all conclusions drawn from direct inspection of production source files
 
----
+## Standard Architecture
 
-## Existing Hierarchy (Confirmed)
+### System Overview
 
 ```
-RigidBody2D
-  └─ Body            (components/body.gd)         health, die(), spawn_parent, item_dropper
-       └─ MountableBody  (components/mountable-body.gd)  Action enum, do(), mount_weapon(), mounts[]
-            └─ Ship      (components/ship.gd)           picker Area2D, inventories, coin/ammo/weapon pickup
-                 ├─ PlayerShip  (components/player-ship.gd)   empty stub — movement via PropellerMovement Node
-                 └─ EnemyShip   (components/enemy-ship.gd)    empty stub — ready to be built out
+┌─────────────────────────────────────────────────────────────────────┐
+│                         Autoload Singletons                          │
+│  ┌─────────────────────┐    ┌───────────────────────────────────┐   │
+│  │    ScoreManager      │    │         MusicManager (NEW)         │   │
+│  │  (score-manager.gd)  │    │       (music-manager.gd)           │   │
+│  └──────────┬──────────┘    └────────────────┬──────────────────┘   │
+└─────────────┼───────────────────────────────┼─────────────────────┘
+              │ signals                        │ controls playback
+┌─────────────▼───────────────────────────────▼─────────────────────┐
+│                          world.tscn (Node2D)                        │
+│                                                                      │
+│  ┌────────────┐  ┌──────────────┐  ┌──────────┐  ┌─────────────┐  │
+│  │ ShipBFG23  │  │  WaveManager │  │ Camera2D │  │ ShipCamera  │  │
+│  │(PlayerShip)│  │ (wave-mgr.gd)│  │(static)  │  │(BodyCamera) │  │
+│  └────────────┘  └──────┬───────┘  └──────────┘  └─────────────┘  │
+│                          │ spawns                                    │
+│                   ┌──────▼──────────────────────┐                  │
+│                   │   Enemy Instances at runtime  │                  │
+│                   │  Beeliner / Sniper / Flanker  │                  │
+│                   │  Swarmer / Suicider           │                  │
+│                   └─────────────────────────────┘                  │
+│                                                                      │
+│  CanvasLayer overlays (added dynamically in _ready):                 │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │
+│  │ WaveHud  │ │ScoreHud  │ │EnemyRadar│ │DeathScr. │ │CtrlsHint │ │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
-`PropellerMovement` (components/propeller-movement.gd) is a **Node** (not part of the class hierarchy). It reads `Input.is_action_pressed(action)` each `_physics_process` frame and calls `body.apply_force(...)`. Enemies never need this node in their scenes.
+### Component Responsibilities
 
----
+| Component | Responsibility | Status for v3.5 |
+|-----------|----------------|-----------------|
+| `world.gd` | Scene orchestration, input handling, wave config, spawn_parent propagation | MODIFIED — restart logic, music wiring |
+| `ScoreManager` (autoload) | Kill scoring, combo chain, wave multiplier, leaderboard bridge | MODIFIED — reset() method |
+| `MusicManager` (autoload, NEW) | Track loading, category routing, cross-fade, wave-driven intensity | NEW |
+| `WaveManager` | Wave sequencing, enemy spawning, wave_completed / wave_cleared_waiting signals | MODIFIED — reset() method |
+| `EnemyShip` (base class) | State machine, _draw(), physics loop | MODIFIED — sprite/light toggle helper |
+| `[Type].tscn` (5 scenes) | Per-enemy visual + script composition | MODIFIED — add Sprite2D + GemLight |
+| `DeathScreen` | Score submission, leaderboard display | MODIFIED — add restart signal and button |
 
-## Recommended Architecture
+## Recommended Project Structure Changes
 
-### 1. State Machine — Lives in EnemyShip (base class)
+```
+graviton/
+├── components/
+│   ├── music-manager.gd        # NEW — autoload singleton
+│   ├── enemy-ship.gd           # MODIFIED — _apply_sprite() helper, _get_sprite_region()
+│   ├── score-manager.gd        # MODIFIED — reset() method
+│   ├── wave-manager.gd         # MODIFIED — reset() method
+│   └── ... (no other changes)
+├── prefabs/
+│   └── enemies/
+│       ├── beeliner/
+│       │   └── beeliner.tscn   # MODIFIED — add Sprite2D + GemLight (PointLight2D) nodes
+│       ├── sniper/
+│       │   └── sniper.tscn     # MODIFIED
+│       ├── flanker/
+│       │   └── flanker.tscn    # MODIFIED
+│       ├── swarmer/
+│       │   └── swarmer.tscn    # MODIFIED
+│       └── suicider/
+│           └── suicider.tscn   # MODIFIED
+│   └── ui/
+│       └── death-screen.gd     # MODIFIED — restart_requested signal + "Play Again" button
+├── music/
+│   ├── Gravimetric Dawn.mp3    # EXISTS — will be categorized as Ambient or Combat
+│   └── [additional tracks]/   # Player-provided; MusicManager auto-scans at startup
+├── ships_assests.png           # EXISTS — sprite source for all 5 enemy types
+└── project.godot               # MODIFIED — register MusicManager under [autoload]
+```
 
-Place the state machine enum and the virtual transition methods in `EnemyShip`, not in per-type scripts. Rationale:
+### Structure Rationale
 
-- All five enemy types share the same 8-state vocabulary; duplicating the enum across types creates drift.
-- Per-type scripts override only the methods relevant to their behaviour; unimplemented states fall through to no-op defaults in the base.
-- One state variable (`current_state`) is readable by WaveManager and debug overlays from a single known type.
+- **music-manager.gd in components/**: Consistent with score-manager.gd placement — all autoloads live in components/.
+- **Enemy scene modifications only**: No new enemy scenes are needed; Sprite2D and PointLight2D are added as child nodes to existing .tscn files in the editor.
+- **ships_assests.png stays at project root**: Atlas stays where it already exists; no import configuration changes beyond region rect setup at runtime.
 
+## Architectural Patterns
+
+### Pattern 1: MusicManager as Autoload Singleton
+
+**What:** MusicManager is registered as an autoload in project.godot (like ScoreManager). It owns two `AudioStreamPlayer` nodes internally — one for the currently playing track, one for the incoming track — and cross-fades between them using a `Tween`. It exposes a `set_intensity(level: MusicIntensity)` method that world.gd wires to WaveManager signals.
+
+**When to use (autoload, not a world.tscn node):**
+1. Music must survive game restart without restarting the app. An autoload persists across scene reloads; a world node gets destroyed.
+2. Any node in the game can call `MusicManager.set_intensity()` without signal plumbing.
+3. Consistent with the established ScoreManager pattern already in the project.
+
+**Trade-offs:** Autoload state persists if you ever add scene transitions. For this single-scene game that is only a benefit.
+
+**Signal wiring (in world.gd _ready):**
 ```gdscript
-class_name EnemyShip
-extends Ship
-
-enum State {
-    IDLING, SEEKING, LURKING, FIGHTING, FLEEING,
-    PATROLLING, EVADING, ESCORTING
-}
-
-var current_state: State = State.IDLING
-var target: Node2D = null          # usually the PlayerShip node
-var fire_timer: Timer              # created in _ready()
-
-func _ready() -> void:
-    fire_timer = Timer.new()
-    fire_timer.one_shot = false
-    add_child(fire_timer)
-    fire_timer.timeout.connect(_on_fire_timer_timeout)
-    super()                        # Ship._ready() connects body_entered + picker
-
-func _physics_process(delta: float) -> void:
-    _tick_state(delta)
-
-# --- Virtual hooks (override in concrete types) ---
-func _tick_state(_delta: float) -> void: pass
-func _enter_state(_new: State) -> void: pass
-func _exit_state(_old: State) -> void: pass
-
-func transition(new_state: State) -> void:
-    if new_state == current_state:
-        return
-    _exit_state(current_state)
-    current_state = new_state
-    _enter_state(current_state)
-
-# --- Fire hook (override in concrete types) ---
-func _on_fire_timer_timeout() -> void: pass
+# world.gd _ready():
+$WaveManager.wave_started.connect(MusicManager._on_wave_started)
+$WaveManager.all_waves_complete.connect(MusicManager._on_all_waves_complete)
 ```
 
-Per-type scripts (e.g. `prefabs/beeliner/beeliner.gd`) extend `EnemyShip`, override `_tick_state`, `_enter_state`, `_exit_state`, and `_on_fire_timer_timeout`. They do not touch the enum or the `transition()` dispatcher.
-
-### 2. Enemy Movement — apply_force Directly on Self
-
-`PropellerMovement` calls `body.apply_force(...)`. Enemies replicate this pattern inline in `_tick_state`, calling `apply_force(...)` on `self` (since `EnemyShip` IS a `RigidBody2D` via inheritance). No wrapper component is needed.
-
-Reference: `PropellerMovement._physics_process` (components/propeller-movement.gd line 12–24) — the full call is:
-
+**Category mapping driven by wave index:**
 ```gdscript
-body.apply_force(
-    profile.vector.rotated(body.rotation) * profile.thrust * delta * 100,
-    position.rotated(body.rotation)
-)
-```
+enum MusicIntensity { AMBIENT, COMBAT, HIGH_INTENSITY }
 
-Enemies call the equivalent directly:
-
-```gdscript
-# Inside EnemyShip._tick_state or an override:
-var dir = (target.global_position - global_position).normalized()
-apply_force(dir * thrust * delta, Vector2.ZERO)
-```
-
-`linear_damp` on the `RigidBody2D` node (ship-bfg-23 uses `1.0`) provides automatic deceleration; set per-enemy-type in the scene inspector.
-
-### 3. Detection — Area2D as Child Node in Scene
-
-Add a `DetectionArea` (Area2D + CircleShape2D) as a child of each enemy scene. Wire it in `EnemyShip._ready()` via `@export`:
-
-```gdscript
-@export var detection_area: Area2D
-
-func _ready() -> void:
-    if detection_area:
-        detection_area.body_entered.connect(_on_detection_body_entered)
-        detection_area.body_exited.connect(_on_detection_body_exited)
-    super()
-
-func _on_detection_body_entered(body: Node) -> void:
-    if body is PlayerShip:
-        target = body
-        transition(State.SEEKING)
-
-func _on_detection_body_exited(body: Node) -> void:
-    if body == target:
-        target = null
-        transition(State.IDLING)
-```
-
-Detection radius is set per enemy type in the inspector (CircleShape2D.radius). No shared constant needed.
-
-Collision layer/mask to use: Layer 1 is "Ship" (confirmed from world.gd comment line 30). The detection Area2D should mask layer 1 only.
-
-### 4. Simplified Fire — Timer + PackedScene Instantiation
-
-Do NOT use `MountableWeapon`. Enemy fire is:
-
-```gdscript
-@export var bullet_scene: PackedScene
-@export var fire_rate: float = 1.0
-@export var bullet_speed: float = 800.0
-@export var barrel: Node2D   # marker Node2D in scene
-
-func _on_fire_timer_timeout() -> void:
-    if not bullet_scene or not barrel or not target:
-        return
-    var b = bullet_scene.instantiate() as RigidBody2D
-    b.global_position = barrel.global_position
-    b.rotation = global_rotation
-    b.apply_central_impulse(
-        Vector2.from_angle(global_rotation) * bullet_speed
-    )
-    if "spawn_parent" in b:
-        b.spawn_parent = spawn_parent
-    if spawn_parent:
-        spawn_parent.call_deferred("add_child", b)
+func _on_wave_started(wave_number: int, _enemy_count: int, _label: String) -> void:
+    if wave_number <= 3:
+        set_intensity(MusicIntensity.AMBIENT)
+    elif wave_number <= 12:
+        set_intensity(MusicIntensity.COMBAT)
     else:
-        push_warning("EnemyShip %s: spawn_parent not set" % name)
+        set_intensity(MusicIntensity.HIGH_INTENSITY)
 ```
 
-`fire_timer.wait_time = fire_rate` is set in `_ready()` or when entering `FIGHTING` state. `fire_timer.start()` is called on state entry; `fire_timer.stop()` on state exit. The bullet scene can reuse existing `Bullet` (components/bullet.gd) with a `Damage` resource assigned — it already handles `body_entered` → `damage()`.
-
-### 5. WaveManager — Dedicated Child of World Root
-
-WaveManager is a new `Node` (not `Node2D`) added as a direct child of the world root in `world.tscn`. It is NOT inside `world.gd`'s script — it is a separate node with its own script `wave-manager.gd`.
-
-Rationale: `world.gd` is already a developer test harness. Embedding wave logic there couples unrelated concerns and makes it harder to replace the harness later.
-
-Scene tree position:
-
-```
-World (Node2D — world.gd)
-  ├─ ShipBFG23
-  ├─ Camera2D
-  ├─ ShipCamera
-  ├─ WaveManager    ← new Node, wave-manager.gd
-  └─ ...asteroids...
+**Auto-scan pattern:**
+```gdscript
+func _scan_music_folder() -> void:
+    var dir := DirAccess.open("res://music")
+    if not dir:
+        return
+    dir.list_dir_begin()
+    var file := dir.get_next()
+    while file != "":
+        if file.ends_with(".mp3") or file.ends_with(".ogg"):
+            var stream := load("res://music/" + file) as AudioStream
+            # Categorize by filename prefix: "ambient_", "combat_", "hi_"
+            # Uncategorized tracks default to COMBAT
+            _register_track(stream, file)
+        file = dir.get_next()
 ```
 
-WaveManager responsibilities:
-- Hold `@export var spawn_parent: Node` (set to World in inspector)
-- Hold wave definitions (Array of dicts or a WaveDefinition Resource)
-- Instantiate enemy scenes, call `setup_spawn_parent` equivalent, add to `spawn_parent`
-- Track living enemy count via `tree_exited` signal on each spawned enemy node
+**Cross-fade mechanics:** Two `AudioStreamPlayer` children (player_a, player_b). On track switch, tween player_a volume from 0dB to -80dB over 2 seconds while tween player_b from -80dB to 0dB. Swap references after fade. This pattern requires no external audio middleware.
 
-Integration with existing `setup_spawn_parent` pattern: `world.gd` currently has a local `setup_spawn_parent` function (lines 47–51). WaveManager must replicate this walk or call it. The cleanest approach is to move `setup_spawn_parent` to an autoload utility, or have WaveManager call `get_parent().setup_spawn_parent(enemy)` since world.gd is its parent. Do not inline duplicate logic.
+### Pattern 2: Sprite Sheet Slicing via AtlasTexture in _ready()
 
-### 6. spawn_parent Integration Points
+**What:** Each enemy's `Sprite2D` node is configured at runtime (not in the editor) by a shared helper in `enemy-ship.gd` that creates an `AtlasTexture` pointing at `ships_assests.png` with the correct `region` Rect2 for that enemy type. The `Polygon2D` node is hidden (not removed) when sprite loads, so the fallback path is a one-line re-show.
 
-`Body.die()` (body.gd lines 32–57) requires `spawn_parent` to be set on the dying node to place the death explosion scene. `Body.add_successor()` (lines 65–80) also requires it. `ItemDropper.drop()` (item-dropper.gd lines 7–23) requires it on the item node being spawned.
+**Visual mapping confirmed from ships_assests.png:**
+```
+ENM-07 (Beeliner)  — leftmost fighter, green gem
+ENM-08 (Sniper)    — stealth cruiser, purple gem
+ENM-09 (Flanker)   — industrial transport, orange gem
+ENM-10 (Swarmer)   — scout craft, yellow/cream gem
+ENM-11 (Suicider)  — defense node, red sphere
+```
 
-The propagation mechanism already exists: `Body._propagate_spawn_parent(node)` (body.gd lines 59–63) recursively sets `spawn_parent` on all children that have the property. This is called in `add_successor` (line 76) and in `MountPoint._slot_item_adding` (mount-point.gd line 108).
+Region rects must be measured from the PNG in the editor. The sprite sheet has label text ("ENM-07" etc.) printed over the ships — crop regions must exclude that text band at the bottom of each sprite.
 
-**Required integration:** WaveManager must call `_propagate_spawn_parent`-equivalent after instantiating each enemy. The simplest safe approach mirrors world.gd lines 47–51:
+**Fallback behavior:**
+```gdscript
+# In enemy-ship.gd:
+func _apply_sprite(sprite: Sprite2D, polygon: Polygon2D) -> void:
+    var region := _get_sprite_region()   # returns Rect2 or Rect2() for "no sprite"
+    if region == Rect2():
+        polygon.visible = true
+        sprite.visible = false
+        return
+    var atlas := AtlasTexture.new()
+    atlas.atlas = preload("res://ships_assests.png")
+    atlas.region = region
+    sprite.texture = atlas
+    sprite.visible = true
+    polygon.visible = false
+
+# Override in each concrete type, or use a dictionary keyed by class name:
+func _get_sprite_region() -> Rect2:
+    return Rect2()   # base returns empty = fallback; concrete types return real rects
+```
+
+**Trade-offs:** Region rects require manual measurement from the PNG and iterative adjustment. This is a one-time cost. The alternative of slicing the sheet into 5 separate PNGs is more files to maintain with no runtime benefit.
+
+### Pattern 3: Gem Glow via PointLight2D Child Node
+
+**What:** Each enemy `.tscn` gets a `PointLight2D` child named `GemLight`. Its `color` is set to the gem's color per type. A looping pulse tween runs in `_ready()` that oscillates `energy` between 0.5 and 1.5 on a 1.5-second cycle.
+
+**Key concern:** `PointLight2D` only illuminates nodes that have a normal map and are on the same CanvasLayer. For enemy ship sprites (Sprite2D with no normal map) the light will produce a simple additive glow overlay — this is acceptable as a "gem pulse" effect. Confirm `blend_mode` is set to `Mix` to prevent the black background from being overlit.
+
+**Placement:** `GemLight` must be positioned at the gem's local offset within the sprite (varies per enemy type). This offset is set in the scene file after sprite region rects are confirmed.
+
+**The Sprite2D must be visible before GemLight is enabled** — this is why sprite application (Pattern 2) runs in `EnemyShip._ready()` before the light tween starts.
 
 ```gdscript
-# In wave-manager.gd, after enemy = model.instantiate():
-_setup_spawn_parent(enemy)
-spawn_parent.add_child(enemy)
-
-func _setup_spawn_parent(node: Node) -> void:
-    if "spawn_parent" in node:
-        node.spawn_parent = spawn_parent
-    for child in node.get_children():
-        _setup_spawn_parent(child)
+# In enemy-ship.gd _ready(), after _apply_sprite():
+var gem_light: PointLight2D = get_node_or_null("GemLight")
+if gem_light:
+    gem_light.color = _get_gem_color()   # per-type constant
+    var tween := create_tween().set_loops()
+    tween.tween_property(gem_light, "energy", 1.5, 0.75)
+    tween.tween_property(gem_light, "energy", 0.5, 0.75)
 ```
 
-### 7. Item Drop Integration
+### Pattern 4: Game Restart Without App Reload
 
-`Body.die()` calls `item_dropper.drop()` at line 55. This already works for any `Body` subclass. Enemy scenes need an `ItemDropper` node as a child (same pattern as existing ships/asteroids). No code changes needed — set `@export var item_dropper: ItemDropper` in the scene inspector. `ItemDropper.drop()` uses its own `spawn_parent` property; `_propagate_spawn_parent` will set it if the `ItemDropper` node has the property, which it does (item-dropper.gd line 4).
+**What:** The death screen emits a `restart_requested` signal. `world.gd` receives it and calls `restart_game()` — an imperative reset function that clears mutable state without `get_tree().reload_current_scene()`.
 
----
+**Why not reload_current_scene:** That call destroys and recreates all autoloads' child nodes (Timer, AudioStreamPlayer). ScoreManager and MusicManager would lose state and connected signals. Manual reset is the correct approach for a single-scene game with stateful autoloads.
 
-## Component Boundaries
+**Reset checklist — what must be reset and how:**
 
-| Component | File | New / Modified | Responsibility |
-|-----------|------|---------------|----------------|
-| EnemyShip | components/enemy-ship.gd | **Modified** | State enum, state machine scaffold, detection wiring, fire_timer, movement helpers |
-| Beeliner | prefabs/beeliner/beeliner.gd | **New** | Override _tick_state for charge + fire behaviour |
-| Flanker | prefabs/flanker/flanker.gd | **New** | Override _tick_state for orbit + engage behaviour |
-| Sniper | prefabs/sniper/sniper.gd | **New** | Override _tick_state for standoff + flee behaviour |
-| Swarmer | prefabs/swarmer/swarmer.gd | **New** | Override _tick_state for group charge behaviour |
-| Suicider | prefabs/suicider/suicider.gd | **New** | Override _tick_state for ramming + die() on contact |
-| WaveManager | world/wave-manager.gd (or similar) | **New** | Wave timing, enemy instantiation, spawn_parent setup |
-| world.gd | world.gd | **Minor modification** | Add WaveManager child node; keep existing harness untouched |
+| Owner | What to Reset | Mechanism |
+|-------|--------------|-----------|
+| `world.gd` | `_wave_clear_pending` flag | Set to `false` |
+| `world.gd` | Player ship | `queue_free()` old instance, re-instantiate from `ship_model`, re-run `setup_spawn_parent`, re-mount weapons, reconnect `died` signal |
+| `world.gd` | All enemy nodes | `get_tree().get_nodes_in_group("enemy")` → `queue_free()` each |
+| `WaveManager` | `_current_wave_index`, `_enemies_alive`, `_wave_total` | Add public `reset()` method |
+| `ScoreManager` | `total_score`, `kill_count`, `wave_multiplier`, `combo_count` | Add public `reset()` method |
+| `ScoreManager` | `_player` reference | Call `_find_player()` deferred after ship re-added |
+| `MusicManager` | Music intensity | Call `set_intensity(MusicIntensity.AMBIENT)` |
+| `DeathScreen` | Hide self | `visible = false` at start of `restart_game()` |
+| Physics | Pause state | `get_tree().paused = false` must be first action |
 
----
-
-## Build Order (Dependency-Respecting)
-
-1. **EnemyShip base class** — all concrete types depend on it. Must compile before any prefab script is loaded.
-2. **Detection Area wiring in EnemyShip** — required before any type that uses SEEKING/FLEEING states.
-3. **Simplified fire logic in EnemyShip** — required before any type that uses FIGHTING state.
-4. **Beeliner** — simplest type (SEEKING → FIGHTING only); validates base class and fire path end-to-end.
-5. **Sniper** — introduces FLEEING; validates state reversal.
-6. **Flanker** — introduces LURKING; validates multi-phase state sequence.
-7. **Swarmer** — validates that N enemies can coexist without interference (no shared state).
-8. **Suicider** — introduces contact-triggered `die()` override; validates that Body death pipeline still fires item drops.
-9. **WaveManager** — depends on all enemy types being loadable as PackedScenes; build last.
-
----
-
-## Data Flow: Enemy Combat Cycle
-
-```
-WaveManager.spawn_wave()
-  → instantiate EnemyShip subclass
-  → _setup_spawn_parent(enemy)
-  → spawn_parent.add_child(enemy)
-       ↓
-EnemyShip._ready()
-  → Ship._ready() → body_entered.connect + picker.body_entered.connect
-  → detection_area.body_entered.connect
-  → fire_timer created
-       ↓
-EnemyShip._physics_process()
-  → _tick_state(delta)      ← overridden per type
-       ├─ SEEKING: apply_force toward target.global_position
-       ├─ FIGHTING: (fire_timer handles bullets)
-       └─ FLEEING: apply_force away from target.global_position
-       ↓
-fire_timer.timeout → _on_fire_timer_timeout()
-  → bullet_scene.instantiate()
-  → spawn_parent.call_deferred("add_child", bullet)
-       ↓
-Bullet.collision(body)
-  → body.damage(attack)      ← existing pipeline, no changes
-       ↓
-Body.die()
-  → death scene instantiated  ← existing pipeline
-  → item_dropper.drop()       ← existing pipeline
-  → queue_free()
-       ↓
-WaveManager._on_enemy_tree_exited()
-  → decrement living_count
-  → if living_count == 0: start_next_wave()
+**Ordering matters:**
+```gdscript
+func restart_game() -> void:
+    get_tree().paused = false              # 1. Unpause (required before queue_free works)
+    death_screen.visible = false           # 2. Hide overlay
+    _clear_world()                         # 3. queue_free enemies + bullets
+    $WaveManager.reset()                   # 4. Reset wave state
+    ScoreManager.reset()                   # 5. Reset score state
+    MusicManager.set_intensity(            # 6. Reset music
+        MusicManager.MusicIntensity.AMBIENT)
+    _respawn_player()                      # 7. Re-add ship + weapons
+    # 8. WaveManager._find_player() runs deferred (already in _ready pattern)
+    # 9. ScoreManager._find_player() runs deferred (already in _ready pattern)
+    spawn_asteroids(10)                    # 10. Optional: refresh asteroid field
 ```
 
----
+**Death screen modification:** Add a "Play Again" `Button` to the `LeaderboardSection` layout (visible after score submission). Emit `restart_requested` from `death-screen.gd`. Connect in `world.gd _ready()` alongside the existing `$ShipBFG23.died` connection.
 
-## Anti-Patterns to Avoid
+## Data Flow
 
-### Anti-Pattern 1: State Machine in Per-Type Scripts Only
-**What:** Defining the `State` enum in `beeliner.gd`, `flanker.gd` etc. separately.
-**Why bad:** WaveManager and any future debug UI cannot query `enemy.current_state` without casting to a concrete type. Adding a new state requires editing every file.
-**Instead:** Enum and `current_state` live in `EnemyShip`. Per-type scripts override virtual methods.
+### Music Intensity Transitions
 
-### Anti-Pattern 2: Reusing MountableWeapon for Enemy Fire
-**What:** Giving enemies a weapon via the MountPoint/inventory system.
-**Why bad:** Requires full inventory, slot signals, and drag-drop UI scaffolding. Couples enemy balancing to the player's weapon parameters. PROJECT.md explicitly calls this out as a decision (Key Decisions, row 7).
-**Instead:** Inline timer + PackedScene instantiation in EnemyShip as described above.
+```
+WaveManager.wave_started(wave_number, enemy_count, label)
+    ↓ (connected in world.gd _ready)
+MusicManager._on_wave_started(wave_number)
+    ↓
+MusicManager.set_intensity(AMBIENT | COMBAT | HIGH_INTENSITY)
+    ↓
+_select_random_track_from_category()
+    ↓
+_cross_fade(new_track)
+    ↓ (Tween, 2 seconds)
+player_a.volume_db tweens to -80   (current track fades out)
+player_b.volume_db tweens to 0     (new track fades in)
+swap player_a / player_b references
+```
 
-### Anti-Pattern 3: Embedding WaveManager Logic in world.gd
-**What:** Adding wave state and spawning loops inside `world.gd`.
-**Why bad:** world.gd is an acknowledged test harness (PROJECT.md Context paragraph). It already has 167 lines of keyboard debug input. Adding wave logic bloats it and makes the harness unremovable.
-**Instead:** Dedicated `WaveManager` node, separate script, exported `spawn_parent`.
+### Enemy Sprite Application
 
-### Anti-Pattern 4: Polling for Player Reference in _physics_process
-**What:** Every enemy doing `get_tree().get_nodes_in_group("player")[0]` each frame.
-**Why bad:** O(N) tree walk per enemy per physics frame. 10 enemies = 10 tree walks at 60Hz.
-**Instead:** WaveManager injects `target` reference at spawn time: `enemy.target = player_ship_node`. Or EnemyShip caches via `detection_area.body_entered`.
+```
+enemy.tscn instantiated (Beeliner / Sniper / Flanker / Swarmer / Suicider)
+    ↓
+ConcreteType._ready() calls super() → EnemyShip._ready()
+    ↓
+_apply_sprite($Sprite2D, $Shape)
+    ↓ success path (region != Rect2())
+AtlasTexture.region set
+Sprite2D.visible = true
+Polygon2D.visible = false
+_start_gem_pulse($GemLight)
+    ↓ fallback path (region == Rect2())
+Polygon2D.visible = true (default, no change)
+Sprite2D.visible = false
+```
 
-### Anti-Pattern 5: Forgetting spawn_parent on Enemy Death Scenes
-**What:** Enemy instantiated without `_propagate_spawn_parent` walk.
-**Why bad:** `Body.die()` line 46 calls `spawn_parent.add_child(node)` where `spawn_parent` may be null, triggering the `push_warning` on line 48 and orphaning the explosion node (or crashing).
-**Instead:** WaveManager always calls `_setup_spawn_parent(enemy)` before `spawn_parent.add_child(enemy)`.
+### Restart Data Flow
 
----
+```
+Player ship dies → Body.die() → died.emit()
+    ↓
+world.gd._on_player_died()
+    get_tree().paused = true
+    death_screen.show_death_screen(ScoreManager.total_score)
 
-## Integration Points with Existing Code (File + Line Level)
+[Player submits name, views leaderboard, clicks "Play Again"]
 
-| Integration | File | Lines | What Changes |
-|-------------|------|-------|-------------|
-| EnemyShip builds on Ship._ready() | components/ship.gd | 16–19 | Call `super()` in EnemyShip._ready() — already expected by Ship |
-| EnemyShip inherits damage pipeline | components/body.gd | 19–30 | No change — `damage()` and `die()` work on any Body subclass |
-| spawn_parent propagation | components/body.gd | 59–63 | WaveManager replicates this walk for enemies it spawns |
-| item_dropper called in die() | components/body.gd | 55 | No change — EnemyShip scenes need an ItemDropper child node configured in inspector |
-| Bullet reuse for enemy projectiles | components/bullet.gd | 1–19 | No change — assign a Damage resource in the scene, it already calls body.damage() |
-| Ship._on_body_entered kinetic damage | components/ship.gd | 37–41 | No change — PlayerShip takes kinetic damage from enemy collisions automatically |
-| Ship.picker_body_entered item pickup | components/ship.gd | 43–58 | No change — enemies do NOT need picker (set can_pick_coin = false; omit picker Area2D or leave disconnected) |
-| world.gd setup_spawn_parent | world.gd | 47–51 | WaveManager calls same logic; consider extracting to shared utility in later cleanup |
-| world.gd _ready() | world.gd | 39–45 | Add `$WaveManager.player = $ShipBFG23` after existing setup lines |
-| MountableBody.Action enum | components/mountable-body.gd | 4–11 | No change needed — enemies do not use do()/mount_weapon() unless they have weapons via MountPoint |
+DeathScreen.restart_requested.emit()
+    ↓
+world.gd.restart_game()
+    ↓
+[Full reset sequence per Pattern 4 checklist]
+    ↓
+Game resumes at Wave 1, score 0, Ambient music
+```
 
----
+### Wave-to-Music Intensity Mapping
 
-## Scalability Notes
+```
+Wave 1–3  (Suiciders, Beelines, Flankers)    → AMBIENT
+Wave 4–12 (Mixed combat escalation)          → COMBAT
+Wave 13+  (Full assaults, final wave)        → HIGH_INTENSITY
+all_waves_complete signal                    → AMBIENT (victory)
+player died (via world.gd._on_player_died)   → MusicManager.stop() or AMBIENT fade
+```
 
-| Concern | At 5 enemies | At 50 enemies | Mitigation |
-|---------|-------------|--------------|------------|
-| Physics process overhead | Negligible | Moderate | State machine avoids per-frame target lookups; apply_force is O(1) per body |
-| Detection area overlap events | Fine | Fine | Signal-driven, not polled |
-| Bullet instantiation | Fine | Moderate | Reuse Bullet class; consider object pooling at v3.0 |
-| WaveManager enemy tracking | Fine | Fine | Single Array counter; tree_exited signal is O(1) |
+## Integration Points
 
----
+### New vs. Modified Components
+
+| Component | Status | Touch Points |
+|-----------|--------|--------------|
+| `components/music-manager.gd` | NEW | Registered in project.godot; connected to WaveManager in world.gd |
+| `project.godot` | MODIFIED | Add `MusicManager="*res://components/music-manager.gd"` to [autoload] section |
+| `world.gd` | MODIFIED | Connect MusicManager to WaveManager signals; add `restart_game()`; connect `death_screen.restart_requested` |
+| `components/score-manager.gd` | MODIFIED | Add public `reset()` method; clear all state vars |
+| `components/wave-manager.gd` | MODIFIED | Add public `reset()` method; reset `_current_wave_index`, `_enemies_alive`, `_wave_total` |
+| `components/enemy-ship.gd` | MODIFIED | Add `_apply_sprite()` helper and `_get_sprite_region()` / `_get_gem_color()` virtual methods |
+| `prefabs/enemies/beeliner/beeliner.tscn` | MODIFIED | Add Sprite2D node + GemLight (PointLight2D) as children |
+| `prefabs/enemies/sniper/sniper.tscn` | MODIFIED | Add Sprite2D node + GemLight (PointLight2D) as children |
+| `prefabs/enemies/flanker/flanker.tscn` | MODIFIED | Add Sprite2D node + GemLight (PointLight2D) as children |
+| `prefabs/enemies/swarmer/swarmer.tscn` | MODIFIED | Add Sprite2D node + GemLight (PointLight2D) as children |
+| `prefabs/enemies/suicider/suicider.tscn` | MODIFIED | Add Sprite2D node + GemLight (PointLight2D) as children |
+| `prefabs/ui/death-screen.gd` | MODIFIED | Add `restart_requested` signal; add "Play Again" Button to leaderboard section |
+
+### Node References in world.gd After Restart
+
+After `restart_game()`, these member vars and node paths need handling:
+
+| Reference | How to Handle |
+|-----------|--------------|
+| `death_screen` | Keep same instance — just hide it, no re-instantiation needed |
+| `_wave_hud` | Keep same instance — already connected to WaveManager signals which persist |
+| `_controls_hint` | Keep same instance — stateless, no action needed |
+| `$ShipBFG23` (node path) | Re-instantiate: queue_free old node, add new from ship_model, run setup_spawn_parent, mount weapons, reconnect died signal |
+| `$WaveManager` | Keep node — call `reset()`, player lookup re-runs via deferred `_find_player()` |
+| `ScoreManager._player` | Re-runs `_find_player()` deferred after new ship added to tree |
+
+### Signal Wiring Summary
+
+```gdscript
+# In world.gd _ready() — additions for v3.5:
+$WaveManager.wave_started.connect(MusicManager._on_wave_started)           # NEW
+$WaveManager.all_waves_complete.connect(MusicManager._on_all_waves_complete)  # NEW
+death_screen.restart_requested.connect(restart_game)                        # NEW
+
+# In music-manager.gd _ready():
+# No external connections — world.gd pushes intensity via set_intensity()
+# Internal: two AudioStreamPlayer children, Tween for cross-fade
+```
+
+## Recommended Build Order for Phases
+
+Based on feature dependencies, the correct build order is:
+
+**Phase 1: Enemy Sprites (SPR-01 to SPR-05)**
+
+Build this first because:
+- No dependencies on other new v3.5 features.
+- Establishes which child nodes exist in enemy .tscn files (Sprite2D, GemLight).
+- SPR-04 (gem glow) depends on SPR-01 (sprite visible) — both are in this phase.
+- Region rect measurement is a one-time manual step; get it done early so it doesn't block other work.
+- Fallback path (SPR-03) must be verified before any further work on enemy scenes.
+
+**Phase 2: Music System (MUS-01 to MUS-05)**
+
+Build second because:
+- Independent of sprite work — no shared nodes.
+- Requires WaveManager signals (already exist and are stable).
+- Requires a new autoload registration (project.godot change).
+- Cross-fade complexity justifies its own focused phase.
+- MusicManager.reset() must exist before the restart phase can call it.
+
+**Phase 3: Game Restart (UI-05)**
+
+Build last because:
+- Requires ScoreManager.reset() — must be written in Phase 2 prep or Phase 3.
+- Requires WaveManager.reset() — same.
+- Requires MusicManager.set_intensity() to exist (Phase 2).
+- DeathScreen needs a new button/signal that should be tested against the complete feature set.
+- All other v3.5 features must be working so restart is validated against the full game state.
+
+## Anti-Patterns
+
+### Anti-Pattern 1: Placing MusicManager as a Node in world.tscn
+
+**What people do:** Add an AudioStreamPlayer or music controller node directly to the world scene.
+
+**Why it's wrong:** When `restart_game()` clears the world or if scene reloading is ever added, any scene-owned music node loses state or gets queue_freed. The autoload pattern is already established by ScoreManager.
+
+**Do this instead:** Register `music-manager.gd` as an autoload in project.godot. It owns its AudioStreamPlayer children directly, persists for the entire app lifetime, and can be called from anywhere.
+
+### Anti-Pattern 2: Removing Polygon2D Nodes from Enemy Scenes
+
+**What people do:** Delete the Polygon2D node when adding Sprite2D, assuming it "won't be needed."
+
+**Why it's wrong:** SPR-03 explicitly requires fallback to Polygon2D when the sprite is unavailable. The `_draw()` method in `enemy-ship.gd` also draws debug arcs, state labels, and direction arrows — these are separate from the Polygon2D shape node and remain active in both sprite and fallback paths.
+
+**Do this instead:** Keep the Polygon2D. Control visibility: `polygon.visible = false` when sprite loads successfully, `polygon.visible = true` in the fallback path.
+
+### Anti-Pattern 3: Using reload_current_scene() for Restart
+
+**What people do:** Call `get_tree().reload_current_scene()` as the restart mechanism because it is simple.
+
+**Why it's wrong:** Autoloads (ScoreManager, MusicManager) will have their child Timers and AudioStreamPlayers recreated by their own `_ready()`, but signals connected to world.gd nodes become dangling. The ScoreManager `_player` reference will be stale. Cross-fade Tweens in MusicManager will be orphaned.
+
+**Do this instead:** Implement `restart_game()` in world.gd as an imperative reset per the Pattern 4 checklist. Explicit resets are debuggable; reload is opaque.
+
+### Anti-Pattern 4: Storing AtlasTexture Region Rects in .tscn Files
+
+**What people do:** Pre-configure AtlasTexture on each Sprite2D node in the Godot editor and save it into the .tscn file.
+
+**Why it's wrong:** The region rects in ships_assests.png need iterative tuning during development (label text overlaps ship art). Storing them in 5 separate .tscn files means 5 files to update per adjustment.
+
+**Do this instead:** Hardcode region rects as constants in enemy-ship.gd and apply at runtime in `_apply_sprite()`. One file to update when regions need adjustment.
+
+### Anti-Pattern 5: Forgetting to Unpause Before queue_free in Restart
+
+**What people do:** Call `queue_free()` on enemies while `get_tree().paused = true`, then unpause after.
+
+**Why it's wrong:** In Godot 4, paused nodes with `PROCESS_MODE_PAUSABLE` (the default) do not process deferred calls. `queue_free()` is deferred. Enemies will not actually be freed until after unpause, causing a frame flash of dead enemies in the revived world.
+
+**Do this instead:** `get_tree().paused = false` is the very first line of `restart_game()`, before any queue_free calls.
 
 ## Sources
 
-All findings derived from direct source inspection:
-- `components/body.gd` — health/death/spawn_parent pipeline
-- `components/mountable-body.gd` — Action enum, do() routing
-- `components/ship.gd` — Ship._ready(), picker, inventory
-- `components/enemy-ship.gd` — confirmed stub (2 lines only)
-- `components/player-ship.gd` — confirmed stub (1 line only)
-- `components/propeller-movement.gd` — movement pattern to replicate
-- `components/mountable-weapon.gd` — fire pattern to simplify
-- `components/bullet.gd` — reusable projectile
-- `components/item-dropper.gd` — drop pipeline, spawn_parent usage
-- `components/mount-point.gd` — plug/unplug, spawn_parent
-- `components/explosion.gd` — death scene pattern
-- `world.gd` — setup_spawn_parent, spawn pattern, scene tree layout
-- `prefabs/ship-bfg-23/ship-bfg-23.tscn` — confirmed node structure for reference
-- `.planning/PROJECT.md` — confirmed scope, key decisions, constraints
+- Direct inspection of `world.gd` (397 lines, Godot 4.6.2)
+- Direct inspection of `components/score-manager.gd`
+- Direct inspection of `components/wave-manager.gd`
+- Direct inspection of `components/enemy-ship.gd`
+- Direct inspection of `components/beeliner.gd`, `components/sniper.gd`
+- Direct inspection of `prefabs/enemies/beeliner/beeliner.tscn`
+- Direct inspection of `prefabs/enemies/sniper/sniper.tscn` (partial)
+- Direct inspection of `prefabs/ui/death-screen.gd`
+- Direct inspection of `project.godot` — confirmed autoload section structure
+- Direct inspection of `ships_assests.png` — confirmed 5 sprite positions and gem colors
+- `.planning/PROJECT.md` — active requirements UI-05, MUS-01 to MUS-05, SPR-01 to SPR-05
+
+---
+*Architecture research for: Graviton v3.5 — MusicManager, enemy sprites, game restart integration*
+*Researched: 2026-04-16*

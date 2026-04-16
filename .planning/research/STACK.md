@@ -1,208 +1,391 @@
-# Technology Stack: Enemy AI
+# Stack Research: Graviton v3.5 Juice & Polish
 
-**Project:** Graviton v2.0 Enemies
-**Researched:** 2026-04-11
-**Scope:** State-machine enemy AI, simplified fire logic, wave spawning — integrated into existing RigidBody2D ship hierarchy
+**Project:** Graviton v3.5 — Dynamic music, enemy sprites, gem glow, game restart
+**Researched:** 2026-04-16
+**Confidence:** HIGH (all APIs verified against Godot 4.6 docs via Context7 + official sources)
+**Scope:** Only new feature APIs — existing stack (RigidBody2D, MountPoint, WaveManager, ScoreManager) is not re-researched.
 
 ---
 
-## Recommended Stack
+## Feature 1: Dynamic Background Music with Cross-Fade
 
-### State Machine Implementation
+### Core API
 
-| Technology | Purpose | Why |
-|------------|---------|-----|
-| Enum + `match` (inline, single-file) | States for simple enemies (Beeliner, Suicider) | Zero overhead, readable, idiomatic for enemies with 2-3 states |
-| Node-based StateMachine + State children | States for complex enemies (Flanker, Sniper, Swarmer) | Isolates per-state logic into separate nodes; each state's `physics_update()` is called by the machine; avoids a giant `match` block |
-| GDScript `class_name State extends Node` | Base class for all states | Gives `enter()`, `exit()`, `physics_update(delta)` hooks; states reference `owner` (the EnemyShip) for all character properties |
+| Class | Version | Purpose | Why |
+|-------|---------|---------|-----|
+| `AudioStreamPlayer` | 4.x built-in | Non-positional background music playback | Use over `AudioStreamPlayer2D` — music has no world position, `AudioStreamPlayer` has no max_distance falloff |
+| `Tween` (via `create_tween()`) | 4.x built-in | Animate `volume_db` for cross-fade | Existing codebase already uses create_tween() in ScoreManager._spawn_score_label() — consistent pattern |
 
-**Verdict: Use node-based StateMachine as the default.** The project already has 8 planned states and 5 enemy types. A flat enum-per-enemy would duplicate the 8-branch `match` tree in every concrete class. Node-based keeps each state file small, introspectable in the editor, and independently testable.
+### Pattern: Two Players, Volume Tween
 
-**Pattern (verified: GDQuest, multiple community tutorials):**
+The standard Godot 4 cross-fade uses two `AudioStreamPlayer` nodes: one active track fades out while the other fades in simultaneously.
 
 ```gdscript
-# state.gd
-class_name State
-extends Node
-
-signal finished(next_state_path: String)
-
-func enter() -> void: pass
-func exit() -> void: pass
-func physics_update(_delta: float) -> void: pass
-
-# state_machine.gd
-class_name StateMachine
-extends Node
-
-@export var initial_state: State
-var current_state: State
+# MusicManager autoload — two players for overlap during transition
+var _player_a: AudioStreamPlayer
+var _player_b: AudioStreamPlayer
+var _active: AudioStreamPlayer   # currently audible player
+var _inactive: AudioStreamPlayer # incoming player
 
 func _ready() -> void:
-    for child in get_children():
-        if child is State:
-            child.state_machine = self
-    current_state = initial_state
-    current_state.enter()
+    _player_a = AudioStreamPlayer.new()
+    _player_b = AudioStreamPlayer.new()
+    # PROCESS_MODE_ALWAYS so music continues while game is paused
+    # (world.gd sets get_tree().paused = true on player death)
+    _player_a.process_mode = Node.PROCESS_MODE_ALWAYS
+    _player_b.process_mode = Node.PROCESS_MODE_ALWAYS
+    add_child(_player_a)
+    add_child(_player_b)
+    _active = _player_a
+    _inactive = _player_b
 
-func transition_to(target_state_path: String) -> void:
-    if current_state.name == target_state_path:
-        return
-    current_state.exit()
-    current_state = get_node(target_state_path)
-    current_state.enter()
+func crossfade_to(stream: AudioStream, duration: float = 2.0) -> void:
+    if _active.stream == stream and _active.playing:
+        return  # already playing this track
 
-func _physics_process(delta: float) -> void:
-    current_state.physics_update(delta)
+    _inactive.stream = stream
+    _inactive.volume_db = -80.0
+    _inactive.play()
+
+    var tw := create_tween()
+    tw.set_parallel(true)
+    # Fade out active
+    tw.tween_property(_active, "volume_db", -80.0, duration)\
+      .set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+    # Fade in incoming
+    tw.tween_property(_inactive, "volume_db", 0.0, duration)\
+      .set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+    # After fade, stop the old player to free its stream reference
+    tw.chain().tween_callback(func(): _active.stop())
+
+    # Swap references
+    var tmp := _active
+    _active = _inactive
+    _inactive = tmp
 ```
 
-States access the owning EnemyShip via `owner` (the root node of the scene). Store all tunable values (`chase_range`, `fire_range`, `max_speed`) as `@export` vars on EnemyShip, not inside states.
+**Critical note on `volume_db = -80.0`:** Do NOT tween to/from `-INF` (linear silence). Godot's `-INF` dB is a sentinel for fully muted, not a smooth fade endpoint. Use `-80.0 dB` as the silence floor — inaudible to the human ear and safe for tween interpolation. (Confirmed: Godot forum thread, May 2025.)
 
-Do NOT mutate the scene tree (add/remove nodes) inside `_physics_process`. Use `call_deferred` if a state needs to do so.
+**Critical note on `process_mode`:** `world.gd` sets `get_tree().paused = true` when the player dies. The death screen is shown while paused. Music nodes must be `PROCESS_MODE_ALWAYS` to keep playing during that pause. AudioStreamPlayer defaults to `PROCESS_MODE_PAUSABLE`.
 
----
-
-### Movement: Steering Behaviors over apply_force
-
-| Technology | Purpose | Why |
-|------------|---------|-----|
-| `apply_central_force()` on `RigidBody2D` | Seek / flee / arrive per physics frame | Matches how PropellerMovement already drives the player ship — consistent with existing architecture |
-| Steering formulas (seek, flee, arrive) | Translate AI intent to physics forces | Pure vector math; no external library needed for 5 enemy types |
-
-NavigationAgent2D is explicitly NOT recommended for this project. Reasons:
-
-1. NavigationAgent2D requires a baked `NavigationRegion2D` covering the map. Graviton's world is unbounded open space (100,000×100,000 background). There is no navigable polygon, no tilemap, no walls. Setting up a nav mesh for open space adds complexity with no benefit.
-2. NavigationAgent2D is designed for CharacterBody2D workflows (move_and_slide). With RigidBody2D you would compute the next-path-point and then translate it to an apply_force call yourself — the agent only saves the pathfinding step, which isn't needed in open space.
-3. Godot 4.5 introduced a regression in NavigationRegion2D (issue #110686: "more than 2 edges tried to occupy the same map rasterization space") that was targeted for 4.6 but had incomplete fixes. Avoiding NavigationAgent2D eliminates this risk entirely.
-
-**Steering formulas to implement directly:**
+### Music Category Selection
 
 ```gdscript
-# Seek: accelerate toward target
-func seek(target_pos: Vector2, max_speed: float, max_force: float) -> void:
-    var desired = (target_pos - global_position).normalized() * max_speed
-    var steering = desired - linear_velocity
-    apply_central_force(steering.limit_length(max_force))
+# In MusicManager
+enum Category { AMBIENT, COMBAT, HIGH_INTENSITY }
 
-# Flee: same but reversed direction
-func flee(threat_pos: Vector2, max_speed: float, max_force: float) -> void:
-    var desired = (global_position - threat_pos).normalized() * max_speed
-    var steering = desired - linear_velocity
-    apply_central_force(steering.limit_length(max_force))
+var _tracks: Dictionary = {
+    Category.AMBIENT: [],
+    Category.COMBAT: [],
+    Category.HIGH_INTENSITY: []
+}
 
-# Arrive: seek with deceleration radius
-func arrive(target_pos: Vector2, slow_radius: float, max_speed: float, max_force: float) -> void:
-    var to_target = target_pos - global_position
-    var dist = to_target.length()
-    var speed = max_speed if dist > slow_radius else max_speed * (dist / slow_radius)
-    var desired = to_target.normalized() * speed
-    var steering = desired - linear_velocity
-    apply_central_force(steering.limit_length(max_force))
+func scan_music_folder() -> void:
+    var dir := DirAccess.open("res://music")
+    if not dir:
+        push_warning("[MusicManager] Cannot open res://music")
+        return
+    for file in dir.get_files():
+        # Strip .remap suffix added by Godot export pipeline
+        var clean := file.replace(".remap", "")
+        if not (clean.ends_with(".mp3") or clean.ends_with(".ogg") or clean.ends_with(".wav")):
+            continue
+        var path := "res://music/" + clean
+        var stream := load(path) as AudioStream
+        if not stream:
+            continue
+        # Categorize by filename prefix: "ambient_", "combat_", "hi_"
+        if clean.begins_with("ambient"):
+            _tracks[Category.AMBIENT].append(stream)
+        elif clean.begins_with("combat"):
+            _tracks[Category.COMBAT].append(stream)
+        elif clean.begins_with("hi"):
+            _tracks[Category.HIGH_INTENSITY].append(stream)
+        else:
+            _tracks[Category.AMBIENT].append(stream)  # default bucket
 ```
 
-Call these inside each state's `physics_update(delta)`. The `max_speed` limit is enforced by setting `max_linear_velocity` on the RigidBody2D in the scene (same constant pattern as player ship).
+**DirAccess.get_files()** returns a sorted array of filenames (not full paths) in the opened directory. Returns an empty array if the directory is empty or inaccessible — null-safe. (Verified: Godot 4.6 docs via Context7.)
 
----
+**Remap caveat:** In exported builds, Godot remaps imported resources to `.remap` files in the PCK. Strip the `.remap` suffix and pass to `load()` — which handles the resource mapping automatically. Do NOT use `FileAccess` or `AudioStreamWAV.load_from_file()` for exported projects.
 
-### Detection: Area2D + RayCast2D
-
-| Node | Purpose | Why |
-|------|---------|-----|
-| `Area2D` (child of EnemyShip) | Range detection — when player enters seek/fight radius | Body-entered signal; no per-frame polling; clean signal-driven state transitions |
-| `CollisionShape2D` (CircleShape2D on the Area2D) | Defines detection radius | Tunable per enemy type via `@export var detection_radius` |
-| `PhysicsRayQueryParameters2D` + `PhysicsDirectSpaceState2D` | Line-of-sight check for Sniper | Scriptable raycast (no node needed); use `get_world_2d().direct_space_state.intersect_ray(params)` |
-
-**Pattern: Area2D for range, raycast for LoS.**
-
-The Area2D `body_entered` signal triggers a state transition (e.g., idle → seeking). Inside the seeking/fighting state, optionally verify line-of-sight with a one-off raycast before firing. This avoids polling every physics frame for all enemies when most are far from the player.
-
-Assign the detection Area2D to its own physics layer (not the ship body layer) to avoid triggering collision damage on overlap.
-
----
-
-### Fire Logic: Inline Timer, No MountableWeapon
-
-| Technology | Purpose | Why |
-|------------|---------|-----|
-| `Timer` node (one_shot, created in `_ready()`) | Fire rate cooldown | Same pattern as existing MountableWeapon.shot_timer — proven, idiomatic |
-| `PackedScene` instantiated at a barrel `Node2D` | Spawn bullet | Reuses existing Bullet class and Damage resource — no new pipeline |
-
-The project decision to skip MountableWeapon/inventory for enemies is correct. The full weapon system carries magazine tracking, reload sounds, ammo inventory, recoil, and mount point synchronization — none of which enemy AI needs. A minimal fire method on EnemyShip (or in a fighting state) creates a bullet at a barrel position, sets its velocity, and starts the cooldown timer.
+**Wave-driven selection:** Connect MusicManager to WaveManager signals. `wave_started` carries `wave_number` — derive category from enemy count or wave index. Simple threshold works well:
 
 ```gdscript
-# Inside EnemyShip or a FightingState
-func fire() -> void:
-    if not _fire_timer.is_stopped():
-        return
-    var bullet = bullet_scene.instantiate() as RigidBody2D
-    bullet.position = barrel.global_position
-    bullet.rotation = global_rotation
-    bullet.apply_central_impulse(Vector2.from_angle(global_rotation) * bullet_speed)
-    if "spawn_parent" in bullet:
-        bullet.spawn_parent = spawn_parent
-    spawn_parent.call_deferred("add_child", bullet)
-    _fire_timer.start(fire_rate)
+func _on_wave_started(wave_number: int, enemy_count: int, _label: String) -> void:
+    var category: Category
+    if enemy_count >= 20:
+        category = Category.HIGH_INTENSITY
+    elif enemy_count >= 8:
+        category = Category.COMBAT
+    else:
+        category = Category.AMBIENT
+    play_category(category)
 ```
 
-The existing `Bullet` class and `Damage` resource work without modification. Enemy bullets hit the player ship because `body_entered` on Bullet checks `if body is Body` — the player ship already extends Body.
+### Integration with Existing Codebase
+
+- Add `MusicManager` as a second autoload in `project.godot` (alongside `ScoreManager`).
+- In `world.gd._ready()`, call `MusicManager.connect_to_wave_manager($WaveManager)` — mirrors how `ScoreManager.connect_to_wave_manager()` is called.
+- For restart: MusicManager needs a `reset()` method (see Feature 4).
 
 ---
 
-### Wave Spawning
+## Feature 2: Sprite Sheet Slicing (ships_assets.png)
 
-| Technology | Purpose | Why |
-|------------|---------|-----|
-| `Node` script (`WaveSpawner`) in `world.tscn` | Manage wave state and spawn timing | World already owns asteroid spawning; consistent pattern |
-| `Timer` node (repeating) | Delay between wave triggers | Built-in; no polling |
-| `@export var spawn_parent: Node` | Scene tree stability for spawned enemies | Same pattern as Body.spawn_parent, already validated in v1.0 (KEY-03) |
-| `PackedScene` array per wave | Enemy variety | One entry per enemy type; wave config is a simple Array or Resource |
+### Core API
 
-No plugin needed. The project opted out of GUT and explicitly defers flocking/Boids to v2.1+. LimboAI (behavior trees) is explicitly NOT recommended: it's a C++ GDExtension plugin, supports Godot 4.4-4.5 (not yet confirmed for 4.6.2), and adds a non-trivial dependency for a problem that node-based state machines solve cleanly.
+| Class | Version | Purpose | Why |
+|-------|---------|---------|-----|
+| `Sprite2D` | 4.x built-in | Display sprite on RigidBody2D enemy | Lightweight, no animation needed — enemies are static sprites, not animated characters |
+| `AtlasTexture` | 4.x built-in | Crop sub-region from ships_assets.png | Programmatic atlas slicing; `region` property takes `Rect2` with pixel coordinates |
+
+### Pattern: AtlasTexture Assigned at Runtime
+
+```gdscript
+# Inside each enemy's _ready() — or a shared helper on EnemyShip base class
+func _setup_sprite(atlas_path: String, region: Rect2) -> void:
+    var atlas := AtlasTexture.new()
+    atlas.atlas = load(atlas_path)
+    atlas.region = region
+    var sprite := Sprite2D.new()
+    sprite.texture = atlas
+    add_child(sprite)
+```
+
+**Why AtlasTexture over Sprite2D.region_rect:** Both approaches work. AtlasTexture wraps the region into a self-contained resource that can be preloaded and shared across enemy instances, avoiding re-loading the source PNG for each enemy. At 5 enemy types this doesn't matter much for performance, but it's the cleaner encapsulation.
+
+**Why not `Sprite2D.region_enabled + region_rect`:** `region_enabled = true` + `region_rect = Rect2(...)` on a Sprite2D directly is simpler and works. Use this if the region is set once and not reused. Use AtlasTexture if you want to preload the cropped region as a `.tres` resource in the editor or share it.
+
+**Known issue:** AtlasTexture created in code and assigned to Sprite2D can render an incorrect adjacent tile in Godot 4.4 in some edge cases (GitHub issue #108690). If this manifests, fall back to `Sprite2D.region_enabled = true` + `Sprite2D.region_rect = region` directly on the Sprite2D node. The direct `region_rect` approach is unaffected by this bug. (MEDIUM confidence — bug report exists but may not affect all configurations.)
+
+**Fallback pattern (Polygon2D if sprite unavailable):**
+
+```gdscript
+func _setup_visual(atlas_path: String, region: Rect2) -> void:
+    if not ResourceLoader.exists(atlas_path):
+        push_warning("[EnemyShip] Sprite sheet not found, using Polygon2D fallback")
+        return  # Polygon2D already exists in scene from SPR-03 requirement
+    _setup_sprite(atlas_path, region)
+    # Hide the existing Polygon2D debug shape
+    var shape_node := get_node_or_null("Shape")
+    if shape_node:
+        shape_node.visible = false
+```
+
+**Scale to match player ship:** Player ship BFG-23 collision circle is radius 300 (from beeliner.tscn's CollisionShape2D). Scale the Sprite2D so its texture bounds match the collision circle:
+
+```gdscript
+# After adding sprite, scale to fit collision radius
+var target_size := 300.0 * 2.0  # diameter
+var sprite_natural_size := region.size.x  # assume square sprite cell
+sprite.scale = Vector2.ONE * (target_size / sprite_natural_size)
+```
+
+### Locating Sprite Regions in ships_assets.png
+
+ships_assets.png is present at the project root. Each enemy type needs a `Rect2` defining its cell. The implementation phase must measure pixel coordinates from the sprite sheet. A recommended convention:
+
+```gdscript
+# In EnemyShip base class or per-enemy type
+const SPRITE_ATLAS := "res://ships_assests.png"  # note: project uses this spelling
+# Each enemy defines its region as a constant — e.g.:
+const SPRITE_REGION := Rect2(0, 0, 128, 128)  # fill in during SPR-01/SPR-02 phase
+```
 
 ---
 
-## Alternatives Considered
+## Feature 3: Pulsing Gem Light (PointLight2D + Tween)
 
-| Category | Recommended | Alternative | Why Not |
-|----------|-------------|-------------|---------|
-| State machine style | Node-based StateMachine + State nodes | Flat enum + `match` per class | 8 states × 5 enemy types = massive duplication; harder to add states later |
-| State machine style | Node-based (no plugin) | LimboAI plugin | C++ GDExtension; Godot 4.6.2 support unconfirmed; adds external dependency for a problem GDScript solves cleanly |
-| Pathfinding | Steering forces (seek/flee/arrive) | NavigationAgent2D | Requires NavigationRegion2D bake; broken in 4.5, partially fixed in 4.6; open space world has no nav mesh |
-| Fire logic | Inline Timer + PackedScene | Reuse MountableWeapon | MountableWeapon carries inventory, reload, sound, mount sync — overengineered for AI enemies |
-| Detection | Area2D signal + optional raycast | Poll `global_position.distance_to` every frame | Signals are event-driven; polling scales poorly with many enemies |
+### Core API
+
+| Class | Version | Purpose | Why |
+|-------|---------|---------|-----|
+| `PointLight2D` | 4.x built-in | Gem glow light source on enemy | Already used on sun and propellers in world.tscn — consistent existing pattern |
+| `Tween` (via `create_tween()`) | 4.x built-in | Animate `energy` for pulse, `color` for gem color | Same Tween API used across ScoreManager and body_camera.gd — no new pattern |
+
+### Pattern: Looping Energy Tween
+
+```gdscript
+# Inside each enemy's _ready() after sprite is set up
+func _setup_gem_light(gem_color: Color, position_offset: Vector2) -> void:
+    var light := PointLight2D.new()
+    light.color = gem_color
+    light.energy = 1.0
+    light.texture_scale = 2.0   # controls radius of light spread
+    light.position = position_offset
+    add_child(light)
+    _start_pulse(light)
+
+func _start_pulse(light: PointLight2D) -> void:
+    var tw := create_tween()
+    tw.set_loops()               # loop forever (0 = infinite)
+    tw.tween_property(light, "energy", 2.5, 0.8)\
+      .set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+    tw.tween_property(light, "energy", 0.8, 0.8)\
+      .set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+```
+
+**`set_loops()` with no argument = infinite loops.** This creates a perpetual ping-pong between energy values. (Verified: Context7 Tween API, Godot 4.6.)
+
+**`TRANS_SINE + EASE_IN_OUT`:** Produces a smooth, natural breathing pulse — peaks are not abrupt. Already used in ScoreManager for score label tweens (same easing pattern).
+
+**`texture_scale`:** PointLight2D uses a gradient texture to define falloff. `texture_scale` scales the texture (and thus light radius) without needing a custom texture. The default built-in texture is a radial gradient — sufficient for a gem glow. (Confirmed: Godot 2D lights and shadows documentation.)
+
+**`PointLight2D` properties to set per enemy type:**
+
+| Property | Type | Purpose |
+|----------|------|---------|
+| `color` | Color | Per-enemy gem color (red for Beeliner, blue for Sniper, etc.) |
+| `energy` | float | Brightness, animated by tween (0.8 to 2.5) |
+| `texture_scale` | float | Light radius (2.0 = moderate spread over ship body) |
+| `shadow_enabled` | bool | Set `false` — no shadows needed for a gem; saves draw calls |
+| `blend_mode` | int | Keep default `BLEND_MODE_ADD` — additive is correct for glow |
+
+**`process_mode` for lights:** PointLight2D is a visual node, not a physics node — it is NOT paused by `get_tree().paused`. Tween however IS affected by pause. Set the PointLight2D's tween to `TWEEN_PROCESS_IDLE` (default) and the node itself to `PROCESS_MODE_ALWAYS` if the pulse should continue during the death-screen pause. (Verified: Godot pause docs via Context7.)
 
 ---
 
-## Godot 4.6.2 Specific Notes
+## Feature 4: Game Restart (In-Place State Reset)
 
-- **NavigationAgent2D regression (issue #110686):** Broke in 4.5 due to independent 2D/3D navigation split; targeted for fix in 4.6 but user reports indicate partial resolution only. Avoid entirely — moot since open-space world has no nav mesh.
-- **Timer pattern unchanged:** `Timer.new()`, `one_shot`, `timeout.connect(fn, CONNECT_ONE_SHOT)` all work identically to 4.2.1. The MountableWeapon pattern already uses this and survived the 4.6.2 migration.
-- **RigidBody2D.apply_central_force:** Present and stable across 4.x. Use in `_physics_process` (or `physics_update` called from there). Using `apply_force` with an offset is also valid for torque effects.
-- **`call_deferred("add_child", ...)` for spawning:** Required when instantiating nodes during a physics frame. The existing codebase already uses this correctly in MountableWeapon.fire() and Body.add_successor() — carry the same pattern to enemy fire and spawner.
-- **`owner` vs `get_parent()`:** In node-based state machines, states access the character through `owner` (the scene root), not `get_parent()` (which would be the StateMachine node). This requires the StateMachine to be a child of EnemyShip in the scene, and EnemyShip to be the scene root. Confirm scene structure before coding states.
-- **Collision layer assignment:** Enemy detection Area2D must be on a different physics layer from ship bodies to avoid triggering `_on_body_entered` collision damage when enemies overlap.
+### Core API
+
+| API | Version | Purpose | Why |
+|-----|---------|---------|-----|
+| `get_tree().reload_current_scene()` | 4.x built-in | Nuclear option: reload entire world.tscn | AVOID — does not reset autoloads; ScoreManager retains total_score, wave_multiplier, combo state |
+| Manual `reset()` methods per autoload + world node cleanup | N/A pattern | Reset all mutable state without reloading | Required because ScoreManager is an autoload singleton — reload_current_scene() does not reinitialize it |
+
+### Why `reload_current_scene()` Fails Here
+
+`get_tree().reload_current_scene()` frees the current scene tree and instantiates a fresh copy of `world.tscn`. However:
+
+1. **Autoloads survive** — `ScoreManager` is registered as an autoload in `project.godot`. Its GDScript instance persists across scene reloads. `total_score`, `wave_multiplier`, `combo_count`, `kill_count` all retain stale values.
+2. **Signal connections on freed nodes** — ScoreManager._player points to the old player node, which is freed. Accessing it after reload causes errors.
+3. **Timer state** — `_combo_timer` and `_combo_audio` are children of ScoreManager (autoload), so they persist. No issue, but state must be reset.
+
+(Confirmed: Godot forum discussions, multiple reports across Godot 4.2-4.4.)
+
+### Pattern: Explicit Reset Chain
+
+**Step 1: Add `reset()` to ScoreManager autoload**
+
+```gdscript
+# In score-manager.gd
+func reset() -> void:
+    total_score = 0
+    kill_count = 0
+    wave_multiplier = 1
+    combo_count = 0
+    _combo_timer.stop()
+    _player = null
+    score_changed.emit(total_score, 0)
+    multiplier_changed.emit(wave_multiplier)
+    combo_updated.emit(0)
+    print("[ScoreManager] Reset complete")
+```
+
+**Step 2: Add `reset()` to MusicManager autoload (new in v3.5)**
+
+```gdscript
+# In music-manager.gd
+func reset() -> void:
+    # Keep music playing — just ensure we're not stuck in a cross-fade tween
+    # WaveManager will re-emit wave_started on first wave, triggering correct category
+    pass  # or restart ambient music if desired
+```
+
+**Step 3: In `world.gd`, wire the restart button signal from DeathScreen**
+
+```gdscript
+# death-screen.gd: add restart signal
+signal restart_requested
+
+# In _on_submit or after leaderboard shown:
+func _on_restart_button_pressed() -> void:
+    restart_requested.emit()
+```
+
+```gdscript
+# In world.gd._ready():
+death_screen.restart_requested.connect(_on_restart_requested)
+
+func _on_restart_requested() -> void:
+    # 1. Un-pause the tree
+    get_tree().paused = false
+
+    # 2. Reset all autoloads
+    ScoreManager.reset()
+    if MusicManager:
+        MusicManager.reset()
+
+    # 3. Reload world.tscn — autoloads are now clean before the new scene boots
+    get_tree().reload_current_scene()
+```
+
+**Why reload after reset:** Once autoloads are manually reset, `reload_current_scene()` is safe and is the simplest way to re-instantiate all scene nodes (player ship, enemies, asteroids, WaveManager, UI) in a clean state. The alternative — manually calling `queue_free()` on every dynamic node and re-running `_ready()` — is fragile and produces the same result.
+
+**`process_mode` during restart:** The death screen pauses the tree (`get_tree().paused = true`). Before calling `reload_current_scene()`, always un-pause first — otherwise the reload call executes in a paused state. (Verified: Godot SceneTree.paused docs via Context7.)
+
+**`call_deferred` for reload:** `reload_current_scene()` can cause issues if called directly from a button pressed callback in the same frame that other UI nodes are processing. Use `get_tree().call_deferred("reload_current_scene")` for safety — consistent with how body death handling uses `call_deferred("queue_free")` in the existing codebase.
 
 ---
 
-## Integration Points with Existing Architecture
+## What NOT to Use
 
-| Existing System | Integration Point | What Enemy AI Uses |
-|----------------|-------------------|--------------------|
-| `Body` / `RigidBody2D` | EnemyShip extends Ship extends Body | `damage()`, `die()`, `item_dropper.drop()`, `spawn_parent` — inherited free |
-| `Bullet` + `Damage` resource | Enemy fire spawns existing Bullet scenes | No change to Bullet; enemy fires same ammo types or new lightweight bullet |
-| `Body._on_body_entered` | Ships already take kinetic damage on collision | Suicider enemy dies on contact via this existing path + `die()` call |
-| `PropellerMovement` | Enemy ships do NOT use PropellerMovement | Movement is driven by state machine steering forces directly — no Input.is_action_pressed |
-| `spawn_parent` propagation | Enemies set spawn_parent at instantiation | Follow same `_propagate_spawn_parent` pattern already in Body |
-| Physics layers | Comment block in world.gd documents all layers | Assign enemy detection Area2D to an unused layer; verify before using |
+| Avoid | Why | Use Instead |
+|-------|-----|-------------|
+| External audio plugin (FMODAudio, Wwise) | No plugin policy; GDExtension adds build complexity; built-in AudioStreamPlayer is sufficient | AudioStreamPlayer + Tween on volume_db |
+| AnimationPlayer for cross-fade | Requires saving animation tracks as a `.tres` resource file and editor setup; Tween is pure GDScript — no editor assets needed | Tween with set_parallel(true) on volume_db |
+| `AudioStreamPlayer2D` for music | Has distance falloff, bus routing complexity; music is non-positional | `AudioStreamPlayer` (no 2D suffix) |
+| `AnimatedSprite2D` + `SpriteFrames` for enemy sprites | Overkill for static ship sprites; requires building a SpriteFrames resource with animation tracks | `Sprite2D` + `AtlasTexture` region |
+| `NavigationAgent2D` | Already rejected in v2.0 STACK.md (open-space, no nav mesh, regression history) | Steering forces — already implemented |
+| `get_tree().reload_current_scene()` alone (without pre-reset) | Autoloads (ScoreManager) retain state across reloads | Manual `reset()` on autoloads, then reload |
+| Shader for gem pulse | Shader is appropriate for a full particle glow effect; for a single per-enemy light pulse, Tween on PointLight2D.energy is simpler, CPU-side, and debuggable | PointLight2D.energy tweened |
+| `ResourceLoader.list_directory()` | Added in Godot 4.4+; method does not appear in Godot 4.6 Context7 API surface — uncertain if available | `DirAccess.open().get_files()` — confirmed 4.6 API |
+
+---
+
+## Integration Points with Existing Codebase
+
+| Existing System | New Feature | Integration Point |
+|----------------|-------------|-------------------|
+| `ScoreManager` autoload (score-manager.gd) | Game Restart | Add `reset()` method; called by world.gd before reload |
+| `WaveManager.wave_started` signal | Dynamic Music | MusicManager.connect_to_wave_manager() — mirrors ScoreManager pattern |
+| `world.gd._on_player_died()` | Game Restart + Music | un-pause + reset autoloads + reload; music continues on PROCESS_MODE_ALWAYS |
+| `DeathScreen` (death-screen.gd) | Game Restart | Add restart_requested signal and Restart button after leaderboard shown |
+| `EnemyShip` base class (enemy-ship.gd) | Sprites + Gem Light | Add `_setup_visual()` and `_setup_gem_light()` virtual methods; concrete enemies override with their atlas region and gem color |
+| `world.gd` `project.godot` | Dynamic Music | Register `MusicManager` as second autoload; call `MusicManager.scan_music_folder()` in `_ready()` |
+| Existing `PointLight2D` usage (sun, propellers in world.tscn) | Gem Light | Same node type, same `blend_mode = BLEND_MODE_ADD` — no new rendering concepts |
+
+---
+
+## Version Compatibility Notes
+
+| API | Godot Version | Notes |
+|-----|---------------|-------|
+| `AudioStreamPlayer.volume_db` | 4.0+ | Stable; tween-safe; use -80.0 not -INF as silence floor |
+| `Tween.set_loops()` | 4.0+ | Infinite loop when called with no argument or 0 |
+| `Tween.set_parallel(true)` | 4.0+ | Already used in ScoreManager — confirmed working in 4.6.2 |
+| `PointLight2D.energy` | 4.0+ | Tween-safe float property |
+| `PointLight2D.texture_scale` | 4.0+ | Controls light radius without custom texture |
+| `AtlasTexture.region` | 4.0+ | Rect2 pixel coordinates; potential rendering bug in 4.4 (#108690), verify in 4.6.2 |
+| `Sprite2D.region_enabled + region_rect` | 4.0+ | Fallback for AtlasTexture bug; simpler, fully stable |
+| `DirAccess.open().get_files()` | 4.0+ | Returns filenames (not full paths); strips ".remap" needed in exported builds |
+| `get_tree().reload_current_scene()` | 4.0+ | Safe only after manual autoload reset; use `call_deferred` from UI callbacks |
+| `Node.PROCESS_MODE_ALWAYS` | 4.0+ | Required for music/lights to survive `get_tree().paused = true` |
 
 ---
 
 ## Sources
 
-- GDQuest Finite State Machine tutorial: https://www.gdquest.com/tutorial/godot/design-patterns/finite-state-machine/
-- Godot 4 NavigationAgent2D 4.5 regression: https://github.com/godotengine/godot/issues/110686
-- Steering behaviors for Godot 4 (RigidBody2D): https://www.slashskill.com/steering-behaviors-for-game-ai-avoidance-and-anti-oscillation-in-godot-4/
-- Godot 4 Enemy AI state machine: https://codingquests.io/blog/godot-4-enemy-ai-tutorial
-- LimboAI plugin (considered, rejected): https://godotengine.org/asset-library/asset/3787
-- Godot 4 steering AI framework (considered, overkill): https://github.com/GDQuest/godot-steering-ai-framework
-- Godot interactive changelog: https://godotengine.github.io/godot-interactive-changelog/
+- Context7 `/websites/godotengine_en_4_6` — AudioStreamPlayer, Tween, PointLight2D, AtlasTexture, DirAccess, SceneTree.paused, PROCESS_MODE_ALWAYS (HIGH confidence)
+- [GDQuest crossfade tutorial](https://www.gdquest.com/tutorial/godot/audio/background-music-transition/) — two-player cross-fade pattern with AnimationPlayer (MEDIUM confidence; Tween variant preferred here)
+- [Godot Forum: AudioStreamPlayer volume_db tween from -inf](https://forum.godotengine.org/t/audio-tweening-audiostreamplayer-volume-db-from-inf-db-to-0-0db/88343) — confirms -80.0 dB floor (MEDIUM confidence)
+- [Godot Forum: autoloads not reset on reload_current_scene](https://forum.godotengine.org/t/how-to-make-singletons-autoloads-reload-upon-get-tree-reload-current-scene/65629) — confirms manual reset required (HIGH confidence, multiple reports)
+- [davcri.it: programmatic AtlasTexture](https://davcri.it/posts/programmatically-create-atlastexture-with-gdscript/) — AtlasTexture.atlas + AtlasTexture.region pattern (MEDIUM confidence)
+- [GitHub issue #108690](https://github.com/godotengine/godot/issues/108690) — AtlasTexture incorrect region bug in 4.4; Sprite2D.region_rect fallback (MEDIUM confidence)
+- [Godot Forum: loading audio from res:// at runtime](https://forum.godotengine.org/t/guide-how-to-load-wav-mp3-or-ogg-files-on-runtime-from-res-directory/104121) — remap caveat + load() preferred (HIGH confidence)
+
+---
+*Stack research for: Graviton v3.5 Juice & Polish — dynamic music, sprite sheets, gem glow, game restart*
+*Researched: 2026-04-16*
