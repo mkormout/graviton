@@ -65,6 +65,11 @@ func steer_toward(target_position: Vector2) -> void:
 	apply_central_force(direction * thrust)
 
 func _draw() -> void:
+	# Hide all debug overlays when the atlas sprite is active.
+	# _setup_sprite() sets $Shape.visible = false on successful load — use that as the signal.
+	var shape_node := get_node_or_null("Shape") as CanvasItem
+	if shape_node and not shape_node.visible:
+		return
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	# Physical collision boundary
 	draw_arc(Vector2.ZERO, 30.0, 0.0, TAU, 32, Color(1.0, 0.2, 0.2, 1.0), 5.0)
