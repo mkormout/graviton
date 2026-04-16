@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v3.5
 milestone_name: Juice & Polish
-status: Not started
+status: executing
 stopped_at: Phase 15 context gathered
-last_updated: "2026-04-16T22:21:09.228Z"
-last_activity: 2026-04-16 — Roadmap created for v3.5
+last_updated: "2026-04-16T22:51:13.143Z"
+last_activity: 2026-04-16 -- Phase 15 execution started
 progress:
   total_phases: 3
   completed_phases: 0
-  total_plans: 0
+  total_plans: 4
   completed_plans: 0
   percent: 0
 ---
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-16)
 
 **Core value:** The mount-and-weapon system must work reliably — ships can equip, fire, and swap weapons without bugs or silent failures.
-**Current focus:** v3.5 Juice & Polish — Phase 15: Enemy Sprites
+**Current focus:** Phase 15 — enemy-sprites
 
 ## Current Position
 
-Phase: 15 — Enemy Sprites
-Plan: —
-Status: Not started
-Last activity: 2026-04-16 — Roadmap created for v3.5
+Phase: 15 (enemy-sprites) — EXECUTING
+Plan: 1 of 4
+Status: Executing Phase 15
+Last activity: 2026-04-16 -- Phase 15 execution started
 
 Progress: [░░░░░░░░░░] 0%
 
