@@ -61,7 +61,11 @@
   3. Each enemy has a pulsing PointLight2D at its gem position; light color matches the gem color and pulses at a visible rhythm
   4. Gem lights are distance-culled so performance does not degrade at wave 20 with many enemies on screen
   5. Enemy apparent size on screen matches the player ship's apparent size
-**Plans**: TBD
+**Plans**: 4 plans
+- [ ] 15-01-PLAN.md — Add sprite + gem-light setup logic to all five enemy scripts
+- [ ] 15-02-PLAN.md — Add GemLight + VisibleOnScreenNotifier2D + GradientTexture2D to all five enemy ship scenes
+- [ ] 15-03-PLAN.md — Add atlas Sprite2D region to all four firing-enemy bullet scenes
+- [ ] 15-04-PLAN.md — Editor atlas-region verification and wave-20 FPS playtest checkpoint
 **UI hint**: yes
 
 ### Phase 16: Dynamic Music
@@ -105,6 +109,6 @@
 | 12. Score HUD | v3.0 | 1/1 | Complete | 2026-04-14 |
 | 13. Leaderboard | v3.0 | 2/2 | Complete | 2026-04-15 |
 | 14. Enemy Balancing + Wave Variety + UI Polish | v3.0 | 4/4 | Complete | 2026-04-16 |
-| 15. Enemy Sprites | v3.5 | 0/TBD | Not started | - |
+| 15. Enemy Sprites | v3.5 | 0/4 | Not started | - |
 | 16. Dynamic Music | v3.5 | 0/TBD | Not started | - |
 | 17. Game Restart | v3.5 | 0/TBD | Not started | - |
