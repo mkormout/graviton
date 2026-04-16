@@ -3,11 +3,11 @@ gsd_state_version: 1.0
 milestone: v3.5
 milestone_name: Juice & Polish
 status: in_progress
-stopped_at: Defining requirements
+stopped_at: Phase 15 not started
 last_updated: "2026-04-16T00:00:00.000Z"
 last_activity: 2026-04-16
 progress:
-  total_phases: 0
+  total_phases: 3
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -21,22 +21,38 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-16)
 
 **Core value:** The mount-and-weapon system must work reliably — ships can equip, fire, and swap weapons without bugs or silent failures.
-**Current focus:** v3.5 Juice & Polish
+**Current focus:** v3.5 Juice & Polish — Phase 15: Enemy Sprites
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 15 — Enemy Sprites
 Plan: —
-Status: Defining requirements
-Last activity: 2026-04-16 — Milestone v3.5 started
+Status: Not started
+Last activity: 2026-04-16 — Roadmap created for v3.5
 
 Progress: [░░░░░░░░░░] 0%
+
+## Performance Metrics
+
+| Metric | Value |
+|--------|-------|
+| Phases completed | 0/3 |
+| Plans completed | 0/TBD |
+| Requirements covered | 0/13 |
 
 ## Accumulated Context
 
 ### Decisions
 
 Decisions are logged in PROJECT.md Key Decisions table.
+
+### Architecture Constraints (v3.5)
+
+- MusicManager must be an autoload (not a world node) so it survives scene restart
+- Restart sequence: `get_tree().paused = false` → `ScoreManager.reset()` → `MusicManager.reset()` → `WaveManager.reset()` → clear enemies → in-place reset
+- SPR-04 (gem glow) requires distance culling — PointLight2D causes FPS cliff at wave 20 with many lights active
+- MUS-02: use preload catalog, NOT DirAccess scan (export-unsafe)
+- Phase order: Sprites (15) → Music (16) → Restart (17); Restart depends on MusicManager.reset() existing
 
 ### Pending Todos
 
@@ -56,5 +72,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-16T00:00:00.000Z
-Stopped at: Milestone v3.5 started
+Stopped at: Roadmap created — ready to plan Phase 15
 Last activity: 2026-04-16

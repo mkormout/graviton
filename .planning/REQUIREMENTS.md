@@ -56,19 +56,19 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| UI-05  | TBD   | Pending |
-| UI-06  | TBD   | Pending |
-| UI-07  | TBD   | Pending |
-| MUS-01 | TBD   | Pending |
-| MUS-02 | TBD   | Pending |
-| MUS-03 | TBD   | Pending |
-| MUS-04 | TBD   | Pending |
-| MUS-05 | TBD   | Pending |
-| SPR-01 | TBD   | Pending |
-| SPR-02 | TBD   | Pending |
-| SPR-03 | TBD   | Pending |
-| SPR-04 | TBD   | Pending |
-| SPR-05 | TBD   | Pending |
+| UI-05  | Phase 17 | Pending |
+| UI-06  | Phase 17 | Pending |
+| UI-07  | Phase 17 | Pending |
+| MUS-01 | Phase 16 | Pending |
+| MUS-02 | Phase 16 | Pending |
+| MUS-03 | Phase 16 | Pending |
+| MUS-04 | Phase 16 | Pending |
+| MUS-05 | Phase 16 | Pending |
+| SPR-01 | Phase 15 | Pending |
+| SPR-02 | Phase 15 | Pending |
+| SPR-03 | Phase 15 | Pending |
+| SPR-04 | Phase 15 | Pending |
+| SPR-05 | Phase 15 | Pending |
 
 ---
-*Last updated: 2026-04-16 — v3.5 requirements defined*
+*Last updated: 2026-04-16 — v3.5 roadmap created; phases 15-17 assigned*
