@@ -15,6 +15,7 @@ enum State {
 @export var max_speed: float = 500.0
 @export var thrust: float = 200.0
 @export var detection_radius: float = 800.0
+@export var score_value: int = 100
 
 var current_state: State = State.IDLING
 

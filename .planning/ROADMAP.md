@@ -4,6 +4,7 @@
 
 - ✅ **v1.0 Stabilize + Migrate** — Phases 1-3 (shipped 2026-04-10) — [archive](milestones/v1.0-ROADMAP.md)
 - ✅ **v2.0 Enemy AI** — Phases 4-9 (shipped 2026-04-13) — [archive](milestones/v2.0-ROADMAP.md)
+- ✅ **v3.0 Quality & Game Systems** — Phases 10-14 (shipped 2026-04-16) — [archive](milestones/v3.0-ROADMAP.md)
 
 ## Phases
 
@@ -28,6 +29,17 @@
 
 </details>
 
+<details>
+<summary>✅ v3.0 Quality & Game Systems (Phases 10-14) — SHIPPED 2026-04-16</summary>
+
+- [x] Phase 10: Health Pack Foundation (2/2 plans) — completed 2026-04-14
+- [x] Phase 11: ScoreManager (2/2 plans) — completed 2026-04-14
+- [x] Phase 12: Score HUD (1/1 plan) — completed 2026-04-14
+- [x] Phase 13: Leaderboard (2/2 plans) — completed 2026-04-15
+- [x] Phase 14: Enemy Balancing + Wave Variety + UI Polish (4/4 plans) — completed 2026-04-16
+
+</details>
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -41,3 +53,8 @@
 | 7. Flanker | v2.0 | 2/2 | Complete | 2026-04-13 |
 | 8. Swarmer | v2.0 | 2/2 | Complete | 2026-04-13 |
 | 9. Suicider | v2.0 | 2/2 | Complete | 2026-04-13 |
+| 10. Health Pack Foundation | v3.0 | 2/2 | Complete | 2026-04-14 |
+| 11. ScoreManager | v3.0 | 2/2 | Complete | 2026-04-14 |
+| 12. Score HUD | v3.0 | 1/1 | Complete | 2026-04-14 |
+| 13. Leaderboard | v3.0 | 2/2 | Complete | 2026-04-15 |
+| 14. Enemy Balancing + Wave Variety + UI Polish | v3.0 | 4/4 | Complete | 2026-04-16 |

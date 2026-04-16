@@ -7,10 +7,13 @@ extends EnemyShip
 @export var safe_range: float = 7000.0
 @export var aim_up_time: float = 1.0
 @export var bullet_speed: float = 10000.0
+@export var strafe_force: float = 200.0
+@export var strafe_period: float = 4.0
 
 const FIGHTING_THRUST_MULT := 1.5
 
 var _target: Node2D = null
+var _strafe_time: float = 0.0
 var _bullet_scene := preload("res://prefabs/enemies/sniper/sniper-bullet.tscn")
 
 @onready var _fire_timer: Timer = $FireTimer
@@ -62,6 +65,11 @@ func _tick_state(_delta: float) -> void:
 
 		State.FIGHTING:
 			look_at(_target.global_position)
+			# Sinusoidal strafe (D-14)
+			_strafe_time += _delta
+			var strafe_mult := sin(_strafe_time * TAU / strafe_period)
+			var perp := Vector2.from_angle(global_rotation + PI / 2.0) * strafe_mult
+			apply_central_force(perp * strafe_force)
 			# CRITICAL: Check innermost range first (flee_range), then comfort_range
 			if dist < flee_range:
 				_change_state(State.FLEEING)
@@ -83,6 +91,7 @@ func _tick_state(_delta: float) -> void:
 func _enter_state(new_state: State) -> void:
 	print("[Sniper] _enter_state: %s" % State.keys()[new_state])
 	if new_state == State.FIGHTING:
+		_strafe_time = 0.0
 		assert(aim_up_time < _fire_timer.wait_time,
 			"aim_up_time must be less than FireTimer.wait_time or _fire() will never be called")
 		_fire_timer.start()

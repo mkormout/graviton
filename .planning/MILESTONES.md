@@ -1,5 +1,24 @@
 # Milestones
 
+## v3.0 Quality & Game Systems (Shipped: 2026-04-16)
+
+**Phases completed:** 5 phases, 11 plans, 18 tasks  
+**Timeline:** 3 days (2026-04-14 → 2026-04-16)  
+**Scope:** 7,915 insertions across 62 files
+
+**Key accomplishments:**
+
+- Health Pack item with procedural green cross + particle aura; ~10% drop from all 5 enemy types including new Suicider CoinDropper
+- ScoreManager autoload: per-enemy kill scores, wave multiplier (x1–x16, resets on damage), 5-second combo chain with semitone pitch audio
+- Score HUD: CanvasLayer with SCORE/KILLS/MULT/COMBO rows, tween-animated flash on score change and gold pulse on multiplier update
+- Leaderboard: death-screen overlay with name entry, ConfigFile-persisted top-10 high scores, gold current-run row, pre-filled last name
+- Enemy stat buffs (HP ×2, range ×2, bullet speed ×1.4) and Polygon2D vertex-forward orientation for all 5 types
+- Per-type behavioral tweaks: Beeliner jitter pathing, Sniper strafing, Flanker patrol-resume fix, Swarmer fast/slow speed tiers
+- Wave flow refactor: manual advance (Enter/F), WaveClearLabel with tween, wave announcement subtitle listing enemy types
+- ControlsHint scene with TAB toggle and updated v3.0 shortcut list
+
+---
+
 ## v2.0 Enemy AI (Shipped: 2026-04-13)
 
 **Phases completed:** 6 phases, 12 plans, 21 tasks  

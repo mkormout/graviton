@@ -2,6 +2,20 @@
 
 [ext_resource type="Script" path="res://components/suicider.gd" id="1_suicider"]
 [ext_resource type="PackedScene" uid="uid://suicider_explosion_1" path="res://prefabs/enemies/suicider/suicider-explosion.tscn" id="2_death"]
+[ext_resource type="Script" uid="uid://ds8aojueywua2" path="res://components/item-dropper.gd" id="3_itemdropper"]
+[ext_resource type="Script" uid="uid://bcw213vwlscqh" path="res://components/item-drop.gd" id="4_itemdrop"]
+[ext_resource type="PackedScene" uid="uid://c16el8k73hxjn" path="res://prefabs/coin/coin-copper.tscn" id="5_coincop"]
+[ext_resource type="PackedScene" uid="uid://healthpack_scene_001" path="res://prefabs/health-pack/health-pack.tscn" id="6_healthpack"]
+
+[sub_resource type="Resource" id="Resource_coin_drop"]
+script = ExtResource("4_itemdrop")
+model = ExtResource("5_coincop")
+chance = 1.0
+
+[sub_resource type="Resource" id="Resource_health_drop"]
+script = ExtResource("4_itemdrop")
+model = ExtResource("6_healthpack")
+chance = 0.11
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
 radius = 300.0
@@ -15,17 +29,19 @@ radius = 300.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_contact"]
 radius = 330.0
 
-[node name="Suicider" type="RigidBody2D"]
+[node name="Suicider" type="RigidBody2D" node_paths=PackedStringArray("item_dropper")]
 collision_layer = 1
 collision_mask = 3
 gravity_scale = 0.0
 can_sleep = false
 script = ExtResource("1_suicider")
-max_health = 20
-max_speed = 4000.0
-thrust = 2000.0
+max_health = 40
+max_speed = 5200.0
+thrust = 2600.0
 detection_radius = 10000.0
 death = ExtResource("2_death")
+score_value = 75
+item_dropper = NodePath("CoinDropper")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_collision")
@@ -60,3 +76,8 @@ monitorable = false
 
 [node name="ContactShape" type="CollisionShape2D" parent="ContactArea"]
 shape = SubResource("CircleShape2D_contact")
+
+[node name="CoinDropper" type="Node2D" parent="."]
+script = ExtResource("3_itemdropper")
+models = Array[ExtResource("4_itemdrop")]([SubResource("Resource_coin_drop"), SubResource("Resource_health_drop")])
+drop_count = 1

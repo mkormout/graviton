@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://healthpack_scene_001"]
+
+[ext_resource type="Script" uid="uid://6khmdkbwwqmr" path="res://components/item.gd" id="1_hpscript"]
+[ext_resource type="Resource" uid="uid://healthpack_res_001" path="res://items/health-pack.tres" id="2_hpres"]
+[ext_resource type="AudioStream" uid="uid://cada10kx4ql5r" path="res://sounds/coin-pick.wav" id="3_hpsound"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hpack"]
+radius = 150.0
+
+[sub_resource type="Gradient" id="Gradient_hpack"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_hpack"]
+gradient = SubResource("Gradient_hpack")
+width = 300
+height = 300
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="HealthPack" type="RigidBody2D" node_paths=PackedStringArray("pick_sound")]
+z_index = -5
+collision_layer = 32
+collision_mask = 0
+contact_monitor = true
+max_contacts_reported = 10
+linear_damp = 0.5
+script = ExtResource("1_hpscript")
+pick_sound = NodePath("AudioStreamPlayer2D")
+type = ExtResource("2_hpres")
+
+[node name="CrossH" type="Polygon2D" parent="."]
+modulate = Color(0, 2.55, 1.36, 1)
+polygon = PackedVector2Array(-150, -50, 150, -50, 150, 50, -150, 50)
+
+[node name="CrossV" type="Polygon2D" parent="."]
+modulate = Color(0, 2.55, 1.36, 1)
+polygon = PackedVector2Array(-50, -150, 50, -150, 50, 150, -50, 150)
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+z_index = 10
+color = Color(0, 1, 0.53, 1)
+energy = 1.5
+texture = SubResource("GradientTexture2D_hpack")
+texture_scale = 5.0
+shadow_enabled = false
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+emitting = true
+amount = 12
+lifetime = 4.0
+one_shot = false
+emission_shape = 1
+emission_sphere_radius = 200.0
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 30.0
+initial_velocity_max = 120.0
+color = Color(0, 1, 0.53, 1)
+scale_amount_min = 20.0
+scale_amount_max = 60.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_hpack")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_hpsound")
+volume_db = -20.0
+pitch_scale = 1.2
+max_distance = 20000.0

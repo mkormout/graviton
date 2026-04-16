@@ -1,23 +1,41 @@
 [gd_scene format=3 uid="uid://dy8c1mmutnbql"]
 
-[node name="Controls-hint" type="CanvasLayer" unique_id=883985119]
+[ext_resource type="Script" path="res://prefabs/ui/controls-hint.gd" id="1_controls_hint"]
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1314025216]
+[node name="Controls-hint" type="CanvasLayer"]
+script = ExtResource("1_controls_hint")
+
+[node name="ToggleButton" type="Button" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_right = 0.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+flat = true
+text = ">"
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -381.0
-offset_bottom = 704.0
+offset_top = 150.0
+offset_bottom = 854.0
 grow_horizontal = 0
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="Panel" type="Panel" parent="MarginContainer" unique_id=1337076221]
+[node name="Panel" type="Panel" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/Panel" unique_id=64628238]
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/Panel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -38,6 +56,7 @@ SPACE - fire all
 R - reload
 C - camera
 I - inventory
+Tab - cheat sheet
 
 1 - Minigun
 2 - Laser
@@ -53,7 +72,7 @@ A - drop left mount
 S - drop front mount
 D - drop right mount
 
-ENTER - asteroid spawn
-G - god mode for current weapon
-H - unlimited ammo, no reload
-J  - no cooldown, maximum fire rate"
+F / Enter - next wave
+G - god mode for weapon
+H - unlimited ammo
+J  - max fire rate"

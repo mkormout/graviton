@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemType" format=3 uid="uid://healthpack_res_001"]
+
+[ext_resource type="Script" uid="uid://dclxl44j4opab" path="res://components/item-type.gd" id="1_hpitem"]
+
+[resource]
+script = ExtResource("1_hpitem")
+name = "health-pack"
+title = "Health Pack"
+type = 3
+price = 0

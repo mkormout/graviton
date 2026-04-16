@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://beeliner_scene_001"]
+[gd_scene load_steps=18 format=3 uid="uid://beeliner_scene_001"]
 
 [ext_resource type="PackedScene" uid="uid://base_enemy_ship" path="res://prefabs/enemies/base-enemy-ship.tscn" id="0_base"]
 [ext_resource type="Script" path="res://components/beeliner.gd" id="1_beeliner"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://bcw213vwlscqh" path="res://components/item-drop.gd" id="3_itemdrop"]
 [ext_resource type="PackedScene" uid="uid://c16el8k73hxjn" path="res://prefabs/coin/coin-copper.tscn" id="4_coincop"]
 [ext_resource type="PackedScene" uid="uid://5m634maqwghw" path="res://prefabs/minigun/minigun-ammo.tscn" id="5_ammo"]
+[ext_resource type="PackedScene" uid="uid://healthpack_scene_001" path="res://prefabs/health-pack/health-pack.tscn" id="6_healthpack"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
 radius = 300.0
@@ -30,17 +31,24 @@ chance = 0.5
 script = ExtResource("3_itemdrop")
 chance = 0.5
 
+[sub_resource type="Resource" id="Resource_health_drop"]
+script = ExtResource("3_itemdrop")
+model = ExtResource("6_healthpack")
+chance = 0.11
+
 [node name="Beeliner" type="RigidBody2D" node_paths=PackedStringArray("item_dropper")]
 collision_layer = 1
 collision_mask = 3
 gravity_scale = 0.0
 can_sleep = false
 script = ExtResource("1_beeliner")
-max_health = 30
+max_health = 60
 detection_radius = 10000.0
 max_speed = 2000.0
 thrust = 1500.0
-fight_range = 8000.0
+score_value = 100
+fight_range = 16000.0
+bullet_speed = 6160.0
 item_dropper = NodePath("CoinDropper")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -73,7 +81,7 @@ position = Vector2(40, 0)
 
 [node name="CoinDropper" type="Node2D" parent="."]
 script = ExtResource("2_itemdropper")
-models = Array[ExtResource("3_itemdrop")]([SubResource("Resource_coin_drop")])
+models = Array[ExtResource("3_itemdrop")]([SubResource("Resource_coin_drop"), SubResource("Resource_health_drop")])
 drop_count = 2
 
 [node name="FireTimer" type="Timer" parent="."]

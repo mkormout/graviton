@@ -1,5 +1,8 @@
 class_name Body extends RigidBody2D
 
+signal died()
+signal health_changed(old_health: int, new_health: int)
+
 @export var max_health: int = 1
 @export var can_die = true
 @export var defense: Damage
@@ -21,10 +24,13 @@ func damage(attack: Damage):
 		return
 
 	var total = attack.calculate(defense)
-
+	var old_health := health
 	health += total
 
 	# print("damage: ", total, "; health: ", health)
+
+	if health < old_health:
+		health_changed.emit(old_health, health)
 
 	if health <= 0:
 		die()
@@ -54,6 +60,7 @@ func die(delay: float = 0.0):
 	if item_dropper:
 		item_dropper.drop()
 
+	died.emit()
 	queue_free()
 
 func _propagate_spawn_parent(node: Node) -> void:

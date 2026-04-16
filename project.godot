@@ -16,6 +16,10 @@ config/features=PackedStringArray("4.6", "GL Compatibility")
 run/max_fps=100
 config/icon="res://icon.svg"
 
+[autoload]
+
+ScoreManager="*res://components/score-manager.gd"
+
 [display]
 
 window/size/viewport_width=1920

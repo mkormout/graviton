@@ -32,7 +32,8 @@ func pick_ammo(item: Item):
 	item.pick()
 
 func pick_health(item: Item):
-	storage.add_item(item)
+	var heal_amount: int = max_health / 10
+	health = min(health + heal_amount, max_health)
 	item.pick()
 
 func _on_body_entered(body):

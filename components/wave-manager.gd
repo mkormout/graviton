@@ -5,28 +5,21 @@ signal wave_started(wave_number: int, enemy_count: int, label_text: String)
 signal enemy_count_changed(remaining: int, total: int)
 signal all_waves_complete()
 signal countdown_tick(seconds_remaining: int)
+signal wave_completed(wave_number: int)
+signal wave_cleared_waiting(wave_number: int)
 
 ## Array of wave definitions.
 ## New format: { "label": String, "groups": [{ "enemy_scene": PackedScene, "count": int }, ...] }
 ## Legacy format also accepted: { "enemy_scene": PackedScene, "count": int }
 @export var waves: Array = []
 @export var spawn_radius_margin: float = 1000.0
-@export var countdown_seconds: float = 5.0
 
 var _current_wave_index: int = 0
 var _enemies_alive: int = 0
 var _wave_total: int = 0
 var _player: Node2D = null
-var _countdown_remaining: int = 0
-var _countdown_timer: Timer = null
 
 func _ready() -> void:
-	_countdown_timer = Timer.new()
-	_countdown_timer.wait_time = 1.0
-	_countdown_timer.one_shot = false
-	_countdown_timer.autostart = false
-	_countdown_timer.timeout.connect(_on_countdown_tick)
-	add_child(_countdown_timer)
 	call_deferred("_find_player")
 
 func _find_player() -> void:
@@ -44,10 +37,6 @@ func trigger_wave() -> void:
 	if _enemies_alive > 0:
 		print("[WaveManager] Wave still in progress (%d enemies alive)" % _enemies_alive)
 		return
-
-	# Stop countdown if it was running
-	if _countdown_timer.is_inside_tree() and not _countdown_timer.is_stopped():
-		_countdown_timer.stop()
 
 	var wave: Dictionary = waves[_current_wave_index]
 
@@ -84,20 +73,29 @@ func trigger_wave() -> void:
 	for group in groups:
 		var enemy_scene: PackedScene = group.get("enemy_scene")
 		var count: int = group.get("count", 0)
+		var speed_tier: float = group.get("speed_tier", 1.0)
 		if not enemy_scene:
 			push_warning("[WaveManager] Group in wave %d has no enemy_scene" % (_current_wave_index - 1))
 			continue
 		for i in range(count):
-			_spawn_enemy(enemy_scene)
+			_spawn_enemy(enemy_scene, speed_tier)
 
-func _spawn_enemy(enemy_scene: PackedScene) -> void:
+func _spawn_enemy(enemy_scene: PackedScene, speed_tier: float = 1.0) -> void:
 	var enemy := enemy_scene.instantiate()
+
+	# Set speed_tier BEFORE add_child so _ready() receives it
+	if speed_tier != 1.0 and enemy.get("speed_tier") != null:
+		enemy.speed_tier = speed_tier
 
 	# Connect tree_exiting BEFORE add_child to avoid race condition
 	# (if enemy dies in _ready, signal still fires)
 	enemy.tree_exiting.connect(_on_enemy_tree_exiting)
 
 	enemy.add_to_group("enemy")
+
+	# Register with ScoreManager for kill scoring (Phase 11)
+	if ScoreManager:
+		ScoreManager.register_enemy(enemy)
 
 	# Add to world (WaveManager's parent)
 	get_parent().add_child(enemy)
@@ -128,17 +126,8 @@ func _on_enemy_tree_exiting() -> void:
 
 func _on_wave_complete() -> void:
 	print("[WaveManager] Wave %d complete!" % (_current_wave_index))
+	wave_completed.emit(_current_wave_index)
 	if _current_wave_index >= waves.size():
 		all_waves_complete.emit()
 	else:
-		# Start countdown to next wave
-		_countdown_remaining = int(countdown_seconds)
-		countdown_tick.emit(_countdown_remaining)
-		_countdown_timer.start()
-
-func _on_countdown_tick() -> void:
-	_countdown_remaining -= 1
-	countdown_tick.emit(_countdown_remaining)
-	if _countdown_remaining <= 0:
-		_countdown_timer.stop()
-		trigger_wave()
+		wave_cleared_waiting.emit(_current_wave_index)

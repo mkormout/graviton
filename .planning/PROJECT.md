@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A 2D space shooter built in Godot 4.6.2, featuring a component-based ship architecture with hot-swappable weapon mounts, an inventory system, procedurally scattered asteroids, and wave-based enemy ships with state-machine-driven AI. The player pilots a ship, equips weapons from inventory, and battles five distinct enemy types that spawn in configurable waves.
+A 2D space shooter built in Godot 4.6.2, featuring a component-based ship architecture with hot-swappable weapon mounts, an inventory system, procedurally scattered asteroids, and wave-based enemy ships with state-machine-driven AI. The player pilots a ship, equips weapons from inventory, battles five distinct enemy types, and chases high scores tracked on a local leaderboard.
 
 ## Core Value
 
@@ -35,10 +35,18 @@ The mount-and-weapon system must work reliably — ships can equip, fire, and sw
 - ✓ Suicider enemy — charges and explodes on contact — v2.0 (ENM-11)
 - ✓ Simplified enemy fire logic (independent of MountableWeapon/inventory) — v2.0
 - ✓ Wave-based enemy spawning system with WaveManager — v2.0 (ENM-12, ENM-13, ENM-14)
+- ✓ Health Pack item drops from enemies with green cross visuals and heal-on-pickup — v3.0 (ITM-01–ITM-03)
+- ✓ ScoreManager autoload with per-enemy kill scores, wave multiplier (x1–x16), and 5-second combo chain with semitone audio — v3.0 (SCR-03–SCR-08)
+- ✓ Score HUD displaying score, kill count, and wave multiplier with tween animations — v3.0 (SCR-01, SCR-02, SCR-05)
+- ✓ Death screen with name entry, ConfigFile-persisted top-10 leaderboard, and last-name pre-fill — v3.0 (SCR-09–SCR-11)
+- ✓ All enemies buffed (HP ×2, range ×2, speed ×1.4) with Polygon2D vertex-forward orientation — v3.0 (ENM-16–ENM-20)
+- ✓ Per-type behavioral tweaks: Beeliner jitter, Sniper strafe, Flanker patrol fix, Swarmer speed tiers, Suicider explosion buff — v3.0 (ENM-21–ENM-25)
+- ✓ Wave flow refactor: manual advance, WaveClearLabel, wave announcement subtitle — v3.0 (WAV-01, WAV-02)
+- ✓ ControlsHint scene with TAB toggle and updated shortcut list — v3.0 (UI-01–UI-04)
 
 ### Active
 
-*(None — v3.0 requirements to be defined in /gsd-new-milestone)*
+*(None — v4.0 requirements to be defined in /gsd-new-milestone)*
 
 ### Out of Scope
 
@@ -53,13 +61,15 @@ The mount-and-weapon system must work reliably — ships can equip, fire, and sw
 
 ## Context
 
-Godot 4.6.2 project. ~2,073 LOC GDScript across components and prefabs.
+Godot 4.6.2 project. ~15,244 LOC GDScript across components and prefabs.
 
-Five enemy types implemented: Beeliner (charge + fire), Sniper (standoff + aim telegraph + flee), Flanker (orbital LURKING + attack burst), Swarmer (cluster cohesion + separation), Suicider (locked-vector torpedo + contact explosion). All share the EnemyShip base class with 8-state machine, dying guard, and force-based steering.
+Five enemy types (Beeliner, Sniper, Flanker, Swarmer, Suicider) with 8-state AI, Polygon2D visual identity, and per-type behavioral tuning. All buffed in v3.0: HP ×2, range ×2, bullet speed ×1.4, vertex-forward orientation.
 
-WaveManager (standalone World child) drives wave spawning via configurable wave arrays. Wave HUD and enemy radar UI added in Phase 8. Enemy bullet layer (Layer 9) prevents friendly fire. All enemies have Polygon2D visual identity (distinct shape + color per type).
+ScoreManager autoload drives kill scoring, wave multiplier (x1–x16), and combo chain. Score HUD (CanvasLayer) shows SCORE/KILLS/MULT/COMBO in real time. Death screen shows leaderboard with ConfigFile-persisted top-10 entries.
 
-`world.gd` remains a developer test harness — waves triggered manually with KEY_F. No menu, save system, or game loop yet.
+WaveManager supports manual wave advance (Enter/F), with WaveClearLabel and wave announcement subtitles. ControlsHint panel lists all shortcuts and toggles with TAB.
+
+`world.gd` remains a developer test harness with no main menu or persistent game loop. Health packs drop from enemies at ~10% chance.
 
 ## Constraints
 
@@ -85,6 +95,13 @@ WaveManager (standalone World child) drives wave spawning via configurable wave 
 | Flat scene for enemy types (not true inheritance) | Avoids Godot .tscn inheritance complications | ✓ Good |
 | ContactArea2D separate from DetectionArea in Suicider | Clean separation of target acquisition vs. contact detection | ✓ Good |
 | Polygon2D visual identity per enemy type | Could not distinguish enemies visually at a glance during playtest | ✓ Good — added in Phase 9 playtest |
+| ScoreManager as autoload singleton | Avoids signal plumbing through world.gd; any node can read score state | ✓ Good — clean integration |
+| ConfigFile for leaderboard persistence | Built-in Godot API, no external deps, cross-platform | ✓ Good |
+| Two-stage death screen (name entry → leaderboard) | Separates concerns; name can be skipped without breaking leaderboard display | ✓ Good |
+| Wave multiplier resets on any damage | High-risk reward loop; felt fair in playtesting | ✓ Good |
+| Manual wave advance (Enter/F) instead of auto-timer | Gives player breathing room; reduces frustration at high waves | ✓ Good — confirmed in playtesting |
+| speed_tier injection per wave config | Lets WaveManager vary swarmer behavior without subclassing | ✓ Good — clean extensibility |
+| Vertex-forward Polygon2D via fixed rotation offset | All enemy shapes face player with a corner, not a flat edge | ✓ Good — visual improvement confirmed |
 
 ## Evolution
 
@@ -104,4 +121,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-14 after v2.0 milestone completion*
+*Last updated: 2026-04-16 after v3.0 milestone*

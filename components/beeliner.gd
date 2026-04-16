@@ -3,11 +3,14 @@ extends EnemyShip
 
 @export var fight_range: float = 400.0
 @export var bullet_speed: float = 4400.0
+@export var jitter_force: float = 300.0
 
 var _target: Node2D = null
 var _bullet_scene := preload("res://prefabs/enemies/beeliner/beeliner-bullet.tscn")
 
 const SPREAD_ANGLES := [-0.1, 0.0, 0.1]  # radians: -7.5 deg, 0 deg, +7.5 deg
+var _jitter_timer: float = 0.0
+var _jitter_dir: float = 1.0
 
 @onready var _fire_timer: Timer = $FireTimer
 @onready var _ammo_dropper: ItemDropper = $AmmoDropper
@@ -26,10 +29,24 @@ func _tick_state(_delta: float) -> void:
 				steer_toward(_target.global_position)
 				if global_position.distance_to(_target.global_position) <= fight_range:
 					_change_state(State.FIGHTING)
+				# Perpendicular jitter (D-13)
+				_jitter_timer -= _delta
+				if _jitter_timer <= 0.0:
+					_jitter_timer = randf_range(1.0, 2.0)
+					_jitter_dir = 1.0 if randf() > 0.5 else -1.0
+				var perp := Vector2.from_angle(global_rotation + PI / 2.0) * _jitter_dir
+				apply_central_force(perp * jitter_force)
 		State.FIGHTING:
 			if _target:
 				look_at(_target.global_position)
 				steer_toward(_target.global_position)
+				# Perpendicular jitter (D-13)
+				_jitter_timer -= _delta
+				if _jitter_timer <= 0.0:
+					_jitter_timer = randf_range(1.0, 2.0)
+					_jitter_dir = 1.0 if randf() > 0.5 else -1.0
+				var perp := Vector2.from_angle(global_rotation + PI / 2.0) * _jitter_dir
+				apply_central_force(perp * jitter_force)
 
 func _enter_state(new_state: State) -> void:
 	print("[Beeliner] _enter_state: %s" % State.keys()[new_state])

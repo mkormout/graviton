@@ -7,6 +7,7 @@ extends EnemyShip
 @export var cohesion_force: float = 700.0
 @export var separation_force: float = 1800.0
 @export var bullet_speed: float = 3500.0
+@export var speed_tier: float = 1.0
 
 var _target: Node2D = null
 var _angle_offset: float = 0.0
@@ -21,6 +22,8 @@ var _bullet_scene := preload("res://prefabs/enemies/swarmer/swarmer-bullet.tscn"
 
 func _ready() -> void:
 	super()
+	thrust *= speed_tier
+	max_speed *= speed_tier
 	thrust *= randf_range(0.8, 1.2)
 	max_speed *= randf_range(0.8, 1.2)
 	_angle_offset = deg_to_rad(randf_range(-40.0, 40.0))

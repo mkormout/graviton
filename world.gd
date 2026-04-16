@@ -13,7 +13,10 @@ var flanker_model = preload("res://prefabs/enemies/flanker/flanker.tscn")
 var swarmer_model = preload("res://prefabs/enemies/swarmer/swarmer.tscn")
 var suicider_model = preload("res://prefabs/enemies/suicider/suicider.tscn")
 var wave_hud_model = preload("res://prefabs/ui/wave-hud.tscn")
+var score_hud_model = preload("res://prefabs/ui/score-hud.tscn")
 var enemy_radar_model = preload("res://prefabs/ui/enemy-radar.tscn")
+var death_screen_model = preload("res://prefabs/ui/death-screen.tscn")
+var controls_hint_model = preload("res://prefabs/ui/controls-hint.tscn")
 
 var asteroids_small_model = [
 	preload("res://prefabs/asteroid/asteroid-small-1.tscn"),
@@ -32,6 +35,10 @@ var asteroids_large_model = [
 
 var godmode: bool = false
 var camera_follow: bool = true
+var death_screen: DeathScreen = null
+var _wave_clear_pending: bool = false
+var _wave_hud: WaveHud = null
+var _controls_hint: ControlsHint = null
 
 # PHYSICAL LAYERS DESCRIPTION:
 # 1. Ship
@@ -51,11 +58,27 @@ func _ready():
 	mount_weapon($ShipBFG23, minigun_model, "left")
 	mount_weapon($ShipBFG23, minigun_model, "right")
 
-	var wave_hud: WaveHud = wave_hud_model.instantiate()
-	add_child(wave_hud)
-	wave_hud.connect_to_wave_manager($WaveManager)
+	_wave_hud = wave_hud_model.instantiate()
+	add_child(_wave_hud)
+	_wave_hud.connect_to_wave_manager($WaveManager)
+
+	# Wire ScoreManager to WaveManager for wave multiplier (Phase 11)
+	if ScoreManager:
+		ScoreManager.connect_to_wave_manager($WaveManager)
+	$WaveManager.wave_cleared_waiting.connect(func(_n): _wave_clear_pending = true)
+
+	var score_hud: ScoreHud = score_hud_model.instantiate()
+	add_child(score_hud)
+	score_hud.connect_to_score_manager(ScoreManager)
 
 	add_child(enemy_radar_model.instantiate())
+
+	death_screen = death_screen_model.instantiate()
+	add_child(death_screen)
+	$ShipBFG23.died.connect(_on_player_died)
+
+	_controls_hint = controls_hint_model.instantiate()
+	add_child(_controls_hint)
 
 	$ShipCamera.make_current()
 
@@ -86,8 +109,8 @@ func _ready():
 		},
 		# Wave 5
 		{
-			"label": "Swarm",
-			"groups": [{ "enemy_scene": swarmer_model, "count": 6 }]
+			"label": "Fast Swarm",
+			"groups": [{ "enemy_scene": swarmer_model, "count": 6, "speed_tier": 1.5 }]
 		},
 		# Wave 6
 		{
@@ -120,10 +143,10 @@ func _ready():
 		},
 		# Wave 10
 		{
-			"label": "Suiciders + Swarm + Beelines",
+			"label": "Suiciders + Slow Swarm + Beelines",
 			"groups": [
 				{ "enemy_scene": suicider_model, "count": 5 },
-				{ "enemy_scene": swarmer_model, "count": 6 },
+				{ "enemy_scene": swarmer_model, "count": 6, "speed_tier": 0.6 },
 				{ "enemy_scene": beeliner_model, "count": 4 },
 			]
 		},
@@ -137,9 +160,10 @@ func _ready():
 		},
 		# Wave 12
 		{
-			"label": "Swarm + Suiciders",
+			"label": "Slow & Fast Swarm + Suiciders",
 			"groups": [
-				{ "enemy_scene": swarmer_model, "count": 10 },
+				{ "enemy_scene": swarmer_model, "count": 5, "speed_tier": 0.6 },
+				{ "enemy_scene": swarmer_model, "count": 5, "speed_tier": 1.5 },
 				{ "enemy_scene": suicider_model, "count": 4 },
 			]
 		},
@@ -171,9 +195,9 @@ func _ready():
 		},
 		# Wave 16
 		{
-			"label": "Swarm + Suiciders + Snipers",
+			"label": "Fast Swarm + Suiciders + Snipers",
 			"groups": [
-				{ "enemy_scene": swarmer_model, "count": 12 },
+				{ "enemy_scene": swarmer_model, "count": 12, "speed_tier": 1.5 },
 				{ "enemy_scene": suicider_model, "count": 6 },
 				{ "enemy_scene": sniper_model, "count": 4 },
 			]
@@ -189,10 +213,10 @@ func _ready():
 		},
 		# Wave 18
 		{
-			"label": "Snipers + Swarm + Flankers",
+			"label": "Snipers + Slow Swarm + Flankers",
 			"groups": [
 				{ "enemy_scene": sniper_model, "count": 8 },
-				{ "enemy_scene": swarmer_model, "count": 14 },
+				{ "enemy_scene": swarmer_model, "count": 14, "speed_tier": 0.6 },
 				{ "enemy_scene": flanker_model, "count": 6 },
 			]
 		},
@@ -270,8 +294,11 @@ func _input(event):
 		mount_weapon($ShipBFG23, minigun_model, "left")
 		mount_weapon($ShipBFG23, minigun_model, "right")
 		
-	if Input.is_key_pressed(KEY_ENTER):
-		spawn_asteroids(10)
+	if event is InputEventKey and event.pressed and event.keycode == KEY_ENTER:
+		if _wave_clear_pending:
+			_wave_clear_pending = false
+			$WaveManager.trigger_wave()
+			_wave_hud.hide_wave_clear_label()
 	
 	if Input.is_key_pressed(KEY_G):
 		notify_weapons(MountableBody.Action.GODMODE)
@@ -308,7 +335,15 @@ func _input(event):
 		spawn_test_enemy()
 
 	if event is InputEventKey and event.pressed and event.keycode == KEY_F:
-		$WaveManager.trigger_wave()
+		if _wave_clear_pending:
+			_wave_clear_pending = false
+			$WaveManager.trigger_wave()
+			_wave_hud.hide_wave_clear_label()
+		else:
+			$WaveManager.trigger_wave()
+
+	if event is InputEventKey and event.pressed and event.keycode == KEY_TAB:
+		_controls_hint.toggle()
 
 func spawn_asteroids(count: int):
 	for x in range(count * 0.5):
@@ -343,7 +378,7 @@ func add_asteroid(model: PackedScene):
 	const MAX_RANGE = 10000
 	const MAX_LINEAR_VELOCITY = 1000
 	const MAX_ANGULAR_VELOCITY = PI / 2
-	
+
 	var asteroid = model.instantiate() as RigidBody2D
 	asteroid.position = Vector2.from_angle(randf() * 2*PI) * randf_range(MIN_RANGE, MAX_RANGE)
 	asteroid.rotation = randf_range(0, 2*PI)
@@ -353,3 +388,9 @@ func add_asteroid(model: PackedScene):
 	asteroid.linear_damp = 0
 	add_child(asteroid)
 	setup_spawn_parent(asteroid)
+
+func _on_player_died() -> void:
+	_wave_clear_pending = false
+	_wave_hud.hide_wave_clear_label()
+	get_tree().paused = true
+	death_screen.show_death_screen(ScoreManager.total_score)

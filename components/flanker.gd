@@ -44,7 +44,9 @@ func _on_detection_area_body_entered(body: Node2D) -> void:
 		_change_state(State.SEEKING)
 
 func _on_detection_area_body_exited(body: Node2D) -> void:
-	if body == _target:
+	# Only drop target in SEEKING — LURKING and FIGHTING have their own
+	# distance-based leash logic in _tick_state (max_follow_distance check).
+	if body == _target and current_state == State.SEEKING:
 		_target = null
 		_change_state(State.IDLING)
 
