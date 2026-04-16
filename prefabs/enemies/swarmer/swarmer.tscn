@@ -67,6 +67,8 @@ item_dropper = NodePath("CoinDropper")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_collision")
 
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
 [node name="Shape" type="Polygon2D" parent="."]
 rotation = 1.5708
 color = Color(1, 0.5, 0, 1)
