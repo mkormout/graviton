@@ -522,22 +522,25 @@ scale = Vector2(0.3, 0.3)                 # [ASSUMED: adjust to match bullet col
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Is `ships_assests.png` (note the typo: "assests" not "assets") the final filename?**
    - What we know: File exists at project root with that exact name (confirmed via `ls`).
    - What's unclear: Whether the typo will be corrected before implementation.
    - Recommendation: Use the filename as-is (`ships_assests.png`). If renamed, update all `load()` calls in one pass.
+   - RESOLVED: Use `ships_assests.png` as-is. All plans reference this exact filename consistently.
 
 2. **Should Polygon2D "Shape" be hidden via scene property or script?**
    - What we know: Context says hide via `visible = false` when sprite loads successfully in `_ready()`.
    - What's unclear: Whether to set `visible = false` in the .tscn and rely on SPR-03 path only for showing it.
    - Recommendation: Default `Shape.visible = true` in .tscn (unchanged). Script sets `$Shape.visible = false` only after successful atlas load. This preserves the fallback path cleanly.
+   - RESOLVED: Scene defaults to `Shape.visible = true` (unchanged). `_setup_sprite()` sets `$Shape.visible = false` only after successful `load()` — preserves SPR-03 fallback path cleanly (Plan 15-01).
 
 3. **What process_mode should GemLight and VisibleOnScreenNotifier2D use?**
    - What we know: Context notes PointLight2D must have `process_mode` set correctly for death screen pause behavior.
    - What's unclear: Whether enemies are paused on death screen.
    - Recommendation: Set both nodes to `PROCESS_MODE_PAUSABLE` (default). If enemies are frozen during pause, the Tween will also pause — acceptable behavior.
+   - RESOLVED: Default `PROCESS_MODE_PAUSABLE` accepted — no override set in scenes (Plan 15-02). If enemies freeze during pause, the Tween also pauses, which is acceptable.
 
 ---
 
