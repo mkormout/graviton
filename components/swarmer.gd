@@ -8,6 +8,13 @@ extends EnemyShip
 @export var separation_force: float = 1800.0
 @export var bullet_speed: float = 3500.0
 @export var speed_tier: float = 1.0
+# Sprite configuration (SPR-01, SPR-02, SPR-05) — per D-03 Swarmer = ENM-10
+@export var sprite_region: Rect2 = Rect2(1295, 50, 360, 650)
+@export var sprite_scale: Vector2 = Vector2(0.96, 0.96)
+# Gem glow configuration (SPR-04) — per D-04 Swarmer gem is yellow/amber, D-05 quick flicker
+@export var gem_energy_min: float = 0.3
+@export var gem_energy_max: float = 2.0
+@export var gem_pulse_half_period: float = 0.25
 
 var _target: Node2D = null
 var _angle_offset: float = 0.0
@@ -33,6 +40,8 @@ func _ready() -> void:
 	_cohesion_area.body_exited.connect(_on_cohesion_area_body_exited)
 	_fire_timer.timeout.connect(_on_fire_timer_timeout)
 	detection_area.body_exited.connect(_on_detection_area_body_exited)
+	_setup_sprite()
+	_setup_gem_light()
 
 func _on_cohesion_area_body_entered(body: Node2D) -> void:
 	if dying:
@@ -170,3 +179,33 @@ func die(delay: float = 0.0) -> void:
 	_fire_timer.stop()
 	_ammo_dropper.drop()
 	super(delay)
+
+# SPR-01/02/03/05: Load atlas, configure Sprite2D region, hide Polygon2D fallback on success.
+func _setup_sprite() -> void:
+	var atlas: Texture2D = load("res://ships_assests.png")
+	if atlas == null:
+		# SPR-03 fallback: atlas missing — Polygon2D "Shape" stays visible.
+		return
+	var sprite := $Sprite2D as Sprite2D
+	sprite.texture = atlas
+	sprite.region_enabled = true
+	sprite.region_rect = sprite_region
+	sprite.rotation_degrees = -90.0  # atlas art points +Y; Godot facing is +X
+	sprite.scale = sprite_scale
+	$Shape.visible = false
+
+# SPR-04: Wire viewport culling, start infinite pulse tween on gem light.
+func _setup_gem_light() -> void:
+	var notifier := $VisibleOnScreenNotifier2D as VisibleOnScreenNotifier2D
+	var light := $GemLight as PointLight2D
+	light.enabled = false
+	notifier.screen_entered.connect(func(): light.enabled = true)
+	notifier.screen_exited.connect(func(): light.enabled = false)
+	_start_pulse(light)
+
+func _start_pulse(light: PointLight2D) -> void:
+	var tween := create_tween()
+	tween.set_loops(0)  # 0 = infinite in Godot 4 (verified per RESEARCH Pattern 2)
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.tween_property(light, "energy", gem_energy_max, gem_pulse_half_period)
+	tween.tween_property(light, "energy", gem_energy_min, gem_pulse_half_period)
