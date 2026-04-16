@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
-milestone: v3.0
-milestone_name: Quality & Game Systems
-status: complete
-stopped_at: Milestone v3.0 archived
-last_updated: "2026-04-16T21:11:43.460Z"
+milestone: v3.5
+milestone_name: Juice & Polish
+status: in_progress
+stopped_at: Defining requirements
+last_updated: "2026-04-16T00:00:00.000Z"
 last_activity: 2026-04-16
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 11
-  completed_plans: 11
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -21,15 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-16)
 
 **Core value:** The mount-and-weapon system must work reliably — ships can equip, fire, and swap weapons without bugs or silent failures.
-**Current focus:** Planning next milestone (v4.0)
+**Current focus:** v3.5 Juice & Polish
 
 ## Current Position
 
-Phase: — (milestone complete)
+Phase: Not started (defining requirements)
 Plan: —
-Status: v3.0 shipped. Run `/gsd-new-milestone` to start v4.0.
+Status: Defining requirements
+Last activity: 2026-04-16 — Milestone v3.5 started
 
-Progress: [██████████] 100%
+Progress: [░░░░░░░░░░] 0%
 
 ## Accumulated Context
 
@@ -54,6 +55,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-16T13:51:57.933Z
-Stopped at: Phase 14 UI-SPEC approved
+Last session: 2026-04-16T00:00:00.000Z
+Stopped at: Milestone v3.5 started
 Last activity: 2026-04-16

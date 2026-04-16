@@ -8,6 +8,15 @@ A 2D space shooter built in Godot 4.6.2, featuring a component-based ship archit
 
 The mount-and-weapon system must work reliably — ships can equip, fire, and swap weapons without bugs or silent failures.
 
+## Current Milestone: v3.5 Juice & Polish
+
+**Goal:** Transform the raw combat loop into a polished experience with real enemy sprites, dynamic music, and a proper restart flow.
+
+**Target features:**
+- Game Restart — reset wave/score/state from the death screen without reloading the app
+- Dynamic Music System — background audio that adapts to wave complexity; auto-scans /music folder; categories: Ambient/Combat/High-Intensity; cross-fade transitions
+- Enemy Sprites — replace all 5 Polygon2D debug shapes with sprites from ships_assets.png; per-enemy gem glow pulsing light; fallback to debug shape if unavailable; scale to match player ship
+
 ## Requirements
 
 ### Validated
@@ -46,7 +55,17 @@ The mount-and-weapon system must work reliably — ships can equip, fire, and sw
 
 ### Active
 
-*(None — v4.0 requirements to be defined in /gsd-new-milestone)*
+- [ ] **UI-05**: Player can restart the game from the death screen without reloading the application
+- [ ] **MUS-01**: Background music plays automatically when the game starts
+- [ ] **MUS-02**: Music system scans /music folder and loads all audio files automatically
+- [ ] **MUS-03**: Tracks are categorized (Ambient, Combat, High-Intensity) for wave-driven selection
+- [ ] **MUS-04**: Music transitions dynamically based on current wave complexity
+- [ ] **MUS-05**: Tracks cross-fade smoothly when switching categories
+- [ ] **SPR-01**: ENM-07 through ENM-11 display sprite from ships_assets.png instead of Polygon2D
+- [ ] **SPR-02**: Sprite sheet slicing extracts individual ship sprites programmatically
+- [ ] **SPR-03**: Fallback to Polygon2D debug shape when sprite is unavailable
+- [ ] **SPR-04**: Each enemy ship's gem emits a pulsing light matching the gem's color
+- [ ] **SPR-05**: Enemy sprite scale matches player ship size
 
 ### Out of Scope
 
@@ -121,4 +140,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-16 after v3.0 milestone*
+*Last updated: 2026-04-16 — v3.5 started*
