@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://b4dpblnpfuqsa"]
+[gd_scene load_steps=16 format=3 uid="uid://b4dpblnpfuqsa"]
 
 [ext_resource type="Script" uid="uid://434csk2x1emd" path="res://components/sniper.gd" id="1_sniper"]
 [ext_resource type="Script" uid="uid://ds8aojueywua2" path="res://components/item-dropper.gd" id="2_itemdropper"]
@@ -34,6 +34,18 @@ chance = 0.5
 script = ExtResource("3_itemdrop")
 model = ExtResource("6_healthpack")
 chance = 0.11
+
+[sub_resource type="Gradient" id="Gradient_gem_sniper"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gem_sniper"]
+gradient = SubResource("Gradient_gem_sniper")
+width = 256
+height = 256
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 1.0)
 
 [node name="Sniper" type="RigidBody2D" unique_id=1096959428 node_paths=PackedStringArray("item_dropper")]
 collision_mask = 3
@@ -93,3 +105,14 @@ one_shot = true
 script = ExtResource("2_itemdropper")
 models = Array[ExtResource("3_itemdrop")]([SubResource("Resource_ammo_drop"), SubResource("Resource_no_drop")])
 drop_count = 1
+
+[node name="GemLight" type="PointLight2D" parent="."]
+position = Vector2(0, 0)
+color = Color(0.6, 0.0, 1.0, 1)
+energy = 0.2
+shadow_enabled = false
+texture = SubResource("GradientTexture2D_gem_sniper")
+texture_scale = 8.0
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-400, -400, 800, 800)
