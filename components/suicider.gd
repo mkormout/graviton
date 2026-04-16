@@ -2,6 +2,13 @@ class_name Suicider
 extends EnemyShip
 
 const FAR_THRESHOLD := 4000.0  # distance from current target that counts as "far miss" → brake
+# Sprite configuration (SPR-01, SPR-02, SPR-05) — per D-03 Suicider = ENM-11
+@export var sprite_region: Rect2 = Rect2(1720, 80, 340, 640)
+@export var sprite_scale: Vector2 = Vector2(1.01, 1.01)
+# Gem glow configuration (SPR-04) — per D-04 Suicider gem is red, D-05 frantic fast pulse
+@export var gem_energy_min: float = 0.6
+@export var gem_energy_max: float = 3.0
+@export var gem_pulse_half_period: float = 0.15
 
 var _target: Node2D = null
 var _locked_target_pos: Vector2 = Vector2.ZERO
@@ -18,6 +25,8 @@ func _ready() -> void:
 	# detection_area.body_entered already connected by EnemyShip._ready() via virtual dispatch
 	# — do NOT re-connect here or the handler fires twice and the IDLING guard fails on second call
 	_contact_area.body_entered.connect(_on_contact_area_body_entered)
+	_setup_sprite()
+	_setup_gem_light()
 
 func _on_detection_area_body_entered(body: Node2D) -> void:
 	if dying:
@@ -70,3 +79,33 @@ func die(delay: float = 0.0) -> void:
 	if dying:
 		return
 	super(delay)
+
+# SPR-01/02/03/05: Load atlas, configure Sprite2D region, hide Polygon2D fallback on success.
+func _setup_sprite() -> void:
+	var atlas: Texture2D = load("res://ships_assests.png")
+	if atlas == null:
+		# SPR-03 fallback: atlas missing — Polygon2D "Shape" stays visible.
+		return
+	var sprite := $Sprite2D as Sprite2D
+	sprite.texture = atlas
+	sprite.region_enabled = true
+	sprite.region_rect = sprite_region
+	sprite.rotation_degrees = -90.0  # atlas art points +Y; Godot facing is +X
+	sprite.scale = sprite_scale
+	$Shape.visible = false
+
+# SPR-04: Wire viewport culling, start infinite pulse tween on gem light.
+func _setup_gem_light() -> void:
+	var notifier := $VisibleOnScreenNotifier2D as VisibleOnScreenNotifier2D
+	var light := $GemLight as PointLight2D
+	light.enabled = false
+	notifier.screen_entered.connect(func(): light.enabled = true)
+	notifier.screen_exited.connect(func(): light.enabled = false)
+	_start_pulse(light)
+
+func _start_pulse(light: PointLight2D) -> void:
+	var tween := create_tween()
+	tween.set_loops(0)  # 0 = infinite in Godot 4 (verified per RESEARCH Pattern 2)
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.tween_property(light, "energy", gem_energy_max, gem_pulse_half_period)
+	tween.tween_property(light, "energy", gem_energy_min, gem_pulse_half_period)
