@@ -3,7 +3,7 @@ extends Node
 ## Cross-fade music system with wave-based category selection (Phase 16)
 
 @export var crossfade_duration: float = 2.0
-@export var music_volume_db: float = -6.0
+@export var music_volume_db: float = -10.5
 @export var combat_wave: int = 6
 @export var high_intensity_wave: int = 11
 
