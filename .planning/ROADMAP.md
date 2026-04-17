@@ -77,7 +77,9 @@
   2. The music system loads tracks from a preload catalog without using DirAccess (export-safe)
   3. Tracks are grouped into Ambient, Combat, and High-Intensity categories; the active category changes as wave number increases
   4. When the active category changes, the outgoing track fades out while the incoming track fades in; the transition sounds smooth, not abrupt
-**Plans**: TBD
+**Plans**: 2 plans
+- [ ] 16-01-PLAN.md — Import MP3s, create MusicManager autoload, register in project.godot
+- [ ] 16-02-PLAN.md — Wire MusicManager to WaveManager in world.gd and verify end-to-end
 
 ### Phase 17: Game Restart
 **Goal**: Players can restart the full game from the death screen; all systems (wave, score, music, enemies) reset to Wave 1 state without reloading the application
@@ -110,5 +112,5 @@
 | 13. Leaderboard | v3.0 | 2/2 | Complete | 2026-04-15 |
 | 14. Enemy Balancing + Wave Variety + UI Polish | v3.0 | 4/4 | Complete | 2026-04-16 |
 | 15. Enemy Sprites | v3.5 | 3/4 | In Progress|  |
-| 16. Dynamic Music | v3.5 | 0/TBD | Not started | - |
+| 16. Dynamic Music | v3.5 | 0/2 | Not started | - |
 | 17. Game Restart | v3.5 | 0/TBD | Not started | - |
