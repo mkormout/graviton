@@ -46,7 +46,7 @@
 **Milestone Goal:** Transform the raw combat loop into a polished experience with real enemy sprites, dynamic music, and a proper restart flow.
 
 - [ ] **Phase 15: Enemy Sprites** - Replace Polygon2D debug shapes with sprites; per-enemy gem glow
-- [ ] **Phase 16: Dynamic Music** - MusicManager autoload with wave-driven category selection and cross-fade
+- [x] **Phase 16: Dynamic Music** - MusicManager autoload with wave-driven category selection and cross-fade (completed 2026-04-17)
 - [ ] **Phase 17: Game Restart** - Death screen restart resets all systems without reloading the app
 
 ## Phase Details
@@ -78,8 +78,8 @@
   3. Tracks are grouped into Ambient, Combat, and High-Intensity categories; the active category changes as wave number increases
   4. When the active category changes, the outgoing track fades out while the incoming track fades in; the transition sounds smooth, not abrupt
 **Plans**: 2 plans
-- [ ] 16-01-PLAN.md — Import MP3s, create MusicManager autoload, register in project.godot
-- [ ] 16-02-PLAN.md — Wire MusicManager to WaveManager in world.gd and verify end-to-end
+- [x] 16-01-PLAN.md — Import MP3s, create MusicManager autoload, register in project.godot
+- [x] 16-02-PLAN.md — Wire MusicManager to WaveManager in world.gd and verify end-to-end
 
 ### Phase 17: Game Restart
 **Goal**: Players can restart the full game from the death screen; all systems (wave, score, music, enemies) reset to Wave 1 state without reloading the application
@@ -112,5 +112,5 @@
 | 13. Leaderboard | v3.0 | 2/2 | Complete | 2026-04-15 |
 | 14. Enemy Balancing + Wave Variety + UI Polish | v3.0 | 4/4 | Complete | 2026-04-16 |
 | 15. Enemy Sprites | v3.5 | 3/4 | In Progress|  |
-| 16. Dynamic Music | v3.5 | 0/2 | Not started | - |
+| 16. Dynamic Music | v3.5 | 2/2 | Complete   | 2026-04-17 |
 | 17. Game Restart | v3.5 | 0/TBD | Not started | - |

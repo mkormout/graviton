@@ -4,8 +4,8 @@ milestone: v3.5
 milestone_name: Juice & Polish
 status: executing
 stopped_at: Phase 16 context gathered
-last_updated: "2026-04-17T14:55:35.681Z"
-last_activity: 2026-04-17 -- Phase 16 planning complete
+last_updated: "2026-04-17T15:01:56.247Z"
+last_activity: 2026-04-17 -- Phase 16 execution started
 progress:
   total_phases: 3
   completed_phases: 1
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-16)
 
 **Core value:** The mount-and-weapon system must work reliably — ships can equip, fire, and swap weapons without bugs or silent failures.
-**Current focus:** Phase 15 — enemy-sprites
+**Current focus:** Phase 16 — dynamic-music
 
 ## Current Position
 
-Phase: 15 (enemy-sprites) — EXECUTING
-Plan: 1 of 4
-Status: Ready to execute
-Last activity: 2026-04-17 -- Phase 16 planning complete
+Phase: 16 (dynamic-music) — EXECUTING
+Plan: 1 of 2
+Status: Executing Phase 16
+Last activity: 2026-04-17 -- Phase 16 execution started
 
 Progress: [░░░░░░░░░░] 0%
 
