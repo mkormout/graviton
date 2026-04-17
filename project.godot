@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 ScoreManager="*res://components/score-manager.gd"
+MusicManager="*res://components/music-manager.gd"
 
 [display]
 
