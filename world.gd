@@ -65,6 +65,9 @@ func _ready():
 	# Wire ScoreManager to WaveManager for wave multiplier (Phase 11)
 	if ScoreManager:
 		ScoreManager.connect_to_wave_manager($WaveManager)
+	# Wire MusicManager to WaveManager for wave-driven music (Phase 16)
+	if MusicManager:
+		MusicManager.connect_to_wave_manager($WaveManager)
 	$WaveManager.wave_cleared_waiting.connect(func(_n): _wave_clear_pending = true)
 
 	var score_hud: ScoreHud = score_hud_model.instantiate()
