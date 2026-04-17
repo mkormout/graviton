@@ -30,6 +30,30 @@ func _ready() -> void:
 	detection_area.set_collision_mask_value(1, true)     # area detects Ship layer (1)
 	detection_area.body_entered.connect(_on_detection_area_body_entered)
 	hitbox.body_entered.connect(_on_hitbox_body_entered)
+	# Deferred so subclass _ready() (including _setup_gem_light) finishes first.
+	call_deferred("_setup_body_glow")
+
+# Adds a constant low-energy ambient glow behind the sprite using the same
+# radial gradient and color as the enemy's GemLight. Culled by the same
+# VisibleOnScreenNotifier2D. Runs after subclass _ready() via call_deferred.
+func _setup_body_glow() -> void:
+	var gem_light := get_node_or_null("GemLight") as PointLight2D
+	if gem_light == null or gem_light.texture == null:
+		return
+	var notifier := get_node_or_null("VisibleOnScreenNotifier2D") as VisibleOnScreenNotifier2D
+	var body_light := PointLight2D.new()
+	body_light.name = "BodyGlow"
+	body_light.texture = gem_light.texture
+	body_light.color = gem_light.color
+	body_light.energy = 0.4
+	body_light.shadow_enabled = false
+	body_light.texture_scale = gem_light.texture_scale * 1.8  # wider spread than pulsing gem
+	body_light.z_index = -1  # render behind Sprite2D
+	body_light.enabled = false
+	add_child(body_light)
+	if notifier:
+		notifier.screen_entered.connect(func(): body_light.enabled = true)
+		notifier.screen_exited.connect(func(): body_light.enabled = false)
 
 func _physics_process(delta: float) -> void:
 	super(delta)
