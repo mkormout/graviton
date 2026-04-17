@@ -35,7 +35,7 @@ No new gameplay, no UI changes, no enemy or score changes.
 ### Claude's Discretion
 - Initial volume levels for the two AudioStreamPlayers
 - How to handle the edge case where a category change fires while a cross-fade is already in progress (interrupt or queue)
-- Exact preload catalog entries (one track currently: `music/Gravimetric Dawn.mp3`, assigned to Ambient as a placeholder for all categories until more tracks exist)
+- Exact preload catalog GDScript syntax (preload() calls for all four track files)
 - Whether to emit a signal from MusicManager when category changes (useful for Phase 17 debugging but not required)
 
 </decisions>
@@ -55,7 +55,16 @@ No new gameplay, no UI changes, no enemy or score changes.
 - `world.gd` — Shows how `ScoreManager.connect_to_wave_manager(wm)` is called after the scene is ready. MusicManager will need the same wiring pattern.
 
 ### Music assets
-- `music/Gravimetric Dawn.mp3` — Only track currently in the project. Assign to all three categories as a placeholder. No DirAccess scan — hardcode in preload catalog.
+
+Preload catalog assignments (hardcoded — no DirAccess):
+
+| Category | Tracks |
+|----------|--------|
+| Ambient | `music/Gravity-Drum Choir.mp3`, `music/Sulfur Orbit.mp3` |
+| Combat | `music/Static Lullaby.mp3`, `music/Gravimetric Dawn.mp3` |
+| High-Intensity | `music/Static Lullaby.mp3`, `music/Gravimetric Dawn.mp3` |
+
+Note: Combat and High-Intensity share the same two tracks. The category shift still triggers a cross-fade, and the shuffle/no-repeat logic applies within each category's pool independently.
 
 ### Project autoload registration
 - `project.godot` `[autoload]` section — Add `MusicManager="*res://components/music-manager.gd"` following the ScoreManager pattern.
@@ -87,7 +96,7 @@ No new gameplay, no UI changes, no enemy or score changes.
 <specifics>
 ## Specific Ideas
 
-- Gravimetric Dawn.mp3 should be assigned as a placeholder to all three categories in the preload catalog until the user adds more tracks. This means the "no tracks" fallback path won't be hit in practice yet, but the structure is ready.
+- All four tracks are now assigned across categories — no empty-category fallback will be triggered in the current state.
 - The two `AudioStreamPlayer` nodes (A and B, ping-pong) can be created dynamically in `_ready()` rather than requiring a scene file — consistent with ScoreManager's approach of building its own children.
 
 </specifics>
