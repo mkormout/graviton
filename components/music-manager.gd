@@ -3,6 +3,7 @@ extends Node
 ## Cross-fade music system with wave-based category selection (Phase 16)
 
 @export var crossfade_duration: float = 2.0
+@export var music_volume_db: float = -6.0
 @export var combat_wave: int = 6
 @export var high_intensity_wave: int = 11
 
@@ -32,7 +33,7 @@ var _last_track: AudioStream = null
 
 func _ready() -> void:
 	_player_a = AudioStreamPlayer.new()
-	_player_a.volume_db = 0.0
+	_player_a.volume_db = music_volume_db
 	add_child(_player_a)
 
 	_player_b = AudioStreamPlayer.new()
@@ -104,7 +105,7 @@ func _crossfade_to(stream: AudioStream) -> void:
 	_active_tween = create_tween()
 	_active_tween.set_parallel(true)
 	_active_tween.tween_property(_player_a, "volume_db", -80.0, crossfade_duration)
-	_active_tween.tween_property(_player_b, "volume_db", 0.0, crossfade_duration)
+	_active_tween.tween_property(_player_b, "volume_db", music_volume_db, crossfade_duration)
 	_active_tween.chain().tween_callback(_finish_swap)
 
 
@@ -126,7 +127,7 @@ func reset() -> void:
 	_player_a.stop()
 	_player_b.stop()
 	_player_b.volume_db = -80.0
-	_player_a.volume_db = 0.0
+	_player_a.volume_db = music_volume_db
 	var track := _pick_track("ambient")
 	if track:
 		_player_a.stream = track
