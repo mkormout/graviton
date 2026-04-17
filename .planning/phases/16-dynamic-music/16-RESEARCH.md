@@ -470,17 +470,19 @@ func reset() -> void:
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **`const` vs `var` for preload catalog**
    - What we know: `var` with `preload()` at class scope works universally. `const` with `preload()` may or may not be supported as a compile-time constant.
    - What's unclear: Whether Godot 4.6 specifically allows `const Dictionary` with `preload()` values.
    - Recommendation: Use `var` to be safe. Cost is negligible.
+   - RESOLVED: Use `var _catalog` (not `const`) as implemented in Plan 01 Task 2.
 
 2. **loop=false on three unimported tracks**
    - What we know: `Gravimetric Dawn.mp3.import` has `loop=false`. The three new tracks have no .import file.
    - What's unclear: What default loop setting will Godot apply when it auto-generates import files for the three new tracks.
    - Recommendation: Explicitly set `loop=true` in the editor Import tab for all four tracks as part of Wave 0. Do not rely on defaults.
+   - RESOLVED: Plan 01 Task 1 checkpoint explicitly sets `loop=true` for all four tracks in the editor Import tab.
 
 ---
 
