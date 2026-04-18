@@ -112,5 +112,5 @@
 | 13. Leaderboard | v3.0 | 2/2 | Complete | 2026-04-15 |
 | 14. Enemy Balancing + Wave Variety + UI Polish | v3.0 | 4/4 | Complete | 2026-04-16 |
 | 15. Enemy Sprites | v3.5 | 3/4 | In Progress|  |
-| 16. Dynamic Music | v3.5 | 2/2 | Complete   | 2026-04-17 |
+| 16. Dynamic Music | v3.5 | 2/2 | Complete    | 2026-04-18 |
 | 17. Game Restart | v3.5 | 0/TBD | Not started | - |
