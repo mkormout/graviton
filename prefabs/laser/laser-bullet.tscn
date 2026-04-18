@@ -1,9 +1,8 @@
 [gd_scene format=3 uid="uid://cm18d0dsljju"]
 
-[ext_resource type="Script" uid="uid://bpqtbvkdqqr77" path="res://components/bullet.gd" id="1_pgpjq"]
+[ext_resource type="Script" uid="uid://laser_bullet_charb2d" path="res://prefabs/laser/laser-bullet.gd" id="1_lbscript"]
 [ext_resource type="Texture2D" uid="uid://ncjba5q4ihas" path="res://images/laser-bullet.png" id="2_8kldn"]
 [ext_resource type="Script" uid="uid://bm8vrr4oi1o18" path="res://components/damage.gd" id="3_a2nh5"]
-[ext_resource type="PackedScene" uid="uid://bea8xntn1kx3l" path="res://prefabs/laser/laser-bullet-explosion.tscn" id="3_ed1lp"]
 
 [sub_resource type="Resource" id="Resource_cs8mi"]
 script = ExtResource("3_a2nh5")
@@ -25,14 +24,9 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 1)
 
-[node name="LaserBullet" type="RigidBody2D" unique_id=103990723]
-collision_layer = 4
-collision_mask = 8
-contact_monitor = true
-max_contacts_reported = 100
-script = ExtResource("1_pgpjq")
+[node name="LaserBullet" type="CharacterBody2D" unique_id=103990723]
+script = ExtResource("1_lbscript")
 attack = SubResource("Resource_cs8mi")
-death = ExtResource("3_ed1lp")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=852889873]
 rotation = 1.5708
