@@ -48,7 +48,7 @@
 - [ ] **Phase 15: Enemy Sprites** - Replace Polygon2D debug shapes with sprites; per-enemy gem glow
 - [x] **Phase 16: Dynamic Music** - MusicManager autoload with wave-driven category selection and cross-fade (completed 2026-04-17)
 - [ ] **Phase 17: Game Restart** - Death screen restart resets all systems without reloading the app
-- [ ] **Phase 18: Weapons Improvements** - Weapons Improvements
+- [ ] **Phase 18: Weapons Improvements** - Six weapons improved with distinct mechanics, VFX, balance pass, and live weapon HUD
 
 ## Phase Details
 
@@ -82,11 +82,6 @@
 - [x] 16-01-PLAN.md — Import MP3s, create MusicManager autoload, register in project.godot
 - [x] 16-02-PLAN.md — Wire MusicManager to WaveManager in world.gd and verify end-to-end
 
-### Phase 18: Weapons Improvements
-**Goal**: Weapons Improvements
-**Depends on**: Phase 17
-**Plans**: TBD
-
 ### Phase 17: Game Restart
 **Goal**: Players can restart the full game from the death screen; all systems (wave, score, music, enemies) reset to Wave 1 state without reloading the application
 **Depends on**: Phase 16
@@ -100,6 +95,32 @@
 - [ ] 17-01-PLAN.md — Add reset() to WaveManager and ScoreManager
 - [ ] 17-02-PLAN.md — Add Play Again button to DeathScreen, implement _restart_game() in world.gd
 **UI hint**: yes
+
+### Phase 18: Weapons Improvements
+**Goal**: All six player weapons have distinct mechanics, visual effects, and balanced damage; the recoil bug is fixed; a live weapon HUD shows ammo, reload, and charge/spool state
+**Depends on**: Phase 17
+**Requirements**: WPN-01 through WPN-11
+**Success Criteria** (what must be TRUE):
+  1. Firing any weapon no longer causes the ship to spin — recoil applies a clean backward push
+  2. Gausscannon: hold fire charges for up to 2s; releasing fires a scaled shot with PointLight2D glow and spark burst at full charge
+  3. RPG: passively acquires a lock on enemies in a 30-degree cone (1.5s); locked shots home to target with a red bracket UI
+  4. Minigun: fire rate ramps from base to 5x over 2s; damage increases 1.5x at max spool with glow effect
+  5. Laser: bullets bounce up to 3 times, spawning 2 children per bounce (up to 8 bullets) with a green flash at each contact
+  6. GravityGun: hold fire charges for up to 1.5s; both shockwave force and Area2D radius scale with charge
+  7. All weapons produce a muzzle flash; heavy weapons (Gausscannon, RPG, GravityGun) trigger screen shake
+  8. All non-laser bullets leave a visible trail and produce a spark burst on impact
+  9. Weapon HUD is always visible showing active weapon name, ammo count, reload bar, and charge/spool bar
+**Plans**: 10 plans
+- [ ] 18-01-PLAN.md — Recoil bug fix (mountable-body.gd) + BodyCamera.shake() method
+- [ ] 18-02-PLAN.md — Laser bouncing bullet (CharacterBody2D reclassing with move_and_collide)
+- [ ] 18-03-PLAN.md — GausscannonWeapon: hold-to-charge script + scene PointLight2D/CPUParticles2D
+- [ ] 18-04-PLAN.md — RpgWeapon: homing lock acquisition + rpg-bullet.gd homing steering
+- [ ] 18-05-PLAN.md — MinigunWeapon: spooling fire rate + glow/particle scaling
+- [ ] 18-06-PLAN.md — GravityGun: hold-to-charge update to gravitygun-script.gd
+- [ ] 18-07-PLAN.md — Muzzle flash CPUParticles2D for all five weapon scenes + LaserWeapon script
+- [ ] 18-08-PLAN.md — Bullet trail (Line2D) + impact FX + laser bounce flash scenes
+- [ ] 18-09-PLAN.md — Balance pass: update damage values in Gausscannon, RPG, Laser bullet scenes
+- [ ] 18-10-PLAN.md — WeaponHud scene + script + world.gd integration + screen shake wiring (human verify)
 
 ## Progress
 
@@ -122,4 +143,4 @@
 | 15. Enemy Sprites | v3.5 | 3/4 | In Progress|  |
 | 16. Dynamic Music | v3.5 | 2/2 | Complete    | 2026-04-18 |
 | 17. Game Restart | v3.5 | 0/2 | Not started | - |
-| 18. Weapons Improvements | v3.5 | 0/0 | Not planned | - |
+| 18. Weapons Improvements | v3.5 | 0/10 | Planned | - |
