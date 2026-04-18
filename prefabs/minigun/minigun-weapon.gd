@@ -7,6 +7,7 @@ const DAMAGE_MAX_MULTIPLIER: float = 1.5
 
 @export var light: PointLight2D
 @export var sparks: CPUParticles2D
+@export var muzzle_flash: CPUParticles2D
 
 var spool: float = 0.0    # 0.0 = idle, 1.0 = full speed
 
@@ -72,6 +73,9 @@ func fire() -> void:
 		spawn_parent.call_deferred("add_child", instance)
 	else:
 		push_warning("MinigunWeapon: spawn_parent not set")
+
+	if muzzle_flash:
+		muzzle_flash.restart()
 
 	if sound:
 		sound.play()

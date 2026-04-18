@@ -5,6 +5,7 @@ const CHARGE_MAX: float = 2.0
 
 @export var light: PointLight2D
 @export var sparks: CPUParticles2D
+@export var muzzle_flash: CPUParticles2D
 
 signal fired_heavy  # Connected to BodyCamera.shake() in world.gd (plan 18-10)
 
@@ -81,6 +82,9 @@ func _fire_charged() -> void:
 		spawn_parent.call_deferred("add_child", instance)
 	else:
 		push_warning("GausscannonWeapon: spawn_parent not set")
+
+	if muzzle_flash:
+		muzzle_flash.restart()
 
 	if sound:
 		sound.play()

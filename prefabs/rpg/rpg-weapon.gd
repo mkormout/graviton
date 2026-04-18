@@ -5,6 +5,8 @@ const LOCK_TIME: float = 1.5
 const CONE_ANGLE: float = PI / 6.0   # 30° half-angle = 60° total cone
 const LOCK_RANGE: float = 3000.0
 
+@export var muzzle_flash: CPUParticles2D
+
 signal fired_heavy  # Connected to BodyCamera.shake() in world.gd (plan 18-10)
 
 var _lock_target: Node2D = null
@@ -71,6 +73,9 @@ func fire() -> void:
 	if not can_shoot():
 		return
 	super()   # spawns bullet via MountableWeapon.fire()
+
+	if muzzle_flash:
+		muzzle_flash.restart()
 
 	# If locked, pass target to the just-spawned bullet
 	if locked and is_instance_valid(_lock_target):

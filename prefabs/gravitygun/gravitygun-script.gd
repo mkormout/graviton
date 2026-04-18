@@ -12,6 +12,7 @@ const AREA_MAX_MULT: float = 2.5
 @export var torque: int = 2000000
 @export var attack: Damage
 @export var light: PointLight2D  # PointLight2D node for charge-pulse visual (D-23)
+@export var muzzle_flash: CPUParticles2D
 
 signal fired_heavy  # Connected to BodyCamera.shake() in world.gd (plan 18-10)
 
@@ -81,6 +82,9 @@ func _fire_charged() -> void:
 	strength = orig_strength
 	if area:
 		area.scale = _base_area_scale
+
+	if muzzle_flash:
+		muzzle_flash.restart()
 
 	# Camera shake on charged fire (D-27)
 	fired_heavy.emit()

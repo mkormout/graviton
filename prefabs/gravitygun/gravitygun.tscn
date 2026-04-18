@@ -24,7 +24,7 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.49359, 0)
 
-[node name="Gravitygun" type="RigidBody2D" unique_id=1776541003 node_paths=PackedStringArray("area", "barrel", "sound", "empty_sound", "reload_sound", "light")]
+[node name="Gravitygun" type="RigidBody2D" unique_id=1776541003 node_paths=PackedStringArray("area", "barrel", "sound", "empty_sound", "reload_sound", "light", "muzzle_flash")]
 z_index = -1
 collision_layer = 2
 collision_mask = 8
@@ -37,6 +37,7 @@ sound = NodePath("AudioStreamPlayer2D")
 empty_sound = NodePath("EmptySound")
 reload_sound = NodePath("ReloadSound")
 light = NodePath("PointLight2D")
+muzzle_flash = NodePath("Barrel/MuzzleFlash")
 ammo_type = ExtResource("4_foi0f")
 rate = 2.0
 velocity = 25000.0
@@ -62,6 +63,17 @@ max_distance = 20000.0
 
 [node name="Barrel" type="Node2D" parent="." unique_id=1791454971]
 position = Vector2(700, 2.08165e-12)
+
+[node name="MuzzleFlash" type="CPUParticles2D" parent="Barrel" unique_id=1791454972]
+emitting = false
+one_shot = true
+amount = 12
+lifetime = 0.25
+explosiveness = 0.85
+spread = 45.0
+initial_velocity_min = 150.0
+initial_velocity_max = 350.0
+color = Color(0.2, 1.0, 0.4, 1.0)
 
 [node name="MountPoint" type="Node2D" parent="." unique_id=1737085087]
 position = Vector2(-103, 2.08165e-12)
