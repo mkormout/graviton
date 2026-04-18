@@ -43,8 +43,7 @@ func do(sender: MountableBody, action: Action, where: String, meta = null):
 
 	if action == Action.RECOIL:
 		var vector = -Vector2.from_angle(sender.global_rotation) * meta
-		var place = sender.global_position / 100
-		apply_impulse(vector, place)
+		apply_central_impulse(vector)
 	
 	if sender == self:
 		var mount = get_mount(where)
