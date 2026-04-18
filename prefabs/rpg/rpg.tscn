@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://nre36orqecmk"]
 
-[ext_resource type="Script" uid="uid://c78smn4hhr2w5" path="res://components/mountable-weapon.gd" id="1_tahed"]
+[ext_resource type="Script" path="res://prefabs/rpg/rpg-weapon.gd" id="1_tahed"]
 [ext_resource type="PackedScene" uid="uid://jjt7k5wvvkb2" path="res://prefabs/rpg/rpg-bullet.tscn" id="2_qs2qy"]
 [ext_resource type="Resource" uid="uid://bjja6sues7s3s" path="res://items/rpg.tres" id="3_6nvjh"]
 [ext_resource type="Resource" uid="uid://ha5mg162nc1n" path="res://items/rpg-ammo.tres" id="3_77chh"]

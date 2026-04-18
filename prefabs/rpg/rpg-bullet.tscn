@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://jjt7k5wvvkb2"]
 
-[ext_resource type="Script" uid="uid://bpqtbvkdqqr77" path="res://components/bullet.gd" id="1_ffppr"]
+[ext_resource type="Script" path="res://prefabs/rpg/rpg-bullet.gd" id="1_ffppr"]
 [ext_resource type="PackedScene" uid="uid://dkaulya5g8mnu" path="res://prefabs/rpg/rpg-bullet-explosion.tscn" id="2_3ec0n"]
 [ext_resource type="Script" uid="uid://bm8vrr4oi1o18" path="res://components/damage.gd" id="3_qekjp"]
 [ext_resource type="Texture2D" uid="uid://c4l3lik4q5wya" path="res://images/rpg-bullet.png" id="4_rhu4k"]
