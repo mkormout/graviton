@@ -14,7 +14,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_apxb2"]
 size = Vector2(70, 346)
 
-[node name="Minigun" type="RigidBody2D" unique_id=1003743813 node_paths=PackedStringArray("barrel", "sound", "empty_sound", "reload_sound", "light", "sparks")]
+[node name="Minigun" type="RigidBody2D" unique_id=1003743813 node_paths=PackedStringArray("barrel", "sound", "empty_sound", "reload_sound", "light", "sparks", "muzzle_flash")]
 z_index = -1
 collision_layer = 2
 collision_mask = 8
@@ -35,6 +35,7 @@ reload_time = 1.0
 item_type = ExtResource("3_408ca")
 light = NodePath("Barrel/SpoolLight")
 sparks = NodePath("Barrel/SpoolSparks")
+muzzle_flash = NodePath("Barrel/MuzzleFlash")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=497108951]
 rotation = 1.5708
@@ -66,6 +67,17 @@ spread = 30.0
 initial_velocity_min = 150.0
 initial_velocity_max = 300.0
 color = Color(1, 0.6, 0.2, 1)
+
+[node name="MuzzleFlash" type="CPUParticles2D" parent="Barrel" unique_id=201837043]
+emitting = false
+one_shot = true
+amount = 6
+lifetime = 0.1
+explosiveness = 0.95
+spread = 20.0
+initial_velocity_min = 200.0
+initial_velocity_max = 400.0
+color = Color(1.0, 0.8, 0.2, 1.0)
 
 [node name="FireSound" type="AudioStreamPlayer2D" parent="." unique_id=917688067]
 stream = ExtResource("5_smrsu")

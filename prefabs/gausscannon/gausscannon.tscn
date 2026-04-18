@@ -25,7 +25,7 @@ seamless = true
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mhy0m"]
 size = Vector2(126, 345)
 
-[node name="Gausscannon" type="RigidBody2D" unique_id=1656331943 node_paths=PackedStringArray("barrel", "sound", "empty_sound", "reload_sound", "light", "sparks")]
+[node name="Gausscannon" type="RigidBody2D" unique_id=1656331943 node_paths=PackedStringArray("barrel", "sound", "empty_sound", "reload_sound", "light", "sparks", "muzzle_flash")]
 z_index = -1
 collision_layer = 2
 collision_mask = 8
@@ -37,6 +37,7 @@ empty_sound = NodePath("EmptySound")
 reload_sound = NodePath("ReloadSound")
 light = NodePath("Barrel/ChargeLight")
 sparks = NodePath("Barrel/Sparks")
+muzzle_flash = NodePath("Barrel/MuzzleFlash")
 ammo_type = ExtResource("3_2ppho")
 rate = 0.5
 velocity = 40000.0
@@ -80,6 +81,17 @@ spread = 45.0
 initial_velocity_min = 200.0
 initial_velocity_max = 400.0
 color = Color(0.5, 0.8, 1.0, 1.0)
+
+[node name="MuzzleFlash" type="CPUParticles2D" parent="Barrel" unique_id=3333333333]
+emitting = false
+one_shot = true
+amount = 10
+lifetime = 0.15
+explosiveness = 0.95
+spread = 25.0
+initial_velocity_min = 300.0
+initial_velocity_max = 600.0
+color = Color(0.4, 0.7, 1.0, 1.0)
 
 [node name="MountPoint" type="Node2D" parent="." unique_id=145159449]
 position = Vector2(-111, 0)
