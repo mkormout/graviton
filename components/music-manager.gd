@@ -12,6 +12,7 @@ var _catalog: Dictionary = {
 	"ambient": [
 		preload("res://music/Gravity-Drum Choir.mp3"),
 		preload("res://music/Sulfur Orbit.mp3"),
+		preload("res://music/Metonymy Gravity.mp3"),
 	],
 	"combat": [
 		preload("res://music/Static Lullaby.mp3"),
