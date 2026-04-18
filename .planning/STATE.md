@@ -26,8 +26,8 @@ See: .planning/PROJECT.md (updated 2026-04-16)
 ## Current Position
 
 Phase: 18
-Plan: Wave 2 complete (18-03, 18-04, 18-05, 18-06); executing Wave 3
-Status: Phase 18 executing — 6/10 plans complete
+Plan: Wave 3 complete (18-07, 18-08); executing Wave 4
+Status: Phase 18 executing — 8/10 plans complete
 Last activity: 2026-04-19
 
 Progress: [██████████] 75%

@@ -117,8 +117,8 @@
 - [x] 18-04-PLAN.md — RpgWeapon: homing lock acquisition + rpg-bullet.gd homing steering
 - [x] 18-05-PLAN.md — MinigunWeapon: spooling fire rate + glow/particle scaling
 - [x] 18-06-PLAN.md — GravityGun: hold-to-charge update to gravitygun-script.gd
-- [ ] 18-07-PLAN.md — Muzzle flash CPUParticles2D for all five weapon scenes + LaserWeapon script
-- [ ] 18-08-PLAN.md — Bullet trail (Line2D) + impact FX + laser bounce flash scenes
+- [x] 18-07-PLAN.md — Muzzle flash CPUParticles2D for all five weapon scenes + LaserWeapon script
+- [x] 18-08-PLAN.md — Bullet trail (Line2D) + impact FX + laser bounce flash scenes
 - [ ] 18-09-PLAN.md — Balance pass: update damage values in Gausscannon, RPG, Laser bullet scenes
 - [ ] 18-10-PLAN.md — WeaponHud scene + script + world.gd integration + screen shake wiring (human verify)
 
