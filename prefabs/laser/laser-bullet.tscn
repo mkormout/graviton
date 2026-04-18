@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://laser_bullet_charb2d" path="res://prefabs/laser/laser-bullet.gd" id="1_lbscript"]
 [ext_resource type="Texture2D" uid="uid://ncjba5q4ihas" path="res://images/laser-bullet.png" id="2_8kldn"]
 [ext_resource type="Script" uid="uid://bm8vrr4oi1o18" path="res://components/damage.gd" id="3_a2nh5"]
+[ext_resource type="PackedScene" path="res://prefabs/laser/laser-bounce-flash.tscn" id="4_bounceflash"]
 
 [sub_resource type="Resource" id="Resource_cs8mi"]
 script = ExtResource("3_a2nh5")
@@ -27,6 +28,7 @@ fill_to = Vector2(1, 1)
 [node name="LaserBullet" type="CharacterBody2D" unique_id=103990723]
 script = ExtResource("1_lbscript")
 attack = SubResource("Resource_cs8mi")
+bounce_flash_scene = ExtResource("4_bounceflash")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=852889873]
 rotation = 1.5708
@@ -48,3 +50,8 @@ shadow_filter_smooth = 1.7
 texture = SubResource("GradientTexture2D_chupn")
 texture_scale = 20.0
 height = 100.0
+
+[node name="Trail" type="Line2D" parent="."]
+points = PackedVector2Array(0, 0, -10, 0, -20, 0)
+width = 1.0
+default_color = Color(0.2, 1.0, 0.2, 0.5)

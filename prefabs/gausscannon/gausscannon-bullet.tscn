@@ -1,9 +1,10 @@
-[gd_scene format=3 uid="uid://bbbou6h5jmvbh"]
+[gd_scene load_steps=3 format=3 uid="uid://bbbou6h5jmvbh"]
 
-[ext_resource type="Script" uid="uid://bpqtbvkdqqr77" path="res://components/bullet.gd" id="1_vstys"]
+[ext_resource type="Script" path="res://prefabs/gausscannon/gausscannon-bullet.gd" id="1_vstys"]
 [ext_resource type="Texture2D" uid="uid://rsyngcr8ff1t" path="res://images/gausscannon-bullet.png" id="2_woche"]
 [ext_resource type="PackedScene" uid="uid://burphg2ey64t1" path="res://prefabs/gausscannon/gausscannon-bullet-explosion.tscn" id="3_d0lkv"]
 [ext_resource type="Script" uid="uid://bm8vrr4oi1o18" path="res://components/damage.gd" id="3_w2xbv"]
+[ext_resource type="PackedScene" path="res://prefabs/ui/bullet-impact.tscn" id="4_impact"]
 
 [sub_resource type="Resource" id="Resource_bkfm0"]
 script = ExtResource("3_w2xbv")
@@ -44,6 +45,7 @@ script = ExtResource("1_vstys")
 attack = SubResource("Resource_bkfm0")
 death_ttl = 2.0
 death = ExtResource("3_d0lkv")
+impact_scene = ExtResource("4_impact")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=955970648]
 rotation = 1.5708
@@ -82,3 +84,8 @@ scale_amount_min = 20.0
 scale_amount_max = 60.0
 scale_amount_curve = SubResource("Curve_a5ike")
 color_ramp = SubResource("Gradient_b0lmv")
+
+[node name="Trail" type="Line2D" parent="."]
+points = PackedVector2Array(0, 0, -20, 0, -40, 0, -60, 0)
+width = 3.0
+default_color = Color(0.6, 0.8, 1.0, 0.5)

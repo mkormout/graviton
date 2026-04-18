@@ -1,9 +1,10 @@
-[gd_scene format=3 uid="uid://cn8cxmqc4klkd"]
+[gd_scene load_steps=3 format=3 uid="uid://cn8cxmqc4klkd"]
 
-[ext_resource type="Script" uid="uid://bpqtbvkdqqr77" path="res://components/bullet.gd" id="1_ur8u5"]
+[ext_resource type="Script" path="res://prefabs/minigun/minigun-bullet.gd" id="1_ur8u5"]
 [ext_resource type="PackedScene" uid="uid://b8d4dssoxnkg2" path="res://prefabs/minigun/minigun-bullet-explosion.tscn" id="2_dp72j"]
 [ext_resource type="Texture2D" uid="uid://nl7mgr0qflsk" path="res://images/minigun-bullet.png" id="3_qdyd7"]
 [ext_resource type="Script" uid="uid://bm8vrr4oi1o18" path="res://components/damage.gd" id="3_srvt8"]
+[ext_resource type="PackedScene" path="res://prefabs/ui/bullet-impact.tscn" id="4_impact"]
 
 [sub_resource type="Resource" id="Resource_talgb"]
 script = ExtResource("3_srvt8")
@@ -21,6 +22,7 @@ max_contacts_reported = 100
 script = ExtResource("1_ur8u5")
 attack = SubResource("Resource_talgb")
 death = ExtResource("2_dp72j")
+impact_scene = ExtResource("4_impact")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1612484548]
 modulate = Color(2, 1.5, 1, 1)
@@ -30,3 +32,8 @@ texture = ExtResource("3_qdyd7")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1433937163]
 rotation = 1.5708
 shape = SubResource("RectangleShape2D_aamf1")
+
+[node name="Trail" type="Line2D" parent="."]
+points = PackedVector2Array(0, 0, -15, 0, -30, 0)
+width = 1.5
+default_color = Color(1.0, 1.0, 0.5, 0.6)
