@@ -28,6 +28,7 @@ var _time_fast     := 0.0   # seconds above SPEED_THRESHOLD
 var _time_slow     := 0.0   # seconds below SPEED_THRESHOLD after being fast
 var _zooming_out   := false  # true once onset delay satisfied
 var _zoom_current  := ZOOM_DEFAULT
+var _shake_tween: Tween = null
 
 
 func _ready() -> void:
@@ -87,3 +88,17 @@ func _physics_process(delta: float) -> void:
 
 	_zoom_current = lerpf(_zoom_current, zoom_target, clampf(lerp_rate * delta, 0.0, 1.0))
 	zoom = Vector2(_zoom_current, _zoom_current)
+
+
+# Called by heavy weapons (Gausscannon, RPG, GravityGun) on fire.
+# magnitude: pixel offset of shake. duration: seconds of shake.
+func shake(magnitude: float = 8.0, duration: float = 0.3) -> void:
+	if _shake_tween and _shake_tween.is_running():
+		_shake_tween.kill()
+	_shake_tween = create_tween()
+	for _i in range(6):
+		_shake_tween.tween_property(self, "offset",
+			Vector2(randf_range(-magnitude, magnitude),
+					randf_range(-magnitude, magnitude)),
+			duration / 6.0)
+	_shake_tween.tween_property(self, "offset", Vector2.ZERO, 0.05)
