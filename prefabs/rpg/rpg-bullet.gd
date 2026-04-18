@@ -1,12 +1,25 @@
 class_name RpgBullet
 extends Bullet
 
+@export var impact_scene: PackedScene
+
 const TURN_FORCE: float = 60000.0
 
 var _target: Node2D = null
 
 func set_target(t: Node2D) -> void:
 	_target = t
+
+func collision(body) -> void:
+	_spawn_impact(global_position)
+	super.collision(body)
+
+func _spawn_impact(pos: Vector2) -> void:
+	if not impact_scene or not spawn_parent:
+		return
+	var fx = impact_scene.instantiate()
+	fx.global_position = pos
+	spawn_parent.call_deferred("add_child", fx)
 
 func _physics_process(delta: float) -> void:
 	# Homing: apply force toward target each frame (D-10)
