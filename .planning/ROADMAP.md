@@ -90,7 +90,9 @@
   2. Clicking "Play Again" clears all living enemies, resets the wave to Wave 1, and restores the player to full health — the game is immediately playable
   3. Score, kill count, and wave multiplier reset to zero; the leaderboard is not affected
   4. Music resets to Ambient intensity at the restart; the correct category plays from the start of Wave 1
-**Plans**: TBD
+**Plans**: 2 plans
+- [ ] 17-01-PLAN.md — Add reset() to WaveManager and ScoreManager
+- [ ] 17-02-PLAN.md — Add Play Again button to DeathScreen, implement _restart_game() in world.gd
 **UI hint**: yes
 
 ## Progress
@@ -113,4 +115,4 @@
 | 14. Enemy Balancing + Wave Variety + UI Polish | v3.0 | 4/4 | Complete | 2026-04-16 |
 | 15. Enemy Sprites | v3.5 | 3/4 | In Progress|  |
 | 16. Dynamic Music | v3.5 | 2/2 | Complete    | 2026-04-18 |
-| 17. Game Restart | v3.5 | 0/TBD | Not started | - |
+| 17. Game Restart | v3.5 | 0/2 | Not started | - |
