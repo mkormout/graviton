@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v3.5
 milestone_name: Juice & Polish
 status: executing
-stopped_at: Phase 17 planned
-last_updated: "2026-04-18T00:00:00.000Z"
-last_activity: 2026-04-18
+stopped_at: Phase 18 executing
+last_updated: "2026-04-19T00:00:00.000Z"
+last_activity: 2026-04-19
 progress:
   total_phases: 3
   completed_phases: 2
-  total_plans: 8
+  total_plans: 18
   completed_plans: 6
-  percent: 75
+  percent: 33
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-16)
 
 **Core value:** The mount-and-weapon system must work reliably — ships can equip, fire, and swap weapons without bugs or silent failures.
-**Current focus:** Phase 17 — game-restart
+**Current focus:** Phase 18 — weapons-improvements
 
 ## Current Position
 
-Phase: 17
-Plan: Ready to execute
-Status: Phase 17 planned — 2 plans in 2 waves
-Last activity: 2026-04-18
+Phase: 18
+Plan: Wave 1 complete (18-01, 18-02); executing Wave 2
+Status: Phase 18 executing — 2/10 plans complete
+Last activity: 2026-04-19
 
 Progress: [██████████] 75%
 

@@ -111,8 +111,8 @@
   8. All non-laser bullets leave a visible trail and produce a spark burst on impact
   9. Weapon HUD is always visible showing active weapon name, ammo count, reload bar, and charge/spool bar
 **Plans**: 10 plans
-- [ ] 18-01-PLAN.md — Recoil bug fix (mountable-body.gd) + BodyCamera.shake() method
-- [ ] 18-02-PLAN.md — Laser bouncing bullet (CharacterBody2D reclassing with move_and_collide)
+- [x] 18-01-PLAN.md — Recoil bug fix (mountable-body.gd) + BodyCamera.shake() method
+- [x] 18-02-PLAN.md — Laser bouncing bullet (CharacterBody2D reclassing with move_and_collide)
 - [ ] 18-03-PLAN.md — GausscannonWeapon: hold-to-charge script + scene PointLight2D/CPUParticles2D
 - [ ] 18-04-PLAN.md — RpgWeapon: homing lock acquisition + rpg-bullet.gd homing steering
 - [ ] 18-05-PLAN.md — MinigunWeapon: spooling fire rate + glow/particle scaling
