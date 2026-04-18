@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://laser_bounce_flash"]
+
+[ext_resource type="Script" path="res://prefabs/laser/laser-bounce-flash.gd" id="1_flash"]
+
+[node name="LaserBounceFlash" type="CPUParticles2D"]
+script = ExtResource("1_flash")
+one_shot = true
+emitting = true
+amount = 12
+lifetime = 0.2
+explosiveness = 0.95
+spread = 180.0
+initial_velocity_min = 300.0
+initial_velocity_max = 600.0
+color = Color(0.2, 1.0, 0.2, 1.0)
