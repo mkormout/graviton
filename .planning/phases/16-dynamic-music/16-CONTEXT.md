@@ -60,7 +60,7 @@ Preload catalog assignments (hardcoded — no DirAccess):
 
 | Category | Tracks |
 |----------|--------|
-| Ambient | `music/Gravity-Drum Choir.mp3`, `music/Sulfur Orbit.mp3` |
+| Ambient | `music/Gravity-Drum Choir.mp3`, `music/Sulfur Orbit.mp3`, `music/Graviton Lullaby.mp3` |
 | Combat | `music/Static Lullaby.mp3`, `music/Gravimetric Dawn.mp3` |
 | High-Intensity | `music/Static Lullaby.mp3`, `music/Gravimetric Dawn.mp3` |
 

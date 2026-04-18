@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bgo3un77bisue"
+path="res://.godot/imported/Gravity-Drum Choir.mp3-fc5dc0792f11581cd835e4969c179ed5.mp3str"
+
+[deps]
+
+source_file="res://music/Gravity-Drum Choir.mp3"
+dest_files=["res://.godot/imported/Gravity-Drum Choir.mp3-fc5dc0792f11581cd835e4969c179ed5.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

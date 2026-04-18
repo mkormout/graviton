@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dy2icprpfxl1t"
+path="res://.godot/imported/Metonymy Gravity.mp3-cf03f8b011f20962c0cea0b38d29bd72.mp3str"
+
+[deps]
+
+source_file="res://music/Metonymy Gravity.mp3"
+dest_files=["res://.godot/imported/Metonymy Gravity.mp3-cf03f8b011f20962c0cea0b38d29bd72.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
