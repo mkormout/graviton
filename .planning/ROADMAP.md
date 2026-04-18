@@ -113,10 +113,10 @@
 **Plans**: 10 plans
 - [x] 18-01-PLAN.md — Recoil bug fix (mountable-body.gd) + BodyCamera.shake() method
 - [x] 18-02-PLAN.md — Laser bouncing bullet (CharacterBody2D reclassing with move_and_collide)
-- [ ] 18-03-PLAN.md — GausscannonWeapon: hold-to-charge script + scene PointLight2D/CPUParticles2D
-- [ ] 18-04-PLAN.md — RpgWeapon: homing lock acquisition + rpg-bullet.gd homing steering
-- [ ] 18-05-PLAN.md — MinigunWeapon: spooling fire rate + glow/particle scaling
-- [ ] 18-06-PLAN.md — GravityGun: hold-to-charge update to gravitygun-script.gd
+- [x] 18-03-PLAN.md — GausscannonWeapon: hold-to-charge script + scene PointLight2D/CPUParticles2D
+- [x] 18-04-PLAN.md — RpgWeapon: homing lock acquisition + rpg-bullet.gd homing steering
+- [x] 18-05-PLAN.md — MinigunWeapon: spooling fire rate + glow/particle scaling
+- [x] 18-06-PLAN.md — GravityGun: hold-to-charge update to gravitygun-script.gd
 - [ ] 18-07-PLAN.md — Muzzle flash CPUParticles2D for all five weapon scenes + LaserWeapon script
 - [ ] 18-08-PLAN.md — Bullet trail (Line2D) + impact FX + laser bounce flash scenes
 - [ ] 18-09-PLAN.md — Balance pass: update damage values in Gausscannon, RPG, Laser bullet scenes
