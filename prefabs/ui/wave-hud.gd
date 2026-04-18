@@ -67,3 +67,11 @@ func _on_wave_cleared_waiting(wave_number: int) -> void:
 
 func hide_wave_clear_label() -> void:
 	_wave_clear_label.visible = false
+
+func reset() -> void:
+	if _announce_tween and _announce_tween.is_running():
+		_announce_tween.kill()
+	_announcement_label.modulate.a = 0.0
+	_panel.visible = false
+	_wave_clear_label.visible = false
+	_countdown_label.visible = false

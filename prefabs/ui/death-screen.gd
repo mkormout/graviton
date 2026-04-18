@@ -1,6 +1,8 @@
 class_name DeathScreen
 extends CanvasLayer
 
+signal play_again_requested
+
 # --- Constants ---
 const SAVE_PATH := "user://leaderboard.cfg"
 const MAX_ENTRIES := 10
@@ -10,6 +12,7 @@ const GOLD := Color(1.0, 0.843, 0.0)
 var _submitted: bool = false
 var _current_score: int = 0
 var _current_entry_index: int = -1
+var _play_again_btn: Button = null
 
 # --- Node references ---
 @onready var _name_section: Control = $NameSection
@@ -30,6 +33,9 @@ func _ready() -> void:
 func show_death_screen(score: int) -> void:
 	_current_score = score
 	_submitted = false
+	if _play_again_btn:
+		_play_again_btn.queue_free()
+		_play_again_btn = null
 	visible = true
 	_name_section.visible = true
 	_leaderboard_section.visible = false
@@ -64,6 +70,12 @@ func _on_submit(_text: String = "") -> void:
 	_name_section.visible = false
 	_leaderboard_section.visible = true
 	_populate_table(entries)
+
+	_play_again_btn = Button.new()
+	_play_again_btn.text = "Play Again"
+	_play_again_btn.add_theme_font_size_override("font_size", 22)
+	_play_again_btn.pressed.connect(func(): play_again_requested.emit())
+	_leaderboard_section.get_node("VBox").add_child(_play_again_btn)
 
 
 # --- ConfigFile persistence ---

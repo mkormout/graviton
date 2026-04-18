@@ -131,3 +131,9 @@ func _on_wave_complete() -> void:
 		all_waves_complete.emit()
 	else:
 		wave_cleared_waiting.emit(_current_wave_index)
+
+func reset() -> void:
+	_current_wave_index = 0
+	_enemies_alive = 0
+	_wave_total = 0
+	print("[WaveManager] Reset to Wave 1")

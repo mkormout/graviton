@@ -79,6 +79,7 @@ func _ready():
 	death_screen = death_screen_model.instantiate()
 	add_child(death_screen)
 	$ShipBFG23.died.connect(_on_player_died)
+	death_screen.play_again_requested.connect(_restart_game)
 
 	_controls_hint = controls_hint_model.instantiate()
 	add_child(_controls_hint)
@@ -395,5 +396,59 @@ func add_asteroid(model: PackedScene):
 func _on_player_died() -> void:
 	_wave_clear_pending = false
 	_wave_hud.hide_wave_clear_label()
+	# Wait for the death explosion to finish (Explosion.time = 1s) before pausing
+	await get_tree().create_timer(1.2).timeout
 	get_tree().paused = true
 	death_screen.show_death_screen(ScoreManager.total_score)
+
+
+func _restart_game() -> void:
+	get_tree().paused = false
+	death_screen.visible = false
+
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		enemy.queue_free()
+
+	for child in get_children():
+		if child is Item:
+			child.queue_free()
+
+	for child in get_children():
+		if child is Asteroid:
+			child.queue_free()
+
+	for child in get_children():
+		if child is Explosion:
+			child.queue_free()
+
+	for child in get_children():
+		if child is Bullet:
+			child.queue_free()
+
+	await get_tree().process_frame
+
+	# Reset after await so enemy tree_exiting cascade doesn't re-show the label
+	_wave_clear_pending = false
+	_wave_hud.reset()
+
+	var ship = ship_model.instantiate()
+	ship.name = "ShipBFG23"
+	add_child(ship)
+	ship.global_position = Vector2.ZERO
+	ship.add_to_group("player")
+	setup_spawn_parent(ship)
+	mount_weapon(ship, minigun_model, "")
+	mount_weapon(ship, minigun_model, "left")
+	mount_weapon(ship, minigun_model, "right")
+	ship.died.connect(_on_player_died)
+	$ShipCamera.body = ship
+	$Hud.ship = ship
+	$Hud.initialized = false
+	$Coins.ship = ship
+
+	ScoreManager.reset()
+	$WaveManager.reset()
+	$WaveManager._player = ship
+	MusicManager.reset()
+
+	spawn_asteroids(10)

@@ -178,3 +178,14 @@ func _on_player_health_changed(old_health: int, new_health: int) -> void:
 		wave_multiplier = 1
 		multiplier_changed.emit(wave_multiplier)
 		print("[ScoreManager] Damage taken, multiplier reset to x1")
+
+func reset() -> void:
+	_combo_timer.stop()
+	total_score = 0
+	kill_count = 0
+	wave_multiplier = 1
+	combo_count = 0
+	score_changed.emit(total_score, 0)
+	multiplier_changed.emit(wave_multiplier)
+	combo_updated.emit(0)
+	print("[ScoreManager] Reset")
