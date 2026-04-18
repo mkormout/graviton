@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cbco1xs1gleke"]
 
-[ext_resource type="Script" uid="uid://c78smn4hhr2w5" path="res://components/mountable-weapon.gd" id="1_iml48"]
+[ext_resource type="Script" uid="uid://gausscannon_weapon_gd" path="res://prefabs/gausscannon/gausscannon-weapon.gd" id="1_gausswpn"]
 [ext_resource type="PackedScene" uid="uid://bbbou6h5jmvbh" path="res://prefabs/gausscannon/gausscannon-bullet.tscn" id="2_i52xv"]
 [ext_resource type="Resource" uid="uid://b6iqy2gg6o6uo" path="res://items/gausscannon-ammo.tres" id="3_2ppho"]
 [ext_resource type="Resource" uid="uid://c1iigd6ec20sn" path="res://items/gausscannon.tres" id="3_ljmf2"]
@@ -25,16 +25,18 @@ seamless = true
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mhy0m"]
 size = Vector2(126, 345)
 
-[node name="Gausscannon" type="RigidBody2D" unique_id=1656331943 node_paths=PackedStringArray("barrel", "sound", "empty_sound", "reload_sound")]
+[node name="Gausscannon" type="RigidBody2D" unique_id=1656331943 node_paths=PackedStringArray("barrel", "sound", "empty_sound", "reload_sound", "light", "sparks")]
 z_index = -1
 collision_layer = 2
 collision_mask = 8
-script = ExtResource("1_iml48")
+script = ExtResource("1_gausswpn")
 ammo = ExtResource("2_i52xv")
 barrel = NodePath("Barrel")
 sound = NodePath("FireSound")
 empty_sound = NodePath("EmptySound")
 reload_sound = NodePath("ReloadSound")
+light = NodePath("Barrel/ChargeLight")
+sparks = NodePath("Barrel/Sparks")
 ammo_type = ExtResource("3_2ppho")
 rate = 0.5
 velocity = 40000.0
@@ -62,6 +64,22 @@ shape = SubResource("RectangleShape2D_mhy0m")
 
 [node name="Barrel" type="Node2D" parent="." unique_id=1382234682]
 position = Vector2(400, 2.08165e-12)
+
+[node name="ChargeLight" type="PointLight2D" parent="Barrel" unique_id=1111111111]
+energy = 0.3
+texture_scale = 1.5
+color = Color(0.6, 0.8, 1.0, 1.0)
+
+[node name="Sparks" type="CPUParticles2D" parent="Barrel" unique_id=2222222222]
+emitting = false
+one_shot = true
+amount = 12
+lifetime = 0.3
+explosiveness = 0.9
+spread = 45.0
+initial_velocity_min = 200.0
+initial_velocity_max = 400.0
+color = Color(0.5, 0.8, 1.0, 1.0)
 
 [node name="MountPoint" type="Node2D" parent="." unique_id=145159449]
 position = Vector2(-111, 0)
