@@ -5,7 +5,7 @@
 - ✅ **v1.0 Stabilize + Migrate** — Phases 1-3 (shipped 2026-04-10) — [archive](milestones/v1.0-ROADMAP.md)
 - ✅ **v2.0 Enemy AI** — Phases 4-9 (shipped 2026-04-13) — [archive](milestones/v2.0-ROADMAP.md)
 - ✅ **v3.0 Quality & Game Systems** — Phases 10-14 (shipped 2026-04-16) — [archive](milestones/v3.0-ROADMAP.md)
-- 🚧 **v3.5 Juice & Polish** — Phases 15-17 (in progress)
+- 🚧 **v3.5 Juice & Polish** — Phases 15-18 (in progress)
 
 ## Phases
 
@@ -48,6 +48,7 @@
 - [ ] **Phase 15: Enemy Sprites** - Replace Polygon2D debug shapes with sprites; per-enemy gem glow
 - [x] **Phase 16: Dynamic Music** - MusicManager autoload with wave-driven category selection and cross-fade (completed 2026-04-17)
 - [ ] **Phase 17: Game Restart** - Death screen restart resets all systems without reloading the app
+- [ ] **Phase 18: Weapons Improvements** - Weapons Improvements
 
 ## Phase Details
 
@@ -80,6 +81,11 @@
 **Plans**: 2 plans
 - [x] 16-01-PLAN.md — Import MP3s, create MusicManager autoload, register in project.godot
 - [x] 16-02-PLAN.md — Wire MusicManager to WaveManager in world.gd and verify end-to-end
+
+### Phase 18: Weapons Improvements
+**Goal**: Weapons Improvements
+**Depends on**: Phase 17
+**Plans**: TBD
 
 ### Phase 17: Game Restart
 **Goal**: Players can restart the full game from the death screen; all systems (wave, score, music, enemies) reset to Wave 1 state without reloading the application
@@ -116,3 +122,4 @@
 | 15. Enemy Sprites | v3.5 | 3/4 | In Progress|  |
 | 16. Dynamic Music | v3.5 | 2/2 | Complete    | 2026-04-18 |
 | 17. Game Restart | v3.5 | 0/2 | Not started | - |
+| 18. Weapons Improvements | v3.5 | 0/0 | Not planned | - |
