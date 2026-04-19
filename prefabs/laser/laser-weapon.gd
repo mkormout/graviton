@@ -24,8 +24,12 @@ func fire() -> void:
 	var dir := Vector2.from_angle(global_rotation + randf_range(-spread, spread))
 	if "velocity" in instance:
 		instance.velocity = dir * velocity
+	if "bullet_scene" in instance:
+		instance.bullet_scene = ammo
 	if "spawn_parent" in instance:
 		instance.spawn_parent = spawn_parent
+	if "shooter" in instance:
+		instance.shooter = get_ship()
 	if spawn_parent:
 		spawn_parent.call_deferred("add_child", instance)
 	else:

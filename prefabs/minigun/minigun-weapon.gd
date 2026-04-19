@@ -1,9 +1,10 @@
 class_name MinigunWeapon
 extends MountableWeapon
 
-const SPOOL_UP_TIME: float = 2.0
+const SPOOL_UP_TIME: float = 1.2
 const SPOOL_DOWN_TIME: float = 0.5
-const DAMAGE_MAX_MULTIPLIER: float = 1.5
+const DAMAGE_MIN_MULT: float = 0.875  # spool=0: slightly weaker than base
+const DAMAGE_MAX_MULT: float = 1.625  # spool=1: 50% wider range than original 1.5x cliff
 
 @export var light: PointLight2D
 @export var sparks: CPUParticles2D
@@ -16,11 +17,13 @@ var _rate_max: float = 0.0
 
 func _ready() -> void:
 	super()
-	_rate_min = rate
-	_rate_max = max(rate * 0.2, 0.01)  # 5x speed at max spool; clamped to avoid 0 wait_time
+	_rate_min = 0.5            # 2 shots/sec when cold — noticeable slow start
+	_rate_max = max(rate / 5.6, 0.01)  # 5.6x speed at full spool
 
 func _physics_process(delta: float) -> void:
-	var firing: bool = Input.is_action_pressed("ui_select")
+	# Only respond to player input while mounted; dropped weapons must not spool up.
+	var mounted: bool = get_parent() is MountPoint
+	var firing: bool = mounted and Input.is_action_pressed("ui_select")
 
 	if firing:
 		spool = min(spool + delta / SPOOL_UP_TIME, 1.0)
@@ -60,11 +63,12 @@ func fire() -> void:
 		Vector2.from_angle(global_rotation + randf_range(-spread, spread)) * velocity
 	)
 
-	# Scale damage at max spool (D-15)
-	if spool >= 0.95 and "attack" in instance and instance.attack:
+	# Continuous damage scaling across full spool range
+	if "attack" in instance and instance.attack:
 		var scaled_attack = instance.attack.duplicate()
-		scaled_attack.energy *= DAMAGE_MAX_MULTIPLIER
-		scaled_attack.kinetic *= DAMAGE_MAX_MULTIPLIER
+		var mult: float = lerp(DAMAGE_MIN_MULT, DAMAGE_MAX_MULT, spool)
+		scaled_attack.energy *= mult
+		scaled_attack.kinetic *= mult
 		instance.attack = scaled_attack
 
 	if "spawn_parent" in instance:

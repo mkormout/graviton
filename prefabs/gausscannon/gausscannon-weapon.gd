@@ -15,18 +15,18 @@ var _was_charging: bool = false
 const _LIGHT_BASE: float = 0.3
 const _LIGHT_MAX: float = 4.0
 
-# Damage multiplier at full charge: base = 1.0×, full = 3.0×
-const _DAMAGE_MIN_MULT: float = 1.0
-const _DAMAGE_MAX_MULT: float = 3.0
-# Velocity multiplier: base tap = 0.5× velocity, full charge = 1.0×
-const _VEL_MIN_MULT: float = 0.5
-const _VEL_MAX_MULT: float = 1.0
-# Recoil multiplier: tap = 0.3× recoil, full = 1.0×
-const _RECOIL_MIN_MULT: float = 0.3
-const _RECOIL_MAX_MULT: float = 1.0
+# Damage multiplier: midpoint 2.0, diff 3.0 (50% wider than original 2.0 diff)
+const _DAMAGE_MIN_MULT: float = 0.5
+const _DAMAGE_MAX_MULT: float = 3.5
+# Velocity multiplier: midpoint 0.75, diff 0.75 (50% wider than original 0.5 diff)
+const _VEL_MIN_MULT: float = 0.35
+const _VEL_MAX_MULT: float = 1.15
+# Recoil multiplier: midpoint 0.65, diff 1.05 (50% wider than original 0.7 diff)
+const _RECOIL_MIN_MULT: float = 0.1
+const _RECOIL_MAX_MULT: float = 1.2
 
 func _physics_process(delta: float) -> void:
-	var firing: bool = Input.is_action_pressed("ui_select")
+	var firing: bool = get_parent() is MountPoint and Input.is_action_pressed("ui_select")
 
 	if firing and can_shoot():
 		charge_current = min(charge_current + delta, CHARGE_MAX)
@@ -78,6 +78,13 @@ func _fire_charged() -> void:
 		instance.attack = scaled_attack
 	if "spawn_parent" in instance:
 		instance.spawn_parent = spawn_parent
+	# Scale bullet glow and particles with charge — dim at low charge, full at max.
+	var bullet_light = instance.get_node_or_null("PointLight2D")
+	if bullet_light:
+		bullet_light.energy = lerp(0.2, bullet_light.energy, fraction)
+	var bullet_particles = instance.get_node_or_null("CPUParticles2D")
+	if bullet_particles:
+		bullet_particles.scale *= lerp(0.2, 1.0, fraction)
 	if spawn_parent:
 		spawn_parent.call_deferred("add_child", instance)
 	else:

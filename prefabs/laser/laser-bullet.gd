@@ -7,13 +7,20 @@ extends CharacterBody2D
 @export var spread_angle: float = 0.15  # radians (~8.6°)
 @export var bounce_flash_scene: PackedScene
 
+# Set by LaserWeapon.fire() so children can instantiate from the full scene (with CollisionShape2D)
+var bullet_scene: PackedScene
 var spawn_parent: Node
 var bounce_count: int = 0
+# Initial bullets skip the shooter; bounced children leave this null to allow self-hits.
+var shooter: Node2D = null
 
 func _ready() -> void:
-	# Explicit collision layers: layer 3 (bullets), mask 1+2+8 (ships, weapons, asteroids)
-	collision_layer = 4      # bit 3 = layer 3
-	collision_mask = 1 | 2 | 8  # bit 1 (ships), bit 2 (weapons), bit 4 (asteroids)
+	# Layer 3 (bullets) = value 4. Mask: layer 1 (ships=1) + layer 4 (asteroids=8).
+	# Exclude layer 2 (weapons=2) — avoids immediate self-collision with barrel on spawn.
+	collision_layer = 4
+	collision_mask = 1 | 8
+	if shooter:
+		add_collision_exception_with(shooter)
 	get_tree().create_timer(life).timeout.connect(queue_free)
 
 func _physics_process(delta: float) -> void:
@@ -46,12 +53,11 @@ func _on_impact(collision: KinematicCollision2D) -> void:
 	queue_free()
 
 func _spawn_child(new_velocity: Vector2) -> void:
-	var child: LaserBullet = LaserBullet.new()
-	child.attack = attack
-	child.life = life
-	child.max_bounces = max_bounces
-	child.spread_angle = spread_angle
-	child.bounce_flash_scene = bounce_flash_scene
+	if not bullet_scene:
+		push_warning("LaserBullet: bullet_scene not set, cannot spawn bounce child")
+		return
+	var child: LaserBullet = bullet_scene.instantiate() as LaserBullet
+	child.bullet_scene = bullet_scene
 	child.spawn_parent = spawn_parent
 	child.bounce_count = bounce_count + 1
 	child.velocity = new_velocity

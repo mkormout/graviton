@@ -2,10 +2,10 @@ class_name GravityGun
 extends MountableWeapon
 
 const CHARGE_MAX: float = 1.5
-const STRENGTH_MIN_MULT: float = 1.0
-const STRENGTH_MAX_MULT: float = 2.5
-const AREA_MIN_MULT: float = 1.0
-const AREA_MAX_MULT: float = 2.5
+const STRENGTH_MIN_MULT: float = 0.625
+const STRENGTH_MAX_MULT: float = 2.875
+const AREA_MIN_MULT: float = 0.625
+const AREA_MAX_MULT: float = 2.875
 
 @export var area: Area2D
 @export var strength: int = 20000
@@ -39,7 +39,7 @@ func _process(_delta: float) -> void:
 		light.energy = 0.5  # resting glow
 
 func _physics_process(delta: float) -> void:
-	var firing: bool = Input.is_action_pressed("ui_select")
+	var firing: bool = get_parent() is MountPoint and Input.is_action_pressed("ui_select")
 
 	if firing and can_shoot():
 		charge_current = min(charge_current + delta, CHARGE_MAX)
@@ -85,6 +85,24 @@ func _fire_charged() -> void:
 
 	if muzzle_flash:
 		muzzle_flash.restart()
+
+	# Spawn visual projectile — bullet scene has collision_mask=0 so it passes through
+	# everything; the actual damage/push is handled by the Area2D above.
+	if ammo and spawn_parent and barrel:
+		var instance = ammo.instantiate() as RigidBody2D
+		instance.position = barrel.global_position
+		instance.rotation = global_rotation
+		instance.linear_velocity = Vector2.from_angle(global_rotation) * velocity
+		if "spawn_parent" in instance:
+			instance.spawn_parent = spawn_parent
+		# Scale bullet glow and particles with charge — dim at low charge, full at max.
+		var bullet_light = instance.get_node_or_null("PointLight2D")
+		if bullet_light:
+			bullet_light.energy = lerp(0.2, 1.5, fraction)
+		var bullet_particles = instance.get_node_or_null("CPUParticles2D")
+		if bullet_particles:
+			bullet_particles.scale = Vector2(5, 5) * lerp(0.2, 1.0, fraction)
+		spawn_parent.call_deferred("add_child", instance)
 
 	# Camera shake on charged fire (D-27)
 	fired_heavy.emit()

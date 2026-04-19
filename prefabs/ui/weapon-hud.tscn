@@ -2,6 +2,22 @@
 
 [ext_resource type="Script" path="res://prefabs/ui/weapon-hud.gd" id="1_whud"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_outer"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.1, 0.1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inner"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.1, 0.1, 0.6)
+
 [node name="WeaponHud" type="CanvasLayer"]
 layer = 2
 script = ExtResource("1_whud")
@@ -63,6 +79,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_outer")
 
 [node name="InnerRect" type="Panel" parent="LockBracket"]
 anchor_left = 0.1
@@ -71,3 +88,4 @@ anchor_right = 0.9
 anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_inner")

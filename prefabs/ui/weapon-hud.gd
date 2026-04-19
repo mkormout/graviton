@@ -11,6 +11,8 @@ extends CanvasLayer
 var _ship: MountableBody = null
 var _mount_front: MountPoint = null
 var _initialized: bool = false
+# Maps weapon instance ID → bracket Control; one entry per locked RPG mount.
+var _lock_brackets: Dictionary = {}
 
 func _ready() -> void:
 	_reload_bar.visible = false
@@ -62,19 +64,41 @@ func _process(_delta: float) -> void:
 	else:
 		_charge_bar.visible = false
 
-	# RPG lock bracket — duck-type check before cast (T-18-10-04)
-	if _lock_bracket:
-		if weapon.has_method("_scan_cone"):
-			var rpg = weapon as RpgWeapon
-			if rpg and is_instance_valid(rpg) and rpg.lock_target and is_instance_valid(rpg.lock_target):
-				var world_pos: Vector2 = rpg.lock_target.global_position
-				var screen_pos: Vector2 = get_viewport().get_canvas_transform() * world_pos
-				_lock_bracket.position = screen_pos - _lock_bracket.size / 2.0
-				_lock_bracket.visible = true
-				# Bracket shrinks as lock builds: 120px at 0.0 → 30px at 1.0
-				var bracket_size: float = lerp(120.0, 30.0, rpg.lock_progress)
-				_lock_bracket.custom_minimum_size = Vector2(bracket_size, bracket_size)
-			else:
-				_lock_bracket.visible = false
-		else:
-			_lock_bracket.visible = false
+	# RPG lock brackets — one per mounted RPG that has an active lock target.
+	if _lock_bracket and _ship:
+		var active: Dictionary = {}
+		for mount in _ship.get_mounts():
+			var w = mount.body_opposite
+			if not w or not is_instance_valid(w) or not w is RpgWeapon:
+				continue
+			var rpg := w as RpgWeapon
+			if not rpg.lock_target or not is_instance_valid(rpg.lock_target):
+				continue
+			active[rpg.get_instance_id()] = rpg
+
+		# Remove brackets for RPGs no longer targeting.
+		for wid in _lock_brackets.keys():
+			if wid not in active:
+				_lock_brackets[wid].queue_free()
+				_lock_brackets.erase(wid)
+
+		# Create or update a bracket for each active RPG.
+		for wid in active:
+			var rpg: RpgWeapon = active[wid]
+			if wid not in _lock_brackets:
+				var b: Control = _lock_bracket.duplicate()
+				b.visible = false
+				_lock_bracket.get_parent().add_child(b)
+				_lock_brackets[wid] = b
+			var bracket: Control = _lock_brackets[wid]
+			var screen_pos: Vector2 = get_viewport().get_canvas_transform() * rpg.lock_target.global_position
+			# ease(t, 0.3): ease-out curve — fast shrink at start, slows near lock.
+			var t: float = ease(rpg.lock_progress, 0.3)
+			var bracket_size: float = lerp(360.0, 90.0, t)
+			bracket.custom_minimum_size = Vector2(bracket_size, bracket_size)
+			bracket.size = Vector2(bracket_size, bracket_size)
+			bracket.pivot_offset = Vector2(bracket_size, bracket_size) / 2.0
+			bracket.position = screen_pos - bracket.pivot_offset
+			bracket.rotation = t * (PI / 2.0)
+			bracket.modulate.a = lerp(0.3, 1.0, t)
+			bracket.visible = true
