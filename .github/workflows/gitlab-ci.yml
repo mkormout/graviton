@@ -76,6 +76,10 @@ jobs:
           mkdir -v -p build/web
           cd $PROJECT_PATH
           godot --headless --verbose --export-release "HTML5" ./build/web/index.html
+      - name: Patch for SharedArrayBuffer
+        run: |
+          curl -L https://raw.githubusercontent.com/gzuidhof/coi-serviceworker/master/coi-serviceworker.min.js -o build/web/coi-serviceworker.min.js
+          sed -i 's|<head>|<head><script src="coi-serviceworker.min.js"></script>|g' build/web/index.html
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
