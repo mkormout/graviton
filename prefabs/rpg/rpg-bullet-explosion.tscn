@@ -10,7 +10,7 @@
 
 [sub_resource type="Resource" id="Resource_7ipax"]
 script = ExtResource("2_wl3iw")
-kinetic = 3000.0
+kinetic = 4000.0
 
 [sub_resource type="Curve" id="Curve_77gpu"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0511688), 0.0, 0.0, 0, 0]
