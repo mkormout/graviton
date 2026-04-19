@@ -17,6 +17,7 @@ var score_hud_model = preload("res://prefabs/ui/score-hud.tscn")
 var enemy_radar_model = preload("res://prefabs/ui/enemy-radar.tscn")
 var death_screen_model = preload("res://prefabs/ui/death-screen.tscn")
 var controls_hint_model = preload("res://prefabs/ui/controls-hint.tscn")
+var weapon_hud_model = preload("res://prefabs/ui/weapon-hud.tscn")
 
 var asteroids_small_model = [
 	preload("res://prefabs/asteroid/asteroid-small-1.tscn"),
@@ -39,6 +40,7 @@ var death_screen: DeathScreen = null
 var _wave_clear_pending: bool = false
 var _wave_hud: WaveHud = null
 var _controls_hint: ControlsHint = null
+var _weapon_hud: WeaponHud = null
 
 # PHYSICAL LAYERS DESCRIPTION:
 # 1. Ship
@@ -75,6 +77,11 @@ func _ready():
 	score_hud.connect_to_score_manager(ScoreManager)
 
 	add_child(enemy_radar_model.instantiate())
+
+	_weapon_hud = weapon_hud_model.instantiate()
+	add_child(_weapon_hud)
+	_weapon_hud.connect_to_ship($ShipBFG23)
+	_wire_heavy_weapon_shake($ShipBFG23)
 
 	death_screen = death_screen_model.instantiate()
 	add_child(death_screen)
@@ -444,6 +451,9 @@ func _restart_game() -> void:
 	$ShipCamera.body = ship
 	$Hud.ship = ship
 	$Hud.initialized = false
+	if _weapon_hud:
+		_weapon_hud.connect_to_ship(ship)
+	_wire_heavy_weapon_shake(ship)
 	$Coins.ship = ship
 
 	ScoreManager.reset()
@@ -452,3 +462,15 @@ func _restart_game() -> void:
 	MusicManager.reset()
 
 	spawn_asteroids(10)
+
+func _wire_heavy_weapon_shake(ship: MountableBody) -> void:
+	# Connect fired_heavy signal from each heavy weapon mount to camera shake (T-18-10-02)
+	for slot in ["", "left", "right"]:
+		var mount = ship.get_mount(slot)
+		if not mount:
+			continue
+		var weapon = mount.body_opposite
+		if weapon and weapon.has_signal("fired_heavy"):
+			# Avoid duplicate connections on restart
+			if not weapon.fired_heavy.is_connected($ShipCamera.shake):
+				weapon.fired_heavy.connect($ShipCamera.shake)
