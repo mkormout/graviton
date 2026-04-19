@@ -2,20 +2,11 @@
 
 ## What This Is
 
-A 2D space shooter built in Godot 4.6.2, featuring a component-based ship architecture with hot-swappable weapon mounts, an inventory system, procedurally scattered asteroids, and wave-based enemy ships with state-machine-driven AI. The player pilots a ship, equips weapons from inventory, battles five distinct enemy types, and chases high scores tracked on a local leaderboard.
+A 2D space shooter built in Godot 4.6.2, featuring a component-based ship architecture with hot-swappable weapon mounts, an inventory system, procedurally scattered asteroids, and wave-based enemy ships with state-machine-driven AI. The player pilots a ship, equips six mechanically distinct weapons, battles five enemy types with real sprites and per-enemy gem lights, chases high scores on a local leaderboard, and can restart without reloading the app. Dynamic music adapts to wave intensity.
 
 ## Core Value
 
 The mount-and-weapon system must work reliably — ships can equip, fire, and swap weapons without bugs or silent failures.
-
-## Current Milestone: v3.5 Juice & Polish
-
-**Goal:** Transform the raw combat loop into a polished experience with real enemy sprites, dynamic music, and a proper restart flow.
-
-**Target features:**
-- Game Restart — reset wave/score/state from the death screen without reloading the app
-- Dynamic Music System — background audio that adapts to wave complexity; auto-scans /music folder; categories: Ambient/Combat/High-Intensity; cross-fade transitions
-- Enemy Sprites — replace all 5 Polygon2D debug shapes with sprites from ships_assets.png; per-enemy gem glow pulsing light; fallback to debug shape if unavailable; scale to match player ship
 
 ## Requirements
 
@@ -52,49 +43,50 @@ The mount-and-weapon system must work reliably — ships can equip, fire, and sw
 - ✓ Per-type behavioral tweaks: Beeliner jitter, Sniper strafe, Flanker patrol fix, Swarmer speed tiers, Suicider explosion buff — v3.0 (ENM-21–ENM-25)
 - ✓ Wave flow refactor: manual advance, WaveClearLabel, wave announcement subtitle — v3.0 (WAV-01, WAV-02)
 - ✓ ControlsHint scene with TAB toggle and updated shortcut list — v3.0 (UI-01–UI-04)
+- ✓ All 5 enemy types display ship sprites from ships_assets.png with distance-culled pulsing gem lights — v3.5 (SPR-01–SPR-05)
+- ✓ MusicManager autoload with preload catalog; Ambient/Combat/High-Intensity cross-fades keyed to wave number — v3.5 (MUS-01–MUS-05)
+- ✓ Play Again button on death screen resets all systems without reloading the app — v3.5 (UI-05–UI-07)
+- ✓ Recoil bug fixed; all 6 weapons have distinct mechanics (laser bounce, gausscannon charge, RPG homing lock, minigun spool, GravityGun charge) — v3.5 (WPN-01–WPN-06)
+- ✓ All weapons have muzzle flashes, Line2D bullet trails, and spark burst impacts — v3.5 (WPN-07–WPN-10)
+- ✓ WeaponHud CanvasLayer shows weapon name, ammo, reload, charge/spool, lock state; heavy weapons trigger screen shake — v3.5 (WPN-11)
 
 ### Active
 
-- [ ] **UI-05**: Player can restart the game from the death screen without reloading the application
-- [ ] **MUS-01**: Background music plays automatically when the game starts
-- [ ] **MUS-02**: Music system scans /music folder and loads all audio files automatically
-- [ ] **MUS-03**: Tracks are categorized (Ambient, Combat, High-Intensity) for wave-driven selection
-- [ ] **MUS-04**: Music transitions dynamically based on current wave complexity
-- [ ] **MUS-05**: Tracks cross-fade smoothly when switching categories
-- [ ] **SPR-01**: ENM-07 through ENM-11 display sprite from ships_assets.png instead of Polygon2D
-- [ ] **SPR-02**: Sprite sheet slicing extracts individual ship sprites programmatically
-- [ ] **SPR-03**: Fallback to Polygon2D debug shape when sprite is unavailable
-- [ ] **SPR-04**: Each enemy ship's gem emits a pulsing light matching the gem's color
-- [ ] **SPR-05**: Enemy sprite scale matches player ship size
+(None — all v3.5 requirements shipped. See next milestone for new requirements.)
 
 ### Out of Scope
 
 - Multiplayer — not planned
 - Procedural level generation — not planned
 - Automated test suite (GUT) — user opted for manual playtesting
-- Flocking / Boids behavior — deferred to v3.0 or later
+- Flocking / Boids behavior — deferred
 - Predictive targeting for Sniper — deferred
 - Pre-wave HUD announcement and audio sting — deferred
 - Escort / Patrol state implementation — deferred
 - NavigationAgent2D pathfinding — no nav mesh in open space; regression risk
+- DirAccess music auto-scan — export-unsafe; preload catalog used instead
+- Boss music category — no boss enemy yet
 
 ## Context
 
-Godot 4.6.2 project. ~15,244 LOC GDScript across components and prefabs.
+Godot 4.6.2 project. ~4,354 LOC GDScript (components + prefabs).
 
-Five enemy types (Beeliner, Sniper, Flanker, Swarmer, Suicider) with 8-state AI, Polygon2D visual identity, and per-type behavioral tuning. All buffed in v3.0: HP ×2, range ×2, bullet speed ×1.4, vertex-forward orientation.
+Six weapons with distinct mechanics: Minigun (spool), Laser (bounce/split), Gausscannon (hold-charge), RPG (homing lock), GravityGun (hold-charge shockwave), and a sixth slot. All have muzzle flashes, bullet trails, and impact FX. WeaponHud CanvasLayer always visible.
 
-ScoreManager autoload drives kill scoring, wave multiplier (x1–x16), and combo chain. Score HUD (CanvasLayer) shows SCORE/KILLS/MULT/COMBO in real time. Death screen shows leaderboard with ConfigFile-persisted top-10 entries.
+Five enemy types (Beeliner, Sniper, Flanker, Swarmer, Suicider) with 8-state AI and ship sprites from ships_assets.png. Each enemy has a distance-culled pulsing PointLight2D gem glow.
 
-WaveManager supports manual wave advance (Enter/F), with WaveClearLabel and wave announcement subtitles. ControlsHint panel lists all shortcuts and toggles with TAB.
+MusicManager autoload: preload catalog, 3 categories (Ambient/Combat/High-Intensity), cross-fade via dual AudioStreamPlayer + Tween. Wave number drives category selection.
 
-`world.gd` remains a developer test harness with no main menu or persistent game loop. Health packs drop from enemies at ~10% chance.
+Death screen supports Play Again: full game state reset (wave, score, music, enemies, ship) without `get_tree().reload_current_scene()`. Ship is re-instantiated each restart.
+
+`world.gd` remains a developer test harness with no main menu. Manual wave advance (Enter/F). ScoreManager, MusicManager, WaveManager are all autoloads.
 
 ## Constraints
 
 - **Engine**: Godot 4.6.2 (GDScript) — no C# or other language targets
 - **Enemy fire**: Simplified, not using MountableWeapon/inventory layer
 - **Spawning**: Wave-based
+- **Music**: Preload catalog only — DirAccess not available at runtime in exports
 
 ## Key Decisions
 
@@ -113,7 +105,7 @@ WaveManager supports manual wave advance (Enter/F), with WaveClearLabel and wave
 | tree_exiting signal for wave completion | Handles deferred queue_free correctly | ✓ Good — no missed deaths |
 | Flat scene for enemy types (not true inheritance) | Avoids Godot .tscn inheritance complications | ✓ Good |
 | ContactArea2D separate from DetectionArea in Suicider | Clean separation of target acquisition vs. contact detection | ✓ Good |
-| Polygon2D visual identity per enemy type | Could not distinguish enemies visually at a glance during playtest | ✓ Good — added in Phase 9 playtest |
+| Polygon2D visual identity per enemy type | Could not distinguish enemies visually at a glance during playtest | ✓ Good — superseded by sprites in v3.5 |
 | ScoreManager as autoload singleton | Avoids signal plumbing through world.gd; any node can read score state | ✓ Good — clean integration |
 | ConfigFile for leaderboard persistence | Built-in Godot API, no external deps, cross-platform | ✓ Good |
 | Two-stage death screen (name entry → leaderboard) | Separates concerns; name can be skipped without breaking leaderboard display | ✓ Good |
@@ -121,6 +113,15 @@ WaveManager supports manual wave advance (Enter/F), with WaveClearLabel and wave
 | Manual wave advance (Enter/F) instead of auto-timer | Gives player breathing room; reduces frustration at high waves | ✓ Good — confirmed in playtesting |
 | speed_tier injection per wave config | Lets WaveManager vary swarmer behavior without subclassing | ✓ Good — clean extensibility |
 | Vertex-forward Polygon2D via fixed rotation offset | All enemy shapes face player with a corner, not a flat edge | ✓ Good — visual improvement confirmed |
+| MusicManager as autoload (not world node) | Survives scene restart; no reload_current_scene() needed | ✓ Good — v3.5 restart works cleanly |
+| MUS-02: preload catalog, not DirAccess | DirAccess missing at runtime in Godot exports | ✓ Good — export-safe |
+| SPR-04: VisibleOnScreenNotifier2D culling for gem lights | PointLight2D causes FPS cliff at wave 20 with many enemies | ✓ Good — performance preserved |
+| Laser reclassed to CharacterBody2D | RigidBody2D cannot intercept collision normals per-frame for bounce | ✓ Good — move_and_collide pattern works |
+| LaserWeapon.fire() must NOT call super.fire() | super casts bullet to RigidBody2D; CharacterBody2D cast fails silently | ✓ Good — caught and fixed in debug |
+| Ship re-instantiated on restart (not in-place reset) | Avoids stale signal connections from prior session | ✓ Good — clean restart confirmed |
+| await process_frame in _restart_game() | tree_exiting cascade after queue_free re-showed WaveClearLabel without the await | ✓ Good — subtle timing bug fixed |
+| apply_central_impulse for recoil | apply_impulse with offset caused torque/spin; central impulse is clean backward push | ✓ Good — recoil bug resolved |
+| WeaponHud connects via connect_to_ship() in world.gd | Called after each mount + after restart to avoid stale references | ✓ Good |
 
 ## Evolution
 
@@ -140,4 +141,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-18 — Phase 16 complete (dynamic music system with cross-fade)*
+*Last updated: 2026-04-19 — v3.5 Juice & Polish milestone complete*

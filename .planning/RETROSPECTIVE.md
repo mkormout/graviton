@@ -133,6 +133,53 @@
 
 ---
 
+## Milestone: v3.5 — Juice & Polish
+
+**Shipped:** 2026-04-19
+**Phases:** 4 | **Plans:** 18
+
+### What Was Built
+
+- Enemy sprites: all 5 types display ship sprites from ships_assets.png; hardcoded Rect2 regions per enemy; VisibleOnScreenNotifier2D culls pulsing gem PointLight2D nodes
+- Dynamic music: MusicManager autoload with preload catalog (3 categories, cross-fade via dual AudioStreamPlayer + Tween), wave-driven category selection
+- Game restart: Play Again button added to death screen after name entry; `_restart_game()` re-instantiates ship, resets all autoloads, clears all world nodes
+- Weapon mechanics: recoil fixed via `apply_central_impulse`; laser reclassed to CharacterBody2D for bounce; gausscannon/GravityGun hold-charge; RPG homing lock; minigun spool
+- Weapon VFX: muzzle flashes (CPUParticles2D) on all weapons, Line2D trails on all bullets, spark burst scenes on impact, laser bounce flash scene
+- WeaponHud CanvasLayer: ammo/reload/charge/spool/lock bars; `connect_to_ship()` called from world.gd after each mount and on restart
+
+### What Worked
+
+- Reclassing laser bullet to CharacterBody2D was the right call — `move_and_collide` gives per-frame collision normals for bounce; RigidBody2D cannot do this
+- Preload catalog for MusicManager avoided the DirAccess export trap found during research
+- Pausing and re-instantiating ship on restart (vs. in-place reset) eliminated all stale signal issues
+- `await get_tree().process_frame` in `_restart_game()` after `queue_free` calls prevented a subtle WaveClearLabel re-show bug
+- Extracting `_wire_heavy_weapon_shake()` as a helper meant the same wiring could be called on restart without duplicate connections
+- Debug session for RPG lock bugs was resolved within one session — systematic approach paid off
+
+### What Was Inefficient
+
+- Phase 17-02 SUMMARY.md was never written after execution — reconstructed from codebase at milestone close; adds friction and uncertainty
+- Phases executed out of order (18 before 17 was fully complete) — STATE.md became stale and misleading; progress tracking diverged from reality
+- REQUIREMENTS.md traceability continued showing all "Pending" through the milestone — same recurring issue from v1.0/v2.0/v3.0
+- Phase 16 HUMAN-UAT deferred at close: 3 music scenarios require running the game and were never completed
+- 5 quick task stubs had bodies "missing" — intent was captured but not executed or acknowledged until milestone close
+
+### Patterns Established
+
+- `CharacterBody2D` with `move_and_collide` for projectiles that need per-frame collision response (bounce, deflect)
+- Hold-charge pattern: `_fire_held` bool + `_charge_time` accumulator in `_process`; release threshold gates `fire()`
+- `connect_to_ship(ship)` helper on HUD nodes — called from `world.gd` after `mount_weapon()` and after `_restart_game()` to avoid stale references
+- `apply_central_impulse` for recoil — `apply_impulse` with any offset introduces torque/spin
+
+### Key Lessons
+
+1. Write SUMMARY.md at plan completion, not later — reconstruction from code is possible but lossy and slow
+2. Do not execute phases out of order without updating STATE.md — stale progress tracking misleads future sessions
+3. Traceability table (REQUIREMENTS.md) still not updated during execution — this is now the fourth milestone in a row; the template needs to prompt for it at plan-complete time
+4. Quick task stubs without bodies should be explicitly closed or acknowledged at session end — not left as orphaned "missing" state
+
+---
+
 ## Cross-Milestone Trends
 
 ### Process Evolution
@@ -142,10 +189,13 @@
 | v1.0 | 3 | 7 | First milestone — established base patterns |
 | v2.0 | 6 | 12 | Enemy AI system — one-type-per-phase cadence |
 | v3.0 | 5 | 11 | Game systems (scoring, UI, polish) — autoload + CanvasLayer patterns |
+| v3.5 | 4 | 18 | Juice & polish — VFX, music, restart, weapon mechanics; first milestone with CharacterBody2D projectiles |
 
 ### Top Lessons (Verified Across Milestones)
 
 1. Small, focused plans (one concern per plan) complete faster and are easier to review
 2. Scaffold identity/debug features early — retroactive additions cost extra commits across all scenes
 3. Commit UID files immediately when new scripts/scenes are created — do not let them accumulate
-4. Autoload singletons (ScoreManager) keep world.gd from becoming a god object — use for any cross-cutting game state
+4. Autoload singletons (ScoreManager, MusicManager) keep world.gd from becoming a god object — use for any cross-cutting game state
+5. Write SUMMARY.md at plan completion — reconstruction at milestone close is possible but slow and lossy
+6. Keep phases in order; out-of-order execution causes STATE.md drift that misleads future sessions

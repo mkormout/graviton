@@ -1,5 +1,23 @@
 # Milestones
 
+## v3.5 Juice & Polish (Shipped: 2026-04-19)
+
+**Phases completed:** 4 phases, 18 plans
+**Timeline:** 3 days (2026-04-17 → 2026-04-19)
+**Scope:** 1,302 insertions across 27 files
+
+**Key accomplishments:**
+
+- Enemy sprites: all 5 enemy types display distinct ship sprites from ships_assets.png; VisibleOnScreenNotifier2D distance-culled pulsing gem lights per enemy
+- Dynamic music: MusicManager autoload with preload catalog; Ambient/Combat/High-Intensity categories cross-fade automatically as wave number escalates
+- Game restart: Play Again button on death screen resets all systems (wave, score, music, enemies, ship) without reloading the app
+- Weapon mechanics: recoil fix, laser bounce (3x with 2-child split), gausscannon charge, RPG homing lock, minigun spool, GravityGun charge
+- Weapon VFX: muzzle flashes on all weapons, Line2D bullet trails, spark burst impacts, laser bounce flash scenes
+- WeaponHud CanvasLayer: always-visible HUD showing weapon name, ammo count, reload bar, charge/spool bar, lock bracket; screen shake on heavy weapons
+- Known deferred items at close: 7 (see STATE.md Deferred Items)
+
+---
+
 ## v3.0 Quality & Game Systems (Shipped: 2026-04-16)
 
 **Phases completed:** 5 phases, 11 plans, 18 tasks  

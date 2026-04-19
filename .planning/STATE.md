@@ -2,43 +2,57 @@
 gsd_state_version: 1.0
 milestone: v3.5
 milestone_name: Juice & Polish
-status: executing
-stopped_at: Phase 18 executing
+status: completing
+stopped_at: Milestone close in progress
 last_updated: "2026-04-19T00:00:00.000Z"
 last_activity: 2026-04-19
 progress:
-  total_phases: 3
-  completed_phases: 2
+  total_phases: 4
+  completed_phases: 4
   total_plans: 18
-  completed_plans: 6
-  percent: 33
+  completed_plans: 18
+  percent: 100
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-16)
+See: .planning/PROJECT.md (updated 2026-04-19)
 
 **Core value:** The mount-and-weapon system must work reliably — ships can equip, fire, and swap weapons without bugs or silent failures.
-**Current focus:** Phase 18 — weapons-improvements
+**Current focus:** Completing v3.5 milestone
 
 ## Current Position
 
 Phase: 18
-Plan: Wave 3 complete (18-07, 18-08); executing Wave 4
-Status: Phase 18 executing — 8/10 plans complete
+Plan: All 18 plans complete (4 phases)
+Status: All phases complete — closing milestone v3.5
 Last activity: 2026-04-19
 
-Progress: [██████████] 75%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Phases completed | 0/3 |
-| Plans completed | 0/TBD |
-| Requirements covered | 0/13 |
+| Phases completed | 4/4 |
+| Plans completed | 18/18 |
+| Requirements covered | 13/13 |
+
+## Deferred Items
+
+Items acknowledged and deferred at milestone close on 2026-04-19:
+
+| Category | Item | Status |
+|----------|------|--------|
+| uat | Phase 16: 16-HUMAN-UAT.md | partial — 3 pending scenarios |
+| verification | Phase 16: 16-VERIFICATION.md | human_needed |
+| quick_task | 260410-1df-fix-link-slot-nil-error-in-ship-bfg-23 | missing |
+| quick_task | 260414-0c0-improve-wave-system-combined-enemy-types | missing |
+| quick_task | 260414-0ox-improve-tracking-camera-make-it-primary | missing |
+| quick_task | 260415-1kp-move-controls-cheatsheet-lower | missing |
+| quick_task | 260419-0rt-rpg-tuning-lock-bracket-homing | missing |
 
 ## Accumulated Context
 
