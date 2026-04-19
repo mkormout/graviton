@@ -59,6 +59,7 @@ jobs:
         with:
           name: linux
           path: build/linux
+          if-no-files-found: error
 
   export-web:
     name: Web Export
