@@ -51,6 +51,8 @@ jobs:
           mkdir -v -p build/linux
           cd $PROJECT_PATH
           godot --headless --verbose --export-release "Linux/X11" ./build/linux/$EXPORT_NAME.x86_64
+      - name: Verify build output
+        run: ls -lh build/linux/ || echo "WARNING: build/linux is empty or missing"
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -76,10 +78,6 @@ jobs:
           mkdir -v -p build/web
           cd $PROJECT_PATH
           godot --headless --verbose --export-release "HTML5" ./build/web/index.html
-      - name: Patch for SharedArrayBuffer
-        run: |
-          curl -L https://raw.githubusercontent.com/gzuidhof/coi-serviceworker/master/coi-serviceworker.min.js -o build/web/coi-serviceworker.min.js
-          sed -i 's|<head>|<head><script src="coi-serviceworker.min.js"></script>|g' build/web/index.html
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -99,6 +97,11 @@ jobs:
         with:
           name: web
           path: build/web
+
+      - name: Patch for SharedArrayBuffer
+        run: |
+          curl -L https://raw.githubusercontent.com/gzuidhof/coi-serviceworker/master/coi-serviceworker.min.js -o build/web/coi-serviceworker.min.js
+          sed -i 's|<head>|<head><script src="coi-serviceworker.min.js"></script>|g' build/web/index.html
 
       - name: Deploy to GitHub Pages 🚀
         uses: JamesIves/github-pages-deploy-action@v4
