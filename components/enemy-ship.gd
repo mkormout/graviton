@@ -112,7 +112,7 @@ func _draw() -> void:
 	var type_name: String = get_script().get_global_name() if get_script() else "ENEMY"
 	draw_string(font, Vector2(-240, -760), type_name, HORIZONTAL_ALIGNMENT_LEFT, -1, 128, Color(0.0, 1.0, 1.0, 1.0))
 	# State label — bright white text
-	var state_label := "STATE: %s" % State.keys()[current_state]
+	var state_label: String = "STATE: %s" % State.keys()[current_state]
 	draw_string(font, Vector2(-240, -600), state_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 96, Color(1.0, 1.0, 1.0, 1.0))
 
 func _on_hitbox_body_entered(body: Node2D) -> void:
