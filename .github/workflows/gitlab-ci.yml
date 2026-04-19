@@ -51,9 +51,7 @@ jobs:
           mkdir -v -p build/linux
           cd $PROJECT_PATH
           godot --headless --verbose --export-release "Linux/X11" ./build/linux/$EXPORT_NAME.x86_64
-      - name: Verify build output
-        run: |
-          ls -lh build/linux/ || echo "WARNING: build/linux is empty or missing"
+          test -f ./build/linux/$EXPORT_NAME.x86_64 || (echo "ERROR: Godot did not produce build/linux/$EXPORT_NAME.x86_64" && exit 1)
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
