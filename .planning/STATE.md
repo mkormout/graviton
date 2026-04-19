@@ -82,6 +82,7 @@ None.
 |---|-------------|------|--------|-----------|
 | 260414-0c0 | Improve wave system: combined enemy types, 20 escalating waves, auto-start countdown, wave announcement label | 2026-04-13 | 32b9724 | [260414-0c0-improve-wave-system-combined-enemy-types](./quick/260414-0c0-improve-wave-system-combined-enemy-types/) |
 | 260414-0ox | Improve tracking camera: cinematic velocity-based zoom with onset/release delays; BodyCamera made primary at start | 2026-04-14 | ef4e5c8 | [260414-0ox-improve-tracking-camera-make-it-primary-](./quick/260414-0ox-improve-tracking-camera-make-it-primary-/) |
+| 260419-jxl | Fix CI/CD pipeline deployment failure | 2026-04-19 | 5995e7a | [260419-jxl-fix-ci-cd-pipeline-deployment-failure](./quick/260419-jxl-fix-ci-cd-pipeline-deployment-failure/) |
 
 ## Session Continuity
 
