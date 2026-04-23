@@ -22,10 +22,14 @@ var _nearby_swarmers: Array[EnemyShip] = []
 
 var _bullet_scene := preload("res://prefabs/enemies/swarmer/swarmer-bullet.tscn")
 
-@onready var _fire_timer: Timer = $FireTimer
 @onready var _ammo_dropper: ItemDropper = $AmmoDropper
 @onready var _barrel: Node2D = $Barrel
 @onready var _cohesion_area: Area2D = $CohesionArea
+
+# Float-counter replacement for FireTimer (perf: avoid SceneTree Timer per enemy).
+const _FIRE_INTERVAL: float = 0.8   # matches previous Timer.wait_time
+var _fire_active: bool = false
+var _fire_left: float = 0.0
 
 func _ready() -> void:
 	super()
@@ -38,10 +42,17 @@ func _ready() -> void:
 	_cohesion_area.collision_mask = 1
 	_cohesion_area.body_entered.connect(_on_cohesion_area_body_entered)
 	_cohesion_area.body_exited.connect(_on_cohesion_area_body_exited)
-	_fire_timer.timeout.connect(_on_fire_timer_timeout)
 	detection_area.body_exited.connect(_on_detection_area_body_exited)
 	_setup_sprite()
 	_setup_gem_light()
+
+func _start_fire_timer() -> void:
+	_fire_active = true
+	_fire_left = _FIRE_INTERVAL
+
+func _stop_fire_timer() -> void:
+	_fire_active = false
+	_fire_left = 0.0
 
 func _on_cohesion_area_body_entered(body: Node2D) -> void:
 	if dying:
@@ -112,6 +123,11 @@ func _physics_process(delta: float) -> void:
 		return
 	_apply_separation()
 	_apply_cohesion()
+	if _fire_active:
+		_fire_left -= delta
+		if _fire_left <= 0.0:
+			_fire_left += _FIRE_INTERVAL  # += preserves sub-frame drift (matches Timer)
+			_on_fire_timer_timeout()
 
 func _apply_separation() -> void:
 	for swarmer in _nearby_swarmers:
@@ -149,11 +165,11 @@ func _enter_state(new_state: State) -> void:
 	print("[Swarmer] _enter_state: %s" % State.keys()[new_state])
 	if new_state == State.FIGHTING:
 		_fire()
-		_fire_timer.start()
+		_start_fire_timer()
 
 func _exit_state(old_state: State) -> void:
 	if old_state == State.FIGHTING:
-		_fire_timer.stop()
+		_stop_fire_timer()
 
 func _fire() -> void:
 	if dying:
@@ -176,7 +192,7 @@ func _on_fire_timer_timeout() -> void:
 func die(delay: float = 0.0) -> void:
 	if dying:
 		return
-	_fire_timer.stop()
+	_stop_fire_timer()
 	_ammo_dropper.drop()
 	super(delay)
 

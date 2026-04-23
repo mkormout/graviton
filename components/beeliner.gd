@@ -19,16 +19,35 @@ const SPREAD_ANGLES := [-0.1, 0.0, 0.1]  # radians: -7.5 deg, 0 deg, +7.5 deg
 var _jitter_timer: float = 0.0
 var _jitter_dir: float = 1.0
 
-@onready var _fire_timer: Timer = $FireTimer
 @onready var _ammo_dropper: ItemDropper = $AmmoDropper
+
+# Float-counter replacement for FireTimer (perf: avoid SceneTree Timer per enemy).
+const _FIRE_INTERVAL: float = 1.5   # matches previous Timer.wait_time
+var _fire_active: bool = false
+var _fire_left: float = 0.0
 
 func _ready() -> void:
 	super()
 	thrust *= randf_range(0.8, 1.2)
 	max_speed *= randf_range(0.8, 1.2)
-	_fire_timer.timeout.connect(_on_fire_timer_timeout)
 	_setup_sprite()
 	_setup_gem_light()
+
+func _physics_process(delta: float) -> void:
+	super(delta)
+	if _fire_active:
+		_fire_left -= delta
+		if _fire_left <= 0.0:
+			_fire_left += _FIRE_INTERVAL  # += preserves sub-frame drift (matches Timer)
+			_on_fire_timer_timeout()
+
+func _start_fire_timer() -> void:
+	_fire_active = true
+	_fire_left = _FIRE_INTERVAL
+
+func _stop_fire_timer() -> void:
+	_fire_active = false
+	_fire_left = 0.0
 
 func _tick_state(_delta: float) -> void:
 	match current_state:
@@ -61,11 +80,11 @@ func _enter_state(new_state: State) -> void:
 	print("[Beeliner] _enter_state: %s" % State.keys()[new_state])
 	if new_state == State.FIGHTING:
 		_fire()
-		_fire_timer.start()
+		_start_fire_timer()
 
 func _exit_state(old_state: State) -> void:
 	if old_state == State.FIGHTING:
-		_fire_timer.stop()
+		_stop_fire_timer()
 
 func _on_detection_area_body_entered(body: Node2D) -> void:
 	if dying:
@@ -99,7 +118,7 @@ func _on_fire_timer_timeout() -> void:
 func die(delay: float = 0.0) -> void:
 	if dying:
 		return
-	_fire_timer.stop()
+	_stop_fire_timer()
 	_ammo_dropper.drop()
 	super(delay)
 

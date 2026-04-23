@@ -23,20 +23,53 @@ var _target: Node2D = null
 var _strafe_time: float = 0.0
 var _bullet_scene := preload("res://prefabs/enemies/sniper/sniper-bullet.tscn")
 
-@onready var _fire_timer: Timer = $FireTimer
-@onready var _aim_timer: Timer = $AimTimer
 @onready var _ammo_dropper: ItemDropper = $AmmoDropper
 @onready var _barrel: Node2D = $Barrel
+
+# Float-counter replacement for FireTimer + AimTimer (perf: avoid SceneTree Timers per enemy).
+const _FIRE_INTERVAL: float = 3.0   # matches previous FireTimer.wait_time
+var _fire_active: bool = false
+var _fire_left: float = 0.0
+var _aim_active: bool = false
+var _aim_left: float = 0.0
 
 func _ready() -> void:
 	super()
 	thrust *= randf_range(0.8, 1.2)
 	max_speed *= randf_range(0.8, 1.2)
-	_fire_timer.timeout.connect(_on_fire_timer_timeout)
-	_aim_timer.timeout.connect(_on_aim_timer_timeout)
 	detection_area.body_exited.connect(_on_detection_area_body_exited)
 	_setup_sprite()
 	_setup_gem_light()
+
+func _physics_process(delta: float) -> void:
+	super(delta)
+	if _fire_active:
+		_fire_left -= delta
+		if _fire_left <= 0.0:
+			_fire_left += _FIRE_INTERVAL  # += preserves sub-frame drift (matches Timer)
+			_on_fire_timer_timeout()
+	if _aim_active:
+		_aim_left -= delta
+		if _aim_left <= 0.0:
+			_aim_active = false
+			_aim_left = 0.0
+			_on_aim_timer_timeout()
+
+func _start_fire_timer() -> void:
+	_fire_active = true
+	_fire_left = _FIRE_INTERVAL
+
+func _stop_fire_timer() -> void:
+	_fire_active = false
+	_fire_left = 0.0
+
+func _start_aim_timer(duration: float) -> void:
+	_aim_active = true
+	_aim_left = duration
+
+func _stop_aim_timer() -> void:
+	_aim_active = false
+	_aim_left = 0.0
 
 func _on_detection_area_body_entered(body: Node2D) -> void:
 	if dying:
@@ -101,23 +134,23 @@ func _enter_state(new_state: State) -> void:
 	print("[Sniper] _enter_state: %s" % State.keys()[new_state])
 	if new_state == State.FIGHTING:
 		_strafe_time = 0.0
-		assert(aim_up_time < _fire_timer.wait_time,
-			"aim_up_time must be less than FireTimer.wait_time or _fire() will never be called")
-		_fire_timer.start()
+		assert(aim_up_time < _FIRE_INTERVAL,
+			"aim_up_time must be less than _FIRE_INTERVAL or _fire() will never be called")
+		_start_fire_timer()
 	elif new_state == State.FLEEING:
-		_fire_timer.stop()
-		_aim_timer.stop()
+		_stop_fire_timer()
+		_stop_aim_timer()
 
 func _exit_state(old_state: State) -> void:
 	if old_state == State.FIGHTING:
-		_fire_timer.stop()
-		_aim_timer.stop()
+		_stop_fire_timer()
+		_stop_aim_timer()
 
 func _on_fire_timer_timeout() -> void:
 	if dying or current_state != State.FIGHTING:
 		return
 	# Start aim-up telegraph — does NOT fire immediately (D-09)
-	_aim_timer.start(aim_up_time)
+	_start_aim_timer(aim_up_time)
 
 func _on_aim_timer_timeout() -> void:
 	if dying or current_state != State.FIGHTING:
@@ -141,8 +174,8 @@ func _fire() -> void:
 func die(delay: float = 0.0) -> void:
 	if dying:
 		return
-	_fire_timer.stop()
-	_aim_timer.stop()
+	_stop_fire_timer()
+	_stop_aim_timer()
 	_ammo_dropper.drop()
 	super(delay)
 

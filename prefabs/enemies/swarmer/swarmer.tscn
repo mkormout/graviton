@@ -97,9 +97,6 @@ script = ExtResource("2_itemdropper")
 models = Array[ExtResource("3_itemdrop")]([SubResource("Resource_coin_drop"), SubResource("Resource_health_drop")])
 drop_count = 1
 
-[node name="FireTimer" type="Timer" parent="."]
-wait_time = 0.8
-
 [node name="AmmoDropper" type="Node2D" parent="."]
 script = ExtResource("2_itemdropper")
 models = Array[ExtResource("3_itemdrop")]([SubResource("Resource_ammo_drop"), SubResource("Resource_no_drop")])

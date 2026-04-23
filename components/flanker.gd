@@ -28,9 +28,13 @@ var _lurk_speed: float = 1.0
 var _drift_scale: float = 1.0
 var _turn_speed: float = 5.0
 
-@onready var _fire_timer: Timer = $FireTimer
 @onready var _ammo_dropper: ItemDropper = $AmmoDropper
 @onready var _barrel: Node2D = $Barrel
+
+# Float-counter replacement for FireTimer (perf: avoid SceneTree Timer per enemy).
+const _FIRE_INTERVAL: float = 0.25   # matches previous Timer.wait_time
+var _fire_active: bool = false
+var _fire_left: float = 0.0
 
 func _ready() -> void:
 	super()
@@ -40,10 +44,25 @@ func _ready() -> void:
 	_lurk_speed = randf_range(0.8, 1.2)
 	_drift_scale = randf_range(0.8, 1.2)
 	_turn_speed = 5.0 * randf_range(0.8, 1.2)
-	_fire_timer.timeout.connect(_on_fire_timer_timeout)
 	detection_area.body_exited.connect(_on_detection_area_body_exited)
 	_setup_sprite()
 	_setup_gem_light()
+
+func _physics_process(delta: float) -> void:
+	super(delta)
+	if _fire_active:
+		_fire_left -= delta
+		if _fire_left <= 0.0:
+			_fire_left += _FIRE_INTERVAL  # += preserves sub-frame drift (matches Timer)
+			_on_fire_timer_timeout()
+
+func _start_fire_timer() -> void:
+	_fire_active = true
+	_fire_left = _FIRE_INTERVAL
+
+func _stop_fire_timer() -> void:
+	_fire_active = false
+	_fire_left = 0.0
 
 func _on_detection_area_body_entered(body: Node2D) -> void:
 	if dying:
@@ -110,7 +129,7 @@ func _tick_state(_delta: float) -> void:
 			if not _fire_started and absf(angle_difference(rotation, target_angle)) < 0.15:
 				_fire_started = true
 				_fire()
-				_fire_timer.start()
+				_start_fire_timer()
 			if _fire_started:
 				_fight_remaining -= _delta
 			if _fight_remaining <= 0.0 or dist > max_follow_distance:
@@ -127,7 +146,7 @@ func _enter_state(new_state: State) -> void:
 
 func _exit_state(old_state: State) -> void:
 	if old_state == State.FIGHTING:
-		_fire_timer.stop()
+		_stop_fire_timer()
 		_fight_cooldown = 5.0
 
 func _fire() -> void:
@@ -151,7 +170,7 @@ func _on_fire_timer_timeout() -> void:
 func die(delay: float = 0.0) -> void:
 	if dying:
 		return
-	_fire_timer.stop()
+	_stop_fire_timer()
 	_ammo_dropper.drop()
 	super(delay)
 
