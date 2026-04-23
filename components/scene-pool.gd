@@ -76,6 +76,17 @@ func _prepare_for_sleep(node: Node) -> void:
 	node.process_mode = Node.PROCESS_MODE_DISABLED
 	if node is CanvasItem:
 		(node as CanvasItem).visible = false
+	if node is CollisionObject2D:
+		# Parked bodies remain at their death position in world coords (reparent
+		# preserves local transform). Zero layer+mask so they don't keep firing
+		# body_entered against live ships/bullets. Originals stored on first
+		# sleep so _apply_default_reset can restore them on acquire.
+		var co := node as CollisionObject2D
+		if not co.has_meta("_pool_orig_layer"):
+			co.set_meta("_pool_orig_layer", co.collision_layer)
+			co.set_meta("_pool_orig_mask", co.collision_mask)
+		co.collision_layer = 0
+		co.collision_mask = 0
 	if node is RigidBody2D:
 		var rb := node as RigidBody2D
 		rb.linear_velocity = Vector2.ZERO
@@ -93,6 +104,11 @@ func _apply_default_reset(node: Node) -> void:
 		var n2 := node as Node2D
 		n2.rotation = 0.0
 		n2.scale = Vector2.ONE
+	if node is CollisionObject2D:
+		var co := node as CollisionObject2D
+		if co.has_meta("_pool_orig_layer"):
+			co.collision_layer = co.get_meta("_pool_orig_layer")
+			co.collision_mask = co.get_meta("_pool_orig_mask")
 	if node is RigidBody2D:
 		var rb := node as RigidBody2D
 		rb.freeze = false

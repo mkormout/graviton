@@ -35,6 +35,11 @@ func _pool_reset() -> void:
 	call_deferred("_arm")
 
 func collision(body):
+	# Defensive: a bullet that has already died (and is about to be released or
+	# already parked in the pool) must not reapply damage from residual
+	# body_entered signals. dying is reset in _pool_reset on next acquire.
+	if dying:
+		return
 	if body is Body:
 		if attack:
 			body.damage(attack)
