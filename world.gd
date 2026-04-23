@@ -403,8 +403,11 @@ func add_asteroid(model: PackedScene):
 func _on_player_died() -> void:
 	_wave_clear_pending = false
 	_wave_hud.hide_wave_clear_label()
-	# Wait for the death explosion to finish (Explosion.time = 1s) before pausing
-	await get_tree().create_timer(1.2).timeout
+	# Wait ~1.2s for the death explosion to finish (Explosion.time = 1s) before pausing.
+	# Uses a physics_frame yield loop instead of a SceneTreeTimer (no allocation).
+	var frames := int(round(1.2 * Engine.physics_ticks_per_second))
+	for _i in range(frames):
+		await get_tree().physics_frame
 	get_tree().paused = true
 	death_screen.show_death_screen(ScoreManager.total_score)
 

@@ -19,18 +19,14 @@ var combo_count: int = 0
 
 ## Internal references
 var _player: Node = null
-var _combo_timer: Timer = null
 var _combo_audio: AudioStreamPlayer = null
+
+## Float-counter replacement for the combo Timer (perf: no Timer node on the autoload).
+## > 0.0 == combo active; reaches 0.0 -> _on_combo_expired() called.
+var _combo_time_left: float = 0.0
 
 
 func _ready() -> void:
-	# Combo timer — one-shot, 5 second timeout
-	_combo_timer = Timer.new()
-	_combo_timer.wait_time = COMBO_TIMEOUT
-	_combo_timer.one_shot = true
-	_combo_timer.timeout.connect(_on_combo_expired)
-	add_child(_combo_timer)
-
 	# Combo audio — non-positional AudioStreamPlayer
 	_combo_audio = AudioStreamPlayer.new()
 	_combo_audio.stream = preload("res://sounds/combo.wav")
@@ -38,6 +34,14 @@ func _ready() -> void:
 
 	# Deferred player lookup — autoloads run before scene nodes are ready
 	call_deferred("_find_player")
+
+
+func _physics_process(delta: float) -> void:
+	if _combo_time_left > 0.0:
+		_combo_time_left -= delta
+		if _combo_time_left <= 0.0:
+			_combo_time_left = 0.0
+			_on_combo_expired()
 
 
 func _find_player() -> void:
@@ -89,12 +93,12 @@ func _increment_combo() -> void:
 	if combo_count == 0:
 		# First kill — start timer, no audio yet
 		combo_count = 1
-		_combo_timer.start()
+		_combo_time_left = COMBO_TIMEOUT
 		return
 
 	# Subsequent kills — increment, restart timer, play audio
 	combo_count += 1
-	_combo_timer.start()
+	_combo_time_left = COMBO_TIMEOUT
 	_play_combo_sound(combo_count)
 	combo_updated.emit(combo_count)
 	print("[ScoreManager] Combo x%d" % combo_count)
@@ -180,7 +184,7 @@ func _on_player_health_changed(old_health: int, new_health: int) -> void:
 		print("[ScoreManager] Damage taken, multiplier reset to x1")
 
 func reset() -> void:
-	_combo_timer.stop()
+	_combo_time_left = 0.0
 	total_score = 0
 	kill_count = 0
 	wave_multiplier = 1
