@@ -174,7 +174,7 @@ func _exit_state(old_state: State) -> void:
 func _fire() -> void:
 	if dying:
 		return
-	var bullet := _bullet_scene.instantiate() as RigidBody2D
+	var bullet := PoolManager.acquire(_bullet_scene) as RigidBody2D
 	var fire_dir := Vector2.from_angle(global_rotation)
 	bullet.rotation = global_rotation
 	bullet.linear_velocity = fire_dir * bullet_speed

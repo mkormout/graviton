@@ -72,7 +72,15 @@ func die(delay: float = 0.0):
 	dying = true
 
 	if death:
-		var node = death.instantiate()
+		# Death scenes for pooled bullet types (*-bullet-explosion.tscn) go
+		# through PoolManager. Ship/coin/asteroid explosions are one-off and
+		# intentionally NOT pooled — fall back to instantiate() so we don't
+		# build lazy pools for rarely-used scenes.
+		var node: Node
+		if PoolManager.is_pooled(death):
+			node = PoolManager.acquire(death)
+		else:
+			node = death.instantiate()
 		node.global_position = global_position
 		node.spawn_parent = spawn_parent
 		if spawn_parent:

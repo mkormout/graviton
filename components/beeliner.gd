@@ -98,7 +98,7 @@ func _fire() -> void:
 	if dying:
 		return
 	for angle_offset in SPREAD_ANGLES:
-		var bullet := _bullet_scene.instantiate() as RigidBody2D
+		var bullet := PoolManager.acquire(_bullet_scene) as RigidBody2D
 		var fire_dir := Vector2.from_angle(global_rotation + angle_offset)
 		bullet.rotation = global_rotation + angle_offset
 		bullet.linear_velocity = fire_dir * bullet_speed

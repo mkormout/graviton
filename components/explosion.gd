@@ -112,7 +112,13 @@ func generate_debris():
 
 	for i in range(debris_count):
 		var model = debris.pick_random()
-		var node = model.instantiate() as RigidBody2D
+		# Debris scenes are pooled only if explicitly registered in PoolManager;
+		# otherwise fall back to instantiate() (current scenes register no debris).
+		var node: RigidBody2D
+		if PoolManager.is_pooled(model):
+			node = PoolManager.acquire(model) as RigidBody2D
+		else:
+			node = model.instantiate() as RigidBody2D
 		node.global_position = position + Vector2.from_angle(randf() * 2*PI) * randf_range(MIN_RANGE, MAX_RANGE)
 		node.rotation = randf_range(0, 2*PI)
 		node.angular_velocity = MAX_ANGULAR_VELOCITY * randi_range(-1, 1)

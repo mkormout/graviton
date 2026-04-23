@@ -427,15 +427,20 @@ func _restart_game() -> void:
 		if child is Asteroid:
 			child.queue_free()
 
+	# Pool-aware cleanup: pooled Explosion/Bullet instances return to their
+	# pool so PoolManager retains reusable capacity across restarts. Non-pool
+	# instances (none expected in these two branches today, but the helper is
+	# defensive) fall back to queue_free.
 	for child in get_children():
 		if child is Explosion:
-			child.queue_free()
+			_free_or_release(child)
 
 	for child in get_children():
 		if child is Bullet:
-			child.queue_free()
+			_free_or_release(child)
 
 	await get_tree().process_frame
+	# print("[PoolManager stats after restart] ", PoolManager.stats())
 
 	# Reset after await so enemy tree_exiting cascade doesn't re-show the label
 	_wave_clear_pending = false
@@ -477,3 +482,12 @@ func _wire_heavy_weapon_shake(ship: MountableBody) -> void:
 			# Avoid duplicate connections on restart
 			if not weapon.fired_heavy.is_connected($ShipCamera.shake):
 				weapon.fired_heavy.connect($ShipCamera.shake)
+
+func _free_or_release(node: Node) -> void:
+	# Prefer returning to the pool so capacity is retained across restarts;
+	# fall back to queue_free for non-pooled nodes.
+	var scene = node.get_meta("_pool_scene", null)
+	if scene != null and PoolManager.is_pooled(scene):
+		PoolManager.release(node)
+	else:
+		node.queue_free()
