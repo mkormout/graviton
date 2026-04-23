@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-04-19)
 Phase: 18
 Plan: All 18 plans complete (4 phases)
 Status: All phases complete — closing milestone v3.5
-Last activity: 2026-04-23 - Completed quick task 260423-w6g: Replace non-UI Timer nodes with float counters
+Last activity: 2026-04-23 - Completed quick task 260423-wv3: Add object pooling for bullets/explosions/FX
 
 Progress: [██████████] 100%
 
@@ -85,6 +85,7 @@ None.
 | 260419-jxl | Fix CI/CD pipeline deployment failure | 2026-04-19 | 5995e7a | [260419-jxl-fix-ci-cd-pipeline-deployment-failure](./quick/260419-jxl-fix-ci-cd-pipeline-deployment-failure/) |
 | 260419-l29 | Fix Linux export preset platform field: restore platform="Linux/X11" for Godot 4.2.1 | 2026-04-19 | 7f469a1 | [260419-l29-fix-linux-export-preset-platform-field](./quick/260419-l29-fix-linux-export-preset-platform-field/) |
 | 260423-w6g | Replace non-UI Timer nodes and SceneTreeTimer uses with float counters in _physics_process for optimization | 2026-04-23 | b76ad95 | [260423-w6g-find-all-timers-in-enemies-bullets-etc-a](./quick/260423-w6g-find-all-timers-in-enemies-bullets-etc-a/) |
+| 260423-wv3 | Add object pooling (ScenePool + PoolManager autoload) for bullets, explosions, impact FX, and debris | 2026-04-23 | f915e5a | [260423-wv3-add-object-pooling-for-frequently-spawne](./quick/260423-wv3-add-object-pooling-for-frequently-spawne/) |
 
 ## Session Continuity
 
