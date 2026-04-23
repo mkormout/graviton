@@ -18,7 +18,7 @@ func fire() -> void:
 		muzzle_flash.restart()
 
 	# LaserBullet is CharacterBody2D — cannot cast to RigidBody2D; set velocity directly
-	var instance := ammo.instantiate() as Node2D
+	var instance := PoolManager.acquire(ammo) as Node2D
 	instance.global_position = barrel.global_position
 	instance.rotation = global_rotation
 	var dir := Vector2.from_angle(global_rotation + randf_range(-spread, spread))

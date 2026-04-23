@@ -63,7 +63,7 @@ func _fire_charged() -> void:
 	var scaled_recoil: float = recoil * lerp(_RECOIL_MIN_MULT, _RECOIL_MAX_MULT, fraction)
 
 	# Spawn bullet with scaled velocity (manual spawn — do not call super.fire())
-	var instance = ammo.instantiate() as RigidBody2D
+	var instance = PoolManager.acquire(ammo) as RigidBody2D
 	instance.position = barrel.global_position
 	instance.rotation = global_rotation
 	instance.apply_central_impulse(
@@ -79,12 +79,14 @@ func _fire_charged() -> void:
 	if "spawn_parent" in instance:
 		instance.spawn_parent = spawn_parent
 	# Scale bullet glow and particles with charge — dim at low charge, full at max.
+	# Use absolute values (not compounded multiplication) so pool reuse cannot
+	# snowball the scale/energy across successive acquires.
 	var bullet_light = instance.get_node_or_null("PointLight2D")
 	if bullet_light:
-		bullet_light.energy = lerp(0.2, bullet_light.energy, fraction)
+		bullet_light.energy = lerp(0.2, 1.0, fraction)
 	var bullet_particles = instance.get_node_or_null("CPUParticles2D")
 	if bullet_particles:
-		bullet_particles.scale *= lerp(0.2, 1.0, fraction)
+		bullet_particles.scale = Vector2(5, 5) * lerp(0.2, 1.0, fraction)
 	if spawn_parent:
 		spawn_parent.call_deferred("add_child", instance)
 	else:

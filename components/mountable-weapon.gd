@@ -108,7 +108,7 @@ func fire():
 		return
 
 	if can_shoot():
-		var instance = ammo.instantiate() as RigidBody2D
+		var instance = PoolManager.acquire(ammo) as RigidBody2D
 		instance.position = barrel.global_position
 		instance.rotation = global_rotation
 		instance.apply_central_impulse(

@@ -10,6 +10,9 @@ func collision(body) -> void:
 func _spawn_impact(pos: Vector2) -> void:
 	if not impact_scene or not spawn_parent:
 		return
-	var fx = impact_scene.instantiate()
+	var fx = PoolManager.acquire(impact_scene)
 	fx.global_position = pos
 	spawn_parent.call_deferred("add_child", fx)
+	# _pool_reset set emitting=false; replay the CPUParticles2D burst.
+	if fx is CPUParticles2D:
+		(fx as CPUParticles2D).restart()

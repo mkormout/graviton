@@ -11,6 +11,14 @@ var _target: Node2D = null
 func set_target(t: Node2D) -> void:
 	_target = t
 
+func _pool_reset() -> void:
+	super()
+	# Clear homing target — the spawner reassigns via set_target() only when
+	# locked at fire time. Without this, a pool-reused RPG that was
+	# previously locked onto a dead/destroyed target would keep the stale ref
+	# and could chase a freed node.
+	_target = null
+
 func collision(body) -> void:
 	_spawn_impact(global_position)
 	super.collision(body)
@@ -18,9 +26,12 @@ func collision(body) -> void:
 func _spawn_impact(pos: Vector2) -> void:
 	if not impact_scene or not spawn_parent:
 		return
-	var fx = impact_scene.instantiate()
+	var fx = PoolManager.acquire(impact_scene)
 	fx.global_position = pos
 	spawn_parent.call_deferred("add_child", fx)
+	# _pool_reset set emitting=false; replay the CPUParticles2D burst.
+	if fx is CPUParticles2D:
+		(fx as CPUParticles2D).restart()
 
 func _physics_process(delta: float) -> void:
 	# Homing: steer velocity direction toward target each frame.

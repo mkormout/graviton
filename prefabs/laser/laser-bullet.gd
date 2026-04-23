@@ -80,7 +80,7 @@ func _spawn_child(new_velocity: Vector2) -> void:
 	if not bullet_scene:
 		push_warning("LaserBullet: bullet_scene not set, cannot spawn bounce child")
 		return
-	var child: LaserBullet = bullet_scene.instantiate() as LaserBullet
+	var child: LaserBullet = PoolManager.acquire(bullet_scene) as LaserBullet
 	child.bullet_scene = bullet_scene
 	child.spawn_parent = spawn_parent
 	child.bounce_count = bounce_count + 1
@@ -95,10 +95,13 @@ func _spawn_child(new_velocity: Vector2) -> void:
 func _spawn_flash(pos: Vector2) -> void:
 	if not bounce_flash_scene:
 		return
-	var fx = bounce_flash_scene.instantiate()
+	var fx = PoolManager.acquire(bounce_flash_scene)
 	fx.global_position = pos
 	if spawn_parent:
 		spawn_parent.call_deferred("add_child", fx)
+	# Replay the CPUParticles2D burst — _pool_reset set emitting=false.
+	if fx is CPUParticles2D:
+		(fx as CPUParticles2D).restart()
 
 # Pool-aware release: return to the pool if registered, otherwise queue_free.
 func _release_laser() -> void:

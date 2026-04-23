@@ -94,7 +94,7 @@ func _fire_charged() -> void:
 	# Spawn visual projectile — bullet scene has collision_mask=0 so it passes through
 	# everything; the actual damage/push is handled by the Area2D above.
 	if ammo and spawn_parent and barrel:
-		var instance = ammo.instantiate() as RigidBody2D
+		var instance = PoolManager.acquire(ammo) as RigidBody2D
 		instance.position = barrel.global_position
 		instance.rotation = global_rotation
 		instance.linear_velocity = Vector2.from_angle(global_rotation) * velocity

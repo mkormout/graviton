@@ -97,7 +97,7 @@ func fire() -> void:
 		push_warning("RpgWeapon %s: ammo or barrel not configured" % name)
 		return
 
-	var instance = ammo.instantiate() as RigidBody2D
+	var instance = PoolManager.acquire(ammo) as RigidBody2D
 	instance.global_position = barrel.global_position
 	# When locked, aim directly at the target so the rocket starts on course.
 	var fire_dir: Vector2 = Vector2.from_angle(global_rotation)
