@@ -21,24 +21,29 @@ extends MountableBody
 @export var use_ammo: bool = true
 @export var use_rate: bool = true
 
-var reload_timer: Timer
-var shot_timer: Timer
+# Float-counter replacements for Timer nodes (perf: avoid SceneTree Timer overhead
+# on every spawned weapon). Ticked in _physics_process(delta).
+var shot_time_left: float = 0.0   # cooldown between shots; > 0 == on cooldown
+var shot_wait_time: float = 0.0   # current cooldown duration (Minigun mutates this)
+var reload_time_left: float = 0.0 # > 0 == reloading; reaches 0 -> reloaded() called
 var magazine_current: int
 var ammo_current: int
 
 func _ready() -> void:
-	shot_timer = Timer.new()
-	shot_timer.wait_time = rate
-	shot_timer.one_shot = true
-	add_child(shot_timer)
-
-	reload_timer = Timer.new()
-	reload_timer.wait_time = reload_time
-	reload_timer.one_shot = true
-	add_child(reload_timer)
-
+	shot_wait_time = rate
 	magazine_current = magazine_max
 	ammo_current = ammo_max
+
+func _physics_process(delta: float) -> void:
+	if shot_time_left > 0.0:
+		shot_time_left -= delta
+		if shot_time_left < 0.0:
+			shot_time_left = 0.0
+	if reload_time_left > 0.0:
+		reload_time_left -= delta
+		if reload_time_left <= 0.0:
+			reload_time_left = 0.0
+			reloaded()
 
 func get_ship():
 	var mount = get_mount()
@@ -56,10 +61,10 @@ func has_ammo() -> bool:
 	return magazine_current > 0
 
 func is_reloading() -> bool:
-	return not reload_timer.is_stopped()
+	return reload_time_left > 0.0
 
 func is_cooldown() -> bool:
-	return not shot_timer.is_stopped()
+	return shot_time_left > 0.0
 
 func can_shoot() -> bool:
 	return not is_cooldown() and not is_reloading() and has_ammo()
@@ -67,8 +72,7 @@ func can_shoot() -> bool:
 func reload() -> void:
 	if is_reloading():
 		return
-	reload_timer.start()
-	reload_timer.timeout.connect(reloaded, CONNECT_ONE_SHOT)
+	reload_time_left = reload_time
 	if reload_sound:
 		reload_sound.play()
 
@@ -123,7 +127,7 @@ func fire():
 			sound.play()
 
 		if use_rate:
-			shot_timer.start(rate)
+			shot_time_left = shot_wait_time
 
 		if use_ammo:
 			magazine_current -= 1

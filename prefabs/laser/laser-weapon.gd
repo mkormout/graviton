@@ -38,7 +38,7 @@ func fire() -> void:
 	if sound:
 		sound.play()
 	if use_rate:
-		shot_timer.start(rate)
+		shot_time_left = rate
 	if use_ammo:
 		magazine_current -= 1
 	var mount = get_mount("")

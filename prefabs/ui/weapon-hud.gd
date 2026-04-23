@@ -49,7 +49,7 @@ func _process(_delta: float) -> void:
 	# Reload bar
 	if weapon.is_reloading():
 		_reload_bar.visible = true
-		var elapsed: float = weapon.reload_time - weapon.reload_timer.time_left
+		var elapsed: float = weapon.reload_time - weapon.reload_time_left
 		_reload_bar.value = clampf(elapsed / weapon.reload_time, 0.0, 1.0)
 	else:
 		_reload_bar.visible = false

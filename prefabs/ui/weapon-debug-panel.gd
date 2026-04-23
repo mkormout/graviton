@@ -25,12 +25,12 @@ func _process(_delta):
 		return
 		
 	weapon_name.text = weapon.name
-	cooldown_timer.text = str(weapon.shot_timer.time_left).pad_decimals(1)
+	cooldown_timer.text = str(weapon.shot_time_left).pad_decimals(1)
 	health.text = str(weapon.health)
 	magazine_ammo.text = str(weapon.magazine_current)
 	velocity.text = str(weapon.velocity)
 	recoil.text = str(weapon.recoil)
-	reload_timer.text = str(weapon.reload_timer.time_left).pad_decimals(1)
+	reload_timer.text = str(weapon.reload_time_left).pad_decimals(1)
 	total_ammo.text = str(weapon.ammo_current)
 	use_ammo.button_pressed = weapon.use_ammo
 	use_rate.button_pressed = weapon.use_rate

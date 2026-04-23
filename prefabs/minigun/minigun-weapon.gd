@@ -31,8 +31,7 @@ func _physics_process(delta: float) -> void:
 		spool = max(spool - delta / SPOOL_DOWN_TIME, 0.0)
 
 	# Update fire rate — lower wait_time = faster fire (D-13, D-14)
-	if shot_timer:
-		shot_timer.wait_time = lerp(_rate_min, _rate_max, spool)
+	shot_wait_time = lerp(_rate_min, _rate_max, spool)
 
 	# Glow scales with spool (D-15)
 	if light:
@@ -84,7 +83,7 @@ func fire() -> void:
 	if sound:
 		sound.play()
 	if use_rate:
-		shot_timer.start(shot_timer.wait_time)  # Use current spooled rate
+		shot_time_left = shot_wait_time  # Use current spooled rate
 	if use_ammo:
 		magazine_current -= 1
 
