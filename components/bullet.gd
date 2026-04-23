@@ -15,6 +15,12 @@ func _ready():
 # Extracted so both first-spawn (_ready) and pool re-acquire (_pool_reset) can
 # share the same arming path: kick off the `life` timeout via Body.die().
 func _arm() -> void:
+	# When called from _pool_reset's deferred flush, consumer's add_child may
+	# not have run yet — die() awaits get_tree().physics_frame and would crash
+	# on a detached node. Re-defer until reparented.
+	if not is_inside_tree():
+		call_deferred("_arm")
+		return
 	die(life)
 
 func _pool_reset() -> void:

@@ -53,8 +53,14 @@ func _pool_reset() -> void:
 	call_deferred("_on_reacquired")
 
 func _on_reacquired() -> void:
-	# Deferred post-acquire: the consumer has reparented us by now, so we can
-	# safely run the explode() coroutine.
+	# Deferred post-acquire. _pool_reset queues this via call_deferred *before*
+	# the consumer's own call_deferred("add_child", ...), so the consumer's
+	# add_child may not have flushed yet — explode() awaits get_tree()
+	# .physics_frame and would crash on a detached node. Re-defer until the
+	# node has been reparented.
+	if not is_inside_tree():
+		call_deferred("_on_reacquired")
+		return
 	_arm()
 	explode()
 	die(time)
