@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 
 ScoreManager="*res://components/score-manager.gd"
 MusicManager="*res://components/music-manager.gd"
+PoolManager="*res://components/pool-manager.gd"
 
 [display]
 
