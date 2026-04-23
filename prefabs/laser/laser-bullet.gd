@@ -14,6 +14,9 @@ var bounce_count: int = 0
 # Initial bullets skip the shooter; bounced children leave this null to allow self-hits.
 var shooter: Node2D = null
 
+# Float-counter replacement for SceneTreeTimer (perf: avoid one timer per bullet).
+var _life_left: float = 0.0
+
 func _ready() -> void:
 	# Layer 3 (bullets) = value 4. Mask: layer 1 (ships=1) + layer 4 (asteroids=8).
 	# Exclude layer 2 (weapons=2) — avoids immediate self-collision with barrel on spawn.
@@ -21,9 +24,13 @@ func _ready() -> void:
 	collision_mask = 1 | 8
 	if shooter:
 		add_collision_exception_with(shooter)
-	get_tree().create_timer(life).timeout.connect(queue_free)
+	_life_left = life
 
 func _physics_process(delta: float) -> void:
+	_life_left -= delta
+	if _life_left <= 0.0:
+		queue_free()
+		return
 	var collision: KinematicCollision2D = move_and_collide(velocity * delta)
 	if collision:
 		_on_impact(collision)

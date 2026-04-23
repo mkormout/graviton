@@ -75,7 +75,12 @@ func _fire_charged() -> void:
 		sound.play()
 
 	apply_damage()
-	await get_tree().create_timer(0.1).timeout
+	# Yield ~6 physics frames (0.1s at 60 Hz) so damage resolution settles before
+	# applying kickback. (Was: await get_tree().create_timer(0.1).timeout —
+	# created a SceneTreeTimer per fire.)
+	var _frames := int(round(0.1 * Engine.physics_ticks_per_second))
+	for _i in range(_frames):
+		await get_tree().physics_frame
 	apply_kickback()
 
 	# Restore area and strength

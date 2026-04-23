@@ -16,6 +16,10 @@ extends Node2D
 
 var area: Area2D
 
+# Float-counter replacement for SceneTreeTimer in die() (perf: avoid one timer per explosion).
+# -1.0 = inactive; 0.0 = free next tick; >0.0 = counting down.
+var _die_left: float = -1.0
+
 func _ready():
 	initialize()
 	explode()
@@ -23,6 +27,10 @@ func _ready():
 
 func _physics_process(delta):
 	update_light(delta)
+	if _die_left >= 0.0:
+		_die_left -= delta
+		if _die_left <= 0.0:
+			queue_free()
 
 func initialize():
 	var circle = CircleShape2D.new()
@@ -54,8 +62,11 @@ func update_light(_delta):
 		light.energy -= light.energy / (25 * time)
 
 func explode():
-	# correct behavior correction
-	await get_tree().create_timer(0.1).timeout
+	# Yield ~2 physics frames so the Area2D (added via call_deferred in initialize())
+	# is in the scene tree and has detected overlapping bodies for apply_shockwave().
+	# (Was: await get_tree().create_timer(0.1).timeout — created a SceneTreeTimer per explosion.)
+	await get_tree().physics_frame
+	await get_tree().physics_frame
 
 	generate_debris()
 	apply_shockwave()
@@ -111,5 +122,7 @@ func apply_damage(body: Body):
 		body.damage(damage)
 
 func die(delay: float):
-	await get_tree().create_timer(delay).timeout
-	queue_free()
+	# Schedule queue_free after `delay` seconds via the _die_left counter ticked
+	# in _physics_process. (Was: await get_tree().create_timer(delay).timeout —
+	# created a SceneTreeTimer per explosion.)
+	_die_left = delay

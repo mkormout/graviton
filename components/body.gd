@@ -39,8 +39,13 @@ func die(delay: float = 0.0):
 	if dying:
 		return
 
-	if delay:
-		await get_tree().create_timer(delay).timeout
+	if delay > 0.0:
+		# Yield N physics frames instead of creating a SceneTreeTimer per dying body
+		# (can be dozens per wave). Preserves the `await` contract so subclasses
+		# calling `super(delay)` behave identically.
+		var frames := int(ceil(delay * Engine.physics_ticks_per_second))
+		for _i in range(frames):
+			await get_tree().physics_frame
 
 	dying = true
 
