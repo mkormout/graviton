@@ -21,7 +21,41 @@ var area: Area2D
 var _die_left: float = -1.0
 
 func _ready():
-	initialize()
+	# First-spawn path: Area2D not yet built. On pool re-acquire the Area2D
+	# already exists — _pool_reset() runs initialize() only when needed.
+	if area == null:
+		initialize()
+	_arm()
+	die(time)
+
+# Extracted arming: re-enable particles/audio/area on both first-spawn and
+# pool re-acquire so the explosion fires each time it's consumed.
+func _arm() -> void:
+	if particles:
+		particles.emitting = true
+		particles.restart()
+	if audio:
+		audio.play()
+	if area:
+		area.monitoring = true
+
+func _pool_reset() -> void:
+	# Reset the death counter and visual/audio state for reuse. The Area2D
+	# is kept across reuses (created once in initialize via call_deferred);
+	# monitoring is re-enabled inside _arm().
+	_die_left = -1.0
+	if area:
+		area.monitoring = false
+	if particles:
+		particles.emitting = false
+	# _ready will NOT re-run on pool reuse; emulate its remaining behaviour
+	# by re-arming and scheduling the next die().
+	call_deferred("_on_reacquired")
+
+func _on_reacquired() -> void:
+	# Deferred post-acquire: the consumer has reparented us by now, so we can
+	# safely run the explode() coroutine.
+	_arm()
 	explode()
 	die(time)
 
@@ -30,7 +64,7 @@ func _physics_process(delta):
 	if _die_left >= 0.0:
 		_die_left -= delta
 		if _die_left <= 0.0:
-			queue_free()
+			_release()
 
 func initialize():
 	var circle = CircleShape2D.new()
@@ -126,3 +160,16 @@ func die(delay: float):
 	# in _physics_process. (Was: await get_tree().create_timer(delay).timeout —
 	# created a SceneTreeTimer per explosion.)
 	_die_left = delay
+
+# Pool-aware self-release. If this scene is registered with PoolManager,
+# return to the pool (disabling monitoring so the Area2D doesn't keep
+# firing while asleep). Otherwise fall back to queue_free.
+func _release() -> void:
+	_die_left = -1.0
+	if area:
+		area.monitoring = false
+	var scene = get_meta("_pool_scene", null)
+	if scene != null and PoolManager.is_pooled(scene):
+		PoolManager.release(self)
+	else:
+		queue_free()

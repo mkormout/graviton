@@ -18,18 +18,35 @@ var shooter: Node2D = null
 var _life_left: float = 0.0
 
 func _ready() -> void:
+	_configure_collision()
+	_life_left = life
+
+func _pool_reset() -> void:
+	# Remove any collision exceptions from a previous acquisition so the
+	# reused bullet starts with a clean slate (shooter is re-applied below
+	# once the consumer reassigns it).
+	for excepted in get_collision_exceptions():
+		remove_collision_exception_with(excepted)
+	bounce_count = 0
+	shooter = null
+	spawn_parent = null
+	velocity = Vector2.ZERO
+	_life_left = life
+	_configure_collision()
+
+# Idempotent collision-layer setup shared by _ready and _pool_reset.
+func _configure_collision() -> void:
 	# Layer 3 (bullets) = value 4. Mask: layer 1 (ships=1) + layer 4 (asteroids=8).
 	# Exclude layer 2 (weapons=2) — avoids immediate self-collision with barrel on spawn.
 	collision_layer = 4
 	collision_mask = 1 | 8
 	if shooter:
 		add_collision_exception_with(shooter)
-	_life_left = life
 
 func _physics_process(delta: float) -> void:
 	_life_left -= delta
 	if _life_left <= 0.0:
-		queue_free()
+		_release_laser()
 		return
 	var collision: KinematicCollision2D = move_and_collide(velocity * delta)
 	if collision:
@@ -46,7 +63,7 @@ func _on_impact(collision: KinematicCollision2D) -> void:
 	_spawn_flash(collision.get_position())
 
 	if bounce_count >= max_bounces:
-		queue_free()
+		_release_laser()
 		return
 
 	# Reflect and spread (D-17)
@@ -57,7 +74,7 @@ func _on_impact(collision: KinematicCollision2D) -> void:
 		var spread: float = randf_range(-spread_angle, spread_angle)
 		_spawn_child(reflected.rotated(spread))
 
-	queue_free()
+	_release_laser()
 
 func _spawn_child(new_velocity: Vector2) -> void:
 	if not bullet_scene:
@@ -82,3 +99,11 @@ func _spawn_flash(pos: Vector2) -> void:
 	fx.global_position = pos
 	if spawn_parent:
 		spawn_parent.call_deferred("add_child", fx)
+
+# Pool-aware release: return to the pool if registered, otherwise queue_free.
+func _release_laser() -> void:
+	var scene = get_meta("_pool_scene", null)
+	if scene != null and PoolManager.is_pooled(scene):
+		PoolManager.release(self)
+	else:
+		queue_free()
