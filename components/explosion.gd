@@ -25,6 +25,13 @@ func _ready():
 	# already exists — _pool_reset() runs initialize() only when needed.
 	if area == null:
 		initialize()
+	# Skip lifecycle start for prewarmed pool instances. ScenePool.prewarm
+	# sets process_mode=DISABLED before add_child; without this guard every
+	# prewarmed explosion would emit particles, play audio, enable Area2D
+	# monitoring, and arm its die-counter — multiplied across all pooled
+	# explosion types this trashes physics/audio at game start.
+	if process_mode == PROCESS_MODE_DISABLED:
+		return
 	_arm()
 	die(time)
 

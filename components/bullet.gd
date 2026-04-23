@@ -10,6 +10,13 @@ func _ready():
 	# against duplicate connections.
 	if not body_entered.is_connected(collision):
 		body_entered.connect(collision)
+	# Skip arming for prewarmed pool instances. ScenePool.prewarm sets
+	# process_mode=DISABLED before add_child; _ready still runs but the
+	# bullet is parked — arming would start a life-timer coroutine on a
+	# parked node. Gameplay acquire resets process_mode via ScenePool's
+	# _apply_default_reset and arms via _pool_reset -> call_deferred("_arm").
+	if process_mode == PROCESS_MODE_DISABLED:
+		return
 	_arm()
 
 # Extracted so both first-spawn (_ready) and pool re-acquire (_pool_reset) can
