@@ -105,8 +105,9 @@ func _spawn_flash(pos: Vector2) -> void:
 
 # Pool-aware release: return to the pool if registered, otherwise queue_free.
 func _release_laser() -> void:
-	var scene = get_meta("_pool_scene", null)
-	if scene != null and PoolManager.is_pooled(scene):
-		PoolManager.release(self)
-	else:
-		queue_free()
+	if has_meta("_pool_scene"):
+		var scene = get_meta("_pool_scene")
+		if PoolManager.is_pooled(scene):
+			PoolManager.release(self)
+			return
+	queue_free()

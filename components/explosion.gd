@@ -187,8 +187,9 @@ func _release() -> void:
 	_die_left = -1.0
 	if area:
 		area.monitoring = false
-	var scene = get_meta("_pool_scene", null)
-	if scene != null and PoolManager.is_pooled(scene):
-		PoolManager.release(self)
-	else:
-		queue_free()
+	if has_meta("_pool_scene"):
+		var scene = get_meta("_pool_scene")
+		if PoolManager.is_pooled(scene):
+			PoolManager.release(self)
+			return
+	queue_free()

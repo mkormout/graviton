@@ -11,8 +11,9 @@ func _pool_reset() -> void:
 		finished.connect(_on_finished)
 
 func _on_finished() -> void:
-	var scene = get_meta("_pool_scene", null)
-	if scene != null and PoolManager.is_pooled(scene):
-		PoolManager.release(self)
-	else:
-		queue_free()
+	if has_meta("_pool_scene"):
+		var scene = get_meta("_pool_scene")
+		if PoolManager.is_pooled(scene):
+			PoolManager.release(self)
+			return
+	queue_free()

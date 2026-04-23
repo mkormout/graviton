@@ -74,11 +74,11 @@ func acquire(scene: PackedScene) -> Node:
 func release(node: Node) -> void:
 	if node == null:
 		return
-	var scene = node.get_meta("_pool_scene", null)
-	if scene == null:
+	if not node.has_meta("_pool_scene"):
 		push_warning("PoolManager.release: node %s has no _pool_scene meta, falling back to queue_free" % node.name)
 		node.queue_free()
 		return
+	var scene = node.get_meta("_pool_scene")
 	var pool: ScenePool = _pools.get(scene, null)
 	if pool == null:
 		push_warning("PoolManager.release: no pool registered for %s, falling back to queue_free" % scene.resource_path)

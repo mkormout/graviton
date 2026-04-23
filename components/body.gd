@@ -30,11 +30,14 @@ func _pool_reset() -> void:
 # _pool_scene meta and return to the pool; anything else (e.g. successors
 # from add_successor, or non-pooled bodies) falls back to queue_free.
 func _release_to_pool_or_free() -> void:
-	var scene = get_meta("_pool_scene", null)
-	if scene != null and PoolManager.is_pooled(scene):
-		PoolManager.release(self)
-	else:
-		queue_free()
+	# Godot 4.2 treats get_meta(name, null) as "no default" and logs an error
+	# when the meta is absent. Use has_meta() as the prerequisite.
+	if has_meta("_pool_scene"):
+		var scene = get_meta("_pool_scene")
+		if PoolManager.is_pooled(scene):
+			PoolManager.release(self)
+			return
+	queue_free()
 
 func damage(attack: Damage):
 	if not can_die or not attack:
