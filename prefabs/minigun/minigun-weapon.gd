@@ -59,17 +59,16 @@ func fire() -> void:
 		return
 
 	var instance = PoolManager.acquire(ammo) as RigidBody2D
-	# No mass division — tentatively matching what pre-pool visually produced.
-	# If this is too fast we'll revert to / instance.mass.
+	instance.rotation = global_rotation
+	# Set linear_velocity directly (no /mass division). Pre-pool used
+	# apply_central_impulse(dir * velocity) on freshly-instantiated bullets;
+	# that somehow produced direct-velocity semantics rather than
+	# impulse/mass (likely because the body wasn't yet in a PhysicsServer2D
+	# space when the impulse was queued). Pooled bodies need explicit
+	# linear_velocity to match pre-pool visual behavior.
 	var target_velocity: Vector2 = Vector2.from_angle(
 		global_rotation + randf_range(-spread, spread)
 	) * velocity
-
-	# DEBUG (pool slow-bullet investigation): log state at three points.
-	print("[minigun-fire] mass=%s target_velocity=%s linear_damp=%s gravity_scale=%s freeze=%s sleeping=%s"
-		% [instance.mass, target_velocity, instance.linear_damp, instance.gravity_scale, instance.freeze, instance.sleeping])
-
-	instance.rotation = global_rotation
 	instance.linear_velocity = target_velocity
 
 	# Continuous damage scaling across full spool range
@@ -83,13 +82,11 @@ func fire() -> void:
 	if "spawn_parent" in instance:
 		instance.spawn_parent = spawn_parent
 	if spawn_parent:
-		# SYNC add_child to match flanker's working pattern, then set position
-		# AFTER the body is in the tree (flanker sets global_position after
-		# add_child too).
+		# SYNC add_child — matches the working flanker pattern. Set position
+		# AFTER add_child (before-add the detached body's position was being
+		# committed inconsistently for pooled instances).
 		spawn_parent.add_child(instance)
 		instance.global_position = barrel.global_position
-		print("[minigun-fire] AFTER add_child: linear_velocity=%s freeze=%s sleeping=%s inside_tree=%s"
-			% [instance.linear_velocity, instance.freeze, instance.sleeping, instance.is_inside_tree()])
 	else:
 		push_warning("MinigunWeapon: spawn_parent not set")
 

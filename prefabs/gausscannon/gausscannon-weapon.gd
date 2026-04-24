@@ -67,15 +67,13 @@ func _fire_charged() -> void:
 
 	# Spawn bullet with scaled velocity (manual spawn — do not call super.fire())
 	var instance = PoolManager.acquire(ammo) as RigidBody2D
-	instance.position = barrel.global_position
 	instance.rotation = global_rotation
-	# linear_velocity instead of apply_central_impulse — pooled body sleep
-	# state desyncs with Node properties across release/acquire so impulses
-	# are dropped. linear_velocity syncs on tree entry (impulse/mass on a
-	# zero-velocity body equals this direct assignment).
+	# linear_velocity directly (no /mass). Pre-pool's apply_central_impulse
+	# on a fresh body gave direct-velocity because the body wasn't in a
+	# PhysicsServer2D space yet — pooled bodies must match explicitly.
 	instance.linear_velocity = Vector2.from_angle(
 		global_rotation + randf_range(-spread, spread)
-	) * scaled_velocity / instance.mass
+	) * scaled_velocity
 	# Scale damage: duplicate the Damage resource and multiply
 	if "attack" in instance and instance.attack:
 		var scaled_attack = instance.attack.duplicate()
@@ -95,7 +93,9 @@ func _fire_charged() -> void:
 	if bullet_particles:
 		bullet_particles.scale = Vector2(5, 5) * lerp(0.2, 1.0, fraction)
 	if spawn_parent:
-		spawn_parent.call_deferred("add_child", instance)
+		# SYNC add_child — set global_position AFTER (flanker pattern).
+		spawn_parent.add_child(instance)
+		instance.global_position = barrel.global_position
 	else:
 		push_warning("GausscannonWeapon: spawn_parent not set")
 
