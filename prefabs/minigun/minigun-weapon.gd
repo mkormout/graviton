@@ -59,9 +59,11 @@ func fire() -> void:
 		return
 
 	var instance = PoolManager.acquire(ammo) as RigidBody2D
+	# No mass division — tentatively matching what pre-pool visually produced.
+	# If this is too fast we'll revert to / instance.mass.
 	var target_velocity: Vector2 = Vector2.from_angle(
 		global_rotation + randf_range(-spread, spread)
-	) * velocity / instance.mass
+	) * velocity
 
 	# DEBUG (pool slow-bullet investigation): log state at three points.
 	print("[minigun-fire] mass=%s target_velocity=%s linear_damp=%s gravity_scale=%s freeze=%s sleeping=%s"
