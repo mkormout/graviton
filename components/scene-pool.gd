@@ -73,6 +73,11 @@ func release(node: Node) -> void:
 	_live = max(0, _live - 1)
 
 func _prepare_for_sleep(node: Node) -> void:
+	# process_mode=DISABLED pauses _process/_physics_process; collision_layer=0
+	# and mask=0 prevent any collision detection. Together these keep parked
+	# pool instances inert without touching RigidBody2D.freeze / .sleeping —
+	# which desync between the Node and PhysicsServer2D state across pool
+	# release/acquire and silently discard linear_velocity on re-entry.
 	node.process_mode = Node.PROCESS_MODE_DISABLED
 	if node is CanvasItem:
 		(node as CanvasItem).visible = false
@@ -91,8 +96,6 @@ func _prepare_for_sleep(node: Node) -> void:
 		var rb := node as RigidBody2D
 		rb.linear_velocity = Vector2.ZERO
 		rb.angular_velocity = 0.0
-		rb.sleeping = true
-		rb.freeze = true
 	elif node is CharacterBody2D:
 		(node as CharacterBody2D).velocity = Vector2.ZERO
 
@@ -111,8 +114,6 @@ func _apply_default_reset(node: Node) -> void:
 			co.collision_mask = co.get_meta("_pool_orig_mask")
 	if node is RigidBody2D:
 		var rb := node as RigidBody2D
-		rb.freeze = false
-		rb.sleeping = false
 		rb.linear_velocity = Vector2.ZERO
 		rb.angular_velocity = 0.0
 	elif node is CharacterBody2D:
