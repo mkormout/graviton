@@ -21,6 +21,9 @@ func _ready() -> void:
 	_rate_max = max(rate / 5.6, 0.01)  # 5.6x speed at full spool
 
 func _physics_process(delta: float) -> void:
+	# Decrement shot_time_left / reload_time_left — without super() the
+	# parent's cooldown never ticks and only the first shot fires.
+	super(delta)
 	# Only respond to player input while mounted; dropped weapons must not spool up.
 	var mounted: bool = get_parent() is MountPoint
 	var firing: bool = mounted and Input.is_action_pressed("ui_select")
@@ -58,9 +61,7 @@ func fire() -> void:
 	var instance = PoolManager.acquire(ammo) as RigidBody2D
 	instance.position = barrel.global_position
 	instance.rotation = global_rotation
-	instance.apply_central_impulse(
-		Vector2.from_angle(global_rotation + randf_range(-spread, spread)) * velocity
-	)
+	var impulse := Vector2.from_angle(global_rotation + randf_range(-spread, spread)) * velocity
 
 	# Continuous damage scaling across full spool range
 	if "attack" in instance and instance.attack:
@@ -73,7 +74,12 @@ func fire() -> void:
 	if "spawn_parent" in instance:
 		instance.spawn_parent = spawn_parent
 	if spawn_parent:
-		spawn_parent.call_deferred("add_child", instance)
+		# Sync add_child so the bullet is in the physics space when the
+		# impulse is applied. apply_central_impulse on a detached RigidBody2D
+		# is silently dropped, so pooled bullets lost their velocity and
+		# drifted out of the barrel at zero speed.
+		spawn_parent.add_child(instance)
+		instance.apply_central_impulse(impulse)
 	else:
 		push_warning("MinigunWeapon: spawn_parent not set")
 

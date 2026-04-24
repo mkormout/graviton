@@ -111,15 +111,17 @@ func fire():
 		var instance = PoolManager.acquire(ammo) as RigidBody2D
 		instance.position = barrel.global_position
 		instance.rotation = global_rotation
-		instance.apply_central_impulse(
-			Vector2.from_angle(
-				global_rotation + randf_range(-spread, spread)
-			) * velocity,
-		)
+		var impulse := Vector2.from_angle(
+			global_rotation + randf_range(-spread, spread)
+		) * velocity
 		if "spawn_parent" in instance:
 			instance.spawn_parent = spawn_parent
 		if spawn_parent:
-			spawn_parent.call_deferred("add_child", instance)
+			# Sync add_child so the body joins the physics space before the
+			# impulse is applied. apply_central_impulse on a detached pooled
+			# RigidBody2D is silently dropped by PhysicsServer2D.
+			spawn_parent.add_child(instance)
+			instance.apply_central_impulse(impulse)
 		else:
 			push_warning("spawn_parent not set on " + name)
 

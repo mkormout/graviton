@@ -26,6 +26,9 @@ const _RECOIL_MIN_MULT: float = 0.1
 const _RECOIL_MAX_MULT: float = 1.2
 
 func _physics_process(delta: float) -> void:
+	# Decrement shot_time_left / reload_time_left on the parent — without
+	# super() the cooldown never ticks and only the first shot fires.
+	super(delta)
 	var firing: bool = get_parent() is MountPoint and Input.is_action_pressed("ui_select")
 
 	if firing and can_shoot():
@@ -66,9 +69,7 @@ func _fire_charged() -> void:
 	var instance = PoolManager.acquire(ammo) as RigidBody2D
 	instance.position = barrel.global_position
 	instance.rotation = global_rotation
-	instance.apply_central_impulse(
-		Vector2.from_angle(global_rotation + randf_range(-spread, spread)) * scaled_velocity
-	)
+	var impulse := Vector2.from_angle(global_rotation + randf_range(-spread, spread)) * scaled_velocity
 	# Scale damage: duplicate the Damage resource and multiply
 	if "attack" in instance and instance.attack:
 		var scaled_attack = instance.attack.duplicate()
@@ -88,7 +89,11 @@ func _fire_charged() -> void:
 	if bullet_particles:
 		bullet_particles.scale = Vector2(5, 5) * lerp(0.2, 1.0, fraction)
 	if spawn_parent:
-		spawn_parent.call_deferred("add_child", instance)
+		# Sync add_child so the body is in the physics space before the
+		# impulse is applied; apply_central_impulse on a detached pooled
+		# RigidBody2D is silently dropped.
+		spawn_parent.add_child(instance)
+		instance.apply_central_impulse(impulse)
 	else:
 		push_warning("GausscannonWeapon: spawn_parent not set")
 

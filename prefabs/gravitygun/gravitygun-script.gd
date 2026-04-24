@@ -39,6 +39,9 @@ func _process(_delta: float) -> void:
 		light.energy = 0.5  # resting glow
 
 func _physics_process(delta: float) -> void:
+	# Decrement shot_time_left / reload_time_left on the parent — without
+	# super() the cooldown never ticks and only the first shot fires.
+	super(delta)
 	var firing: bool = get_parent() is MountPoint and Input.is_action_pressed("ui_select")
 
 	if firing and can_shoot():
