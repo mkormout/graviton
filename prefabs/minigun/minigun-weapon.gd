@@ -59,16 +59,16 @@ func fire() -> void:
 		return
 
 	var instance = PoolManager.acquire(ammo) as RigidBody2D
-	instance.position = barrel.global_position
-	instance.rotation = global_rotation
-	# linear_velocity instead of apply_central_impulse — the pooled
-	# RigidBody2D's physics-server sleep state desynchronizes from the Node
-	# properties across pool release/acquire, so impulses are dropped.
-	# linear_velocity is read from the Node on tree entry (impulse / mass
-	# on a zero-velocity body is equivalent to this assignment).
-	instance.linear_velocity = Vector2.from_angle(
+	var target_velocity := Vector2.from_angle(
 		global_rotation + randf_range(-spread, spread)
 	) * velocity / instance.mass
+
+	# DEBUG (pool slow-bullet investigation): log state at three points.
+	print("[minigun-fire] mass=%s target_velocity=%s linear_damp=%s gravity_scale=%s freeze=%s sleeping=%s"
+		% [instance.mass, target_velocity, instance.linear_damp, instance.gravity_scale, instance.freeze, instance.sleeping])
+
+	instance.rotation = global_rotation
+	instance.linear_velocity = target_velocity
 
 	# Continuous damage scaling across full spool range
 	if "attack" in instance and instance.attack:
@@ -81,7 +81,13 @@ func fire() -> void:
 	if "spawn_parent" in instance:
 		instance.spawn_parent = spawn_parent
 	if spawn_parent:
-		spawn_parent.call_deferred("add_child", instance)
+		# SYNC add_child to match flanker's working pattern, then set position
+		# AFTER the body is in the tree (flanker sets global_position after
+		# add_child too).
+		spawn_parent.add_child(instance)
+		instance.global_position = barrel.global_position
+		print("[minigun-fire] AFTER add_child: linear_velocity=%s freeze=%s sleeping=%s inside_tree=%s"
+			% [instance.linear_velocity, instance.freeze, instance.sleeping, instance.is_inside_tree()])
 	else:
 		push_warning("MinigunWeapon: spawn_parent not set")
 
