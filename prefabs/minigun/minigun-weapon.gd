@@ -59,7 +59,7 @@ func fire() -> void:
 		return
 
 	var instance = PoolManager.acquire(ammo) as RigidBody2D
-	var target_velocity := Vector2.from_angle(
+	var target_velocity: Vector2 = Vector2.from_angle(
 		global_rotation + randf_range(-spread, spread)
 	) * velocity / instance.mass
 
