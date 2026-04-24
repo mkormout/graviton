@@ -111,17 +111,19 @@ func fire():
 		var instance = PoolManager.acquire(ammo) as RigidBody2D
 		instance.position = barrel.global_position
 		instance.rotation = global_rotation
-		var impulse := Vector2.from_angle(
+		# Set linear_velocity directly instead of apply_central_impulse. When a
+		# pooled RigidBody2D is released its physics-server body state (freeze /
+		# sleeping) gets out of sync with the Node property values, so impulses
+		# after re-acquire are dropped. linear_velocity is a plain Node property
+		# that PhysicsServer2D reads on tree entry — preserves exact velocity
+		# semantics (impulse on zero-velocity body = impulse / mass).
+		instance.linear_velocity = Vector2.from_angle(
 			global_rotation + randf_range(-spread, spread)
-		) * velocity
+		) * velocity / instance.mass
 		if "spawn_parent" in instance:
 			instance.spawn_parent = spawn_parent
 		if spawn_parent:
-			# Sync add_child so the body joins the physics space before the
-			# impulse is applied. apply_central_impulse on a detached pooled
-			# RigidBody2D is silently dropped by PhysicsServer2D.
-			spawn_parent.add_child(instance)
-			instance.apply_central_impulse(impulse)
+			spawn_parent.call_deferred("add_child", instance)
 		else:
 			push_warning("spawn_parent not set on " + name)
 

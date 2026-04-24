@@ -69,7 +69,13 @@ func _fire_charged() -> void:
 	var instance = PoolManager.acquire(ammo) as RigidBody2D
 	instance.position = barrel.global_position
 	instance.rotation = global_rotation
-	var impulse := Vector2.from_angle(global_rotation + randf_range(-spread, spread)) * scaled_velocity
+	# linear_velocity instead of apply_central_impulse — pooled body sleep
+	# state desyncs with Node properties across release/acquire so impulses
+	# are dropped. linear_velocity syncs on tree entry (impulse/mass on a
+	# zero-velocity body equals this direct assignment).
+	instance.linear_velocity = Vector2.from_angle(
+		global_rotation + randf_range(-spread, spread)
+	) * scaled_velocity / instance.mass
 	# Scale damage: duplicate the Damage resource and multiply
 	if "attack" in instance and instance.attack:
 		var scaled_attack = instance.attack.duplicate()
@@ -89,11 +95,7 @@ func _fire_charged() -> void:
 	if bullet_particles:
 		bullet_particles.scale = Vector2(5, 5) * lerp(0.2, 1.0, fraction)
 	if spawn_parent:
-		# Sync add_child so the body is in the physics space before the
-		# impulse is applied; apply_central_impulse on a detached pooled
-		# RigidBody2D is silently dropped.
-		spawn_parent.add_child(instance)
-		instance.apply_central_impulse(impulse)
+		spawn_parent.call_deferred("add_child", instance)
 	else:
 		push_warning("GausscannonWeapon: spawn_parent not set")
 

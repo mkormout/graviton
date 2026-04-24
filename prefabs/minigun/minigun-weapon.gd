@@ -61,7 +61,14 @@ func fire() -> void:
 	var instance = PoolManager.acquire(ammo) as RigidBody2D
 	instance.position = barrel.global_position
 	instance.rotation = global_rotation
-	var impulse := Vector2.from_angle(global_rotation + randf_range(-spread, spread)) * velocity
+	# linear_velocity instead of apply_central_impulse — the pooled
+	# RigidBody2D's physics-server sleep state desynchronizes from the Node
+	# properties across pool release/acquire, so impulses are dropped.
+	# linear_velocity is read from the Node on tree entry (impulse / mass
+	# on a zero-velocity body is equivalent to this assignment).
+	instance.linear_velocity = Vector2.from_angle(
+		global_rotation + randf_range(-spread, spread)
+	) * velocity / instance.mass
 
 	# Continuous damage scaling across full spool range
 	if "attack" in instance and instance.attack:
@@ -74,12 +81,7 @@ func fire() -> void:
 	if "spawn_parent" in instance:
 		instance.spawn_parent = spawn_parent
 	if spawn_parent:
-		# Sync add_child so the bullet is in the physics space when the
-		# impulse is applied. apply_central_impulse on a detached RigidBody2D
-		# is silently dropped, so pooled bullets lost their velocity and
-		# drifted out of the barrel at zero speed.
-		spawn_parent.add_child(instance)
-		instance.apply_central_impulse(impulse)
+		spawn_parent.call_deferred("add_child", instance)
 	else:
 		push_warning("MinigunWeapon: spawn_parent not set")
 
