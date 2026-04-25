@@ -103,6 +103,14 @@ func _change_state(new_state: State) -> void:
 	current_state = new_state
 	_enter_state(new_state)
 	print("[EnemyShip] state: %s -> %s" % [State.keys()[old_state], State.keys()[new_state]])
+	# Once an enemy leaves IDLING, the DetectionArea is no longer needed —
+	# disable monitoring to remove its AABB from physics broadphase. With 250
+	# enemies engaging in wave 2 this drops broadphase pair count dramatically
+	# and is the reason the detection radius can stay at 10000 without tanking
+	# FPS. Trade-off: subclasses that re-IDLE via body_exited won't re-engage
+	# via body_entered, but in practice most enemies stay engaged once aware.
+	if old_state == State.IDLING and detection_area:
+		detection_area.monitoring = false
 	queue_redraw()
 
 func steer_toward(target_position: Vector2) -> void:
