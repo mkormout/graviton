@@ -33,9 +33,13 @@ func _ready() -> void:
 	add_to_group("enemies")
 	# Apply the current global debug-visual state at spawn so newly-spawned enemies
 	# inherit the SHIFT+D toggle state across waves (quick task 260425-dnx).
+	# Deferred so it runs AFTER the subclass _ready() chain (including
+	# _setup_sprite(), which itself sets $Shape.visible = false). Without the
+	# defer, our toggle is overwritten and a debug-mode-spawned enemy ends up
+	# with both Sprite2D and Shape hidden — invisible.
 	var world := get_tree().current_scene
 	var show_debug: bool = world.show_enemy_debug if world and "show_enemy_debug" in world else false
-	set_debug_visible(show_debug)
+	call_deferred("set_debug_visible", show_debug)
 	# Deferred so subclass _ready() (including _setup_gem_light) finishes first.
 	call_deferred("_setup_body_glow")
 
