@@ -20,6 +20,16 @@ var area: Area2D
 # -1.0 = inactive; 0.0 = free next tick; >0.0 = counting down.
 var _die_left: float = -1.0
 
+# Retry counter for _on_reacquired's "wait until parented" loop. If a consumer
+# acquires this explosion from the pool but never adds it to the tree (e.g. a
+# Body.die() with null spawn_parent), the original code would re-defer
+# _on_reacquired forever, saturating SceneTree's deferred queue and tanking
+# FPS to single digits across the entire scene. Cap retries so any future
+# similar bug fails loudly (push_warning + release) instead of silently
+# choking the engine.
+var _reacquire_retries: int = 0
+const _MAX_REACQUIRE_RETRIES: int = 4
+
 func _ready():
 	# First-spawn path: Area2D not yet built. On pool re-acquire the Area2D
 	# already exists — _pool_reset() runs initialize() only when needed.
@@ -51,6 +61,7 @@ func _pool_reset() -> void:
 	# is kept across reuses (created once in initialize via call_deferred);
 	# monitoring is re-enabled inside _arm().
 	_die_left = -1.0
+	_reacquire_retries = 0
 	if area:
 		area.monitoring = false
 	if particles:
@@ -64,13 +75,31 @@ func _on_reacquired() -> void:
 	# the consumer's own call_deferred("add_child", ...), so the consumer's
 	# add_child may not have flushed yet — explode() awaits get_tree()
 	# .physics_frame and would crash on a detached node. Re-defer until the
-	# node has been reparented.
+	# node has been reparented, with a hard cap to prevent runaway when the
+	# consumer never parents us (e.g. Body.die() with null spawn_parent).
 	if not is_inside_tree():
+		_reacquire_retries += 1
+		if _reacquire_retries > _MAX_REACQUIRE_RETRIES:
+			push_warning(
+				"Explosion %s never parented after %d retries — releasing back to pool to prevent infinite call_deferred loop"
+				% [resource_path_or_name(), _MAX_REACQUIRE_RETRIES]
+			)
+			_reacquire_retries = 0
+			_release()
+			return
 		call_deferred("_on_reacquired")
 		return
+	_reacquire_retries = 0
 	_arm()
 	explode()
 	die(time)
+
+func resource_path_or_name() -> String:
+	if has_meta("_pool_scene"):
+		var scene = get_meta("_pool_scene")
+		if scene and scene.resource_path:
+			return scene.resource_path
+	return name
 
 func _physics_process(delta):
 	update_light(delta)

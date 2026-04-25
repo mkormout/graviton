@@ -102,6 +102,10 @@ func _fire() -> void:
 		var fire_dir := Vector2.from_angle(global_rotation + angle_offset)
 		bullet.rotation = global_rotation + angle_offset
 		bullet.linear_velocity = fire_dir * bullet_speed
+		# Propagate spawn_parent so the bullet's death explosion can be parented
+		# to the world. Without this, Body.die() acquires a pooled explosion but
+		# never adds it to the tree, causing an infinite call_deferred loop.
+		bullet.spawn_parent = spawn_parent
 		if spawn_parent:
 			spawn_parent.add_child(bullet)
 			# Spawn past HitBox radius (300) to avoid self-collision
