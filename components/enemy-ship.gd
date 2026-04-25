@@ -103,14 +103,19 @@ func _change_state(new_state: State) -> void:
 	current_state = new_state
 	_enter_state(new_state)
 	print("[EnemyShip] state: %s -> %s" % [State.keys()[old_state], State.keys()[new_state]])
-	# Once an enemy leaves IDLING, the DetectionArea is no longer needed —
-	# disable monitoring to remove its AABB from physics broadphase. With 250
-	# enemies engaging in wave 2 this drops broadphase pair count dramatically
-	# and is the reason the detection radius can stay at 10000 without tanking
-	# FPS. Trade-off: subclasses that re-IDLE via body_exited won't re-engage
-	# via body_entered, but in practice most enemies stay engaged once aware.
+	# Once an enemy leaves IDLING, the DetectionArea is no longer needed.
+	# We must disable the CollisionShape2D inside it (not just monitoring=false
+	# on the Area2D, which only stops signal emission and leaves the AABB in
+	# broadphase). With 250 enemies, a 10000-radius AABB per enemy crushes the
+	# broadphase even with monitoring off. Disabling the shape removes the AABB
+	# entirely. set_deferred is required because this runs from a physics callback.
+	# Trade-off: subclasses that re-IDLE via body_exited won't re-engage —
+	# in practice most enemies stay engaged once aware.
 	if old_state == State.IDLING and detection_area:
-		detection_area.monitoring = false
+		detection_area.set_deferred("monitoring", false)
+		var shape := detection_area.get_node_or_null("DetectionShape") as CollisionShape2D
+		if shape:
+			shape.set_deferred("disabled", true)
 	queue_redraw()
 
 func steer_toward(target_position: Vector2) -> void:
