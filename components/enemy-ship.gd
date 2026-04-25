@@ -109,9 +109,15 @@ func _change_state(new_state: State) -> void:
 	# broadphase). With 250 enemies, a 10000-radius AABB per enemy crushes the
 	# broadphase even with monitoring off. Disabling the shape removes the AABB
 	# entirely. set_deferred is required because this runs from a physics callback.
-	# Trade-off: subclasses that re-IDLE via body_exited won't re-engage —
-	# in practice most enemies stay engaged once aware.
+	# We must FIRST disconnect any body_exited subscribers — Godot fires
+	# body_exited for bodies still overlapping when a shape is disabled, and
+	# subclasses (Swarmer/Sniper/Flanker) use that signal to re-IDLE on lost
+	# target. Without this disconnect the enemy engages, body_exited fires from
+	# the disable, and they go right back to IDLE — visible as Swarmer not
+	# moving in wave 2.
 	if old_state == State.IDLING and detection_area:
+		for connection in detection_area.body_exited.get_connections():
+			detection_area.body_exited.disconnect(connection.callable)
 		detection_area.set_deferred("monitoring", false)
 		var shape := detection_area.get_node_or_null("DetectionShape") as CollisionShape2D
 		if shape:
