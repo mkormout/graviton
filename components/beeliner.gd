@@ -153,8 +153,6 @@ func _setup_gem_light() -> void:
 	_start_pulse(light)
 
 func _start_pulse(light: PointLight2D) -> void:
-	if _DIAG_ENEMY_FX_DISABLED:
-		return  # DIAG: skip infinite pulse Tween
 	var tween := create_tween()
 	tween.set_loops(0)  # 0 = infinite in Godot 4 (verified per RESEARCH Pattern 2)
 	tween.set_trans(Tween.TRANS_SINE)
