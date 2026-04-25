@@ -32,6 +32,7 @@ window/size/mode=2
 
 2d/default_gravity=2.08165e-12
 2d/default_gravity_vector=Vector2(2.08165e-12, 2.08165e-12)
+common/physics_max_steps_per_frame=2
 
 [rendering]
 
