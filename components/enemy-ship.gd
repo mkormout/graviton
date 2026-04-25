@@ -30,8 +30,26 @@ func _ready() -> void:
 	detection_area.set_collision_mask_value(1, true)     # area detects Ship layer (1)
 	detection_area.body_entered.connect(_on_detection_area_body_entered)
 	hitbox.body_entered.connect(_on_hitbox_body_entered)
+	add_to_group("enemies")
+	# Apply the current global debug-visual state at spawn so newly-spawned enemies
+	# inherit the SHIFT+D toggle state across waves (quick task 260425-dnx).
+	var world := get_tree().current_scene
+	var show_debug: bool = world.show_enemy_debug if world and "show_enemy_debug" in world else false
+	set_debug_visible(show_debug)
 	# Deferred so subclass _ready() (including _setup_gem_light) finishes first.
 	call_deferred("_setup_body_glow")
+
+# SHIFT+D debug visual toggle (quick task 260425-dnx).
+# show_debug=true  -> Polygon2D "Shape" visible, Sprite2D hidden, _draw() overlay enabled.
+# show_debug=false -> Sprite2D visible, Polygon2D "Shape" hidden, _draw() overlay skipped.
+func set_debug_visible(show_debug: bool) -> void:
+	var sprite_node := get_node_or_null("Sprite2D") as CanvasItem
+	var shape_node := get_node_or_null("Shape") as CanvasItem
+	if sprite_node:
+		sprite_node.visible = not show_debug
+	if shape_node:
+		shape_node.visible = show_debug
+	queue_redraw()  # _draw() reads $Shape.visible to decide whether to render overlays
 
 # Adds a constant low-energy ambient glow behind the sprite using the same
 # radial gradient and color as the enemy's GemLight. Culled by the same

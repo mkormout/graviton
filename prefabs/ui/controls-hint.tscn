@@ -71,6 +71,7 @@ E - fire right mount
 A - drop left mount
 S - drop front mount
 D - drop right mount
+SHIFT+D - toggle enemy debug visuals
 
 F / Enter - next wave
 G - god mode for weapon
