@@ -13,6 +13,10 @@ signal wave_cleared_waiting(wave_number: int)
 ## Legacy format also accepted: { "enemy_scene": PackedScene, "count": int }
 @export var waves: Array = []
 @export var spawn_radius_margin: float = 1000.0
+## Spread enemy spawns across multiple frames to avoid the broadphase spike
+## from 250 instantiate()+add_child() calls hitting in a single frame.
+## Tune in Inspector if you ever raise enemy counts further.
+@export var spawn_batch_size: int = 10
 
 var _current_wave_index: int = 0
 var _enemies_alive: int = 0
@@ -28,6 +32,8 @@ func _find_player() -> void:
 		push_warning("[WaveManager] No node in group 'player' found")
 
 func trigger_wave() -> void:
+	# `await` inside this function makes it return a Signal, but callers
+	# don't need to await it — spawning continues in the background.
 	if waves.is_empty():
 		push_warning("[WaveManager] No waves configured")
 		return
@@ -70,6 +76,7 @@ func trigger_wave() -> void:
 	_current_wave_index += 1
 	wave_started.emit(_current_wave_index, total_count, label_text)
 
+	var spawned_in_frame: int = 0
 	for group in groups:
 		var enemy_scene: PackedScene = group.get("enemy_scene")
 		var count: int = group.get("count", 0)
@@ -79,6 +86,10 @@ func trigger_wave() -> void:
 			continue
 		for i in range(count):
 			_spawn_enemy(enemy_scene, speed_tier)
+			spawned_in_frame += 1
+			if spawned_in_frame >= spawn_batch_size:
+				spawned_in_frame = 0
+				await get_tree().process_frame
 
 func _spawn_enemy(enemy_scene: PackedScene, speed_tier: float = 1.0) -> void:
 	var enemy := enemy_scene.instantiate()

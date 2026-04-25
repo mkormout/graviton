@@ -30,13 +30,13 @@ window/size/mode=2
 
 [physics]
 
+common/max_physics_steps_per_frame=2
 2d/default_gravity=2.08165e-12
 2d/default_gravity_vector=Vector2(2.08165e-12, 2.08165e-12)
-common/max_physics_steps_per_frame=2
 
 [rendering]
 
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
-limits/opengl/max_renderable_lights=128
+limits/opengl/max_renderable_lights=512
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)
