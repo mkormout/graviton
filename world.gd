@@ -36,6 +36,7 @@ var asteroids_large_model = [
 
 var godmode: bool = false
 var camera_follow: bool = true
+var show_enemy_debug: bool = false  # SHIFT+D toggle (quick task 260425-dnx)
 var death_screen: DeathScreen = null
 var _wave_clear_pending: bool = false
 var _wave_hud: WaveHud = null
@@ -336,7 +337,7 @@ func _input(event):
 		$ShipBFG23.unmount_weapon("left")
 	if Input.is_key_pressed(KEY_S):
 		$ShipBFG23.unmount_weapon("")
-	if Input.is_key_pressed(KEY_D):
+	if Input.is_key_pressed(KEY_D) and not Input.is_key_pressed(KEY_SHIFT):
 		$ShipBFG23.unmount_weapon("right")
 	
 	if Input.is_key_pressed(KEY_I):
@@ -352,6 +353,14 @@ func _input(event):
 			_wave_hud.hide_wave_clear_label()
 		else:
 			$WaveManager.trigger_wave()
+
+	# SHIFT+D: toggle enemy debug visuals (Polygon2D Shape vs Sprite2D). Quick task 260425-dnx.
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_D and event.shift_pressed:
+		show_enemy_debug = not show_enemy_debug
+		for enemy in get_tree().get_nodes_in_group("enemies"):
+			if enemy.has_method("set_debug_visible"):
+				enemy.set_debug_visible(show_enemy_debug)
+		print("[world] enemy debug visuals: %s" % ("ON" if show_enemy_debug else "OFF"))
 
 	if event is InputEventKey and event.pressed and event.keycode == KEY_TAB:
 		_controls_hint.toggle()
