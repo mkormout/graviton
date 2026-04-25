@@ -79,7 +79,6 @@ func _setup_body_glow() -> void:
 
 func _physics_process(delta: float) -> void:
 	super(delta)
-	queue_redraw()
 	if dying:
 		return
 	_tick_state(delta)
