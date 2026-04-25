@@ -17,6 +17,11 @@ enum State {
 @export var detection_radius: float = 800.0
 @export var score_value: int = 100
 
+# DIAGNOSTIC: temporarily disables per-enemy GemLight pulse Tween + BodyGlow PointLight2D
+# setup. Tested as a hypothesis for 2-3 FPS slowdown at 250 live enemies.
+# Read by subclass _start_pulse() and by _setup_body_glow() below.
+const _DIAG_ENEMY_FX_DISABLED: bool = true
+
 var current_state: State = State.IDLING
 
 @onready var detection_area: Area2D = $DetectionArea
@@ -59,6 +64,8 @@ func set_debug_visible(show_debug: bool) -> void:
 # radial gradient and color as the enemy's GemLight. Culled by the same
 # VisibleOnScreenNotifier2D. Runs after subclass _ready() via call_deferred.
 func _setup_body_glow() -> void:
+	if _DIAG_ENEMY_FX_DISABLED:
+		return  # DIAG: skip BodyGlow lights entirely
 	var gem_light := get_node_or_null("GemLight") as PointLight2D
 	if gem_light == null or gem_light.texture == null:
 		return
