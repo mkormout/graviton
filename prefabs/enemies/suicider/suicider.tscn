@@ -43,7 +43,7 @@ fill_to = Vector2(0.5, 1.0)
 
 [node name="Suicider" type="RigidBody2D" node_paths=PackedStringArray("item_dropper")]
 collision_layer = 1
-collision_mask = 3
+collision_mask = 2
 gravity_scale = 0.0
 can_sleep = false
 script = ExtResource("1_suicider")
