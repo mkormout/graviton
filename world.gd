@@ -96,6 +96,29 @@ func _ready():
 
 	spawn_asteroids(10)
 	$WaveManager.waves = [
+		{
+			"label": "Performance test 2",
+			"groups": [
+				# Stage 0 — beeliners full circle, immediate (REGRESSION CANARY: all defaults)
+				{ "enemy_scene": beeliner_model, "count": 50, "spawn_at": 0.0 },
+				# Stage 1 — flankers at 4s, layered random distance, dripped over 2s, in a NORTHERN arc (~60°)
+				{ "enemy_scene": flanker_model,  "count": 50, "spawn_at": 4.0, "stagger": 2.0,
+				  "position_mode": "random", "distance_min": 4500.0, "distance_max": 8500.0,
+				  "angle_mode": "arc", "angle_center": -PI/2, "angle_width": PI/3 },
+				# Stage 2 — swarmer DROP-POD CLUSTER at 6s, exact close ring, tight cluster
+				{ "enemy_scene": swarmer_model,  "count": 50, "spawn_at": 6.0,
+				  "position_mode": "exact", "distance": 5000.0,
+				  "cluster_radius": 800.0 },
+				# Stage 3 — snipers at 8s, exact far ring, EASTERN arc, spawn already FIGHTING (no warm-up)
+				{ "enemy_scene": sniper_model,   "count": 50, "spawn_at": 8.0,
+				  "position_mode": "exact", "distance": 8000.0,
+				  "angle_mode": "arc", "angle_center": 0.0, "angle_width": PI/4,
+				  "initial_state": "FIGHTING" },
+				# Stage 4 — suiciders at 12s, random tight close band, dripped over 4s, full circle
+				{ "enemy_scene": suicider_model, "count": 50, "spawn_at": 12.0, "stagger": 4.0,
+				  "position_mode": "random", "distance_min": 4000.0, "distance_max": 5500.0 },
+			]
+		},
 		# Wave 1
 		{
 			"label": "Suiciders",
