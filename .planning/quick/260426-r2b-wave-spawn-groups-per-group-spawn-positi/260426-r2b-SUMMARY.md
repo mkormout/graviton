@@ -19,11 +19,13 @@ decisions:
   - "Two helpers (_resolve_distance, _resolve_angle) plus the standalone _resolve_base_angle, all small — within the plan's three-helpers cap. Keeps _get_spawn_position itself a 4-line dispatcher."
   - "_change_state(EnemyShip.State[name]) confirmed canonical (enemy-ship.gd line 98); plan's claim verified, no deviation."
   - "spawn_batch_size frame-batching kept exactly as in commit 9dcf1fb; per-enemy stagger awaits ALSO reset spawned_in_frame because they cross frame boundaries anyway."
+status: complete
 metrics:
-  tasks_completed: 2
+  tasks_completed: 3
   tasks_in_plan: 3
   duration_minutes: ~10
   completed_date: 2026-04-26
+  human_checkpoint_approved: 2026-04-27
 ---
 
 # Quick 260426-r2b: Per-group SpawnGroup options Summary
