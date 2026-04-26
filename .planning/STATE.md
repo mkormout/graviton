@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-04-19)
 Phase: 18
 Plan: All 18 plans complete (4 phases)
 Status: All phases complete — closing milestone v3.5
-Last activity: 2026-04-25 - Completed quick task 260425-eli: Performance fix #1 — remove unconditional queue_redraw() from EnemyShip._physics_process
+Last activity: 2026-04-26 - Completed quick task 260426-r2b: Wave spawn groups (spawn_at, position_mode, stagger, angle, cluster_radius, initial_state) + perf-test wave restructure (awaiting human in-game checkpoint)
 
 Progress: [██████████] 100%
 
@@ -88,6 +88,7 @@ None.
 | 260423-wv3 | Add object pooling (ScenePool + PoolManager autoload) for bullets, explosions, impact FX, and debris | 2026-04-23 | f915e5a | [260423-wv3-add-object-pooling-for-frequently-spawne](./quick/260423-wv3-add-object-pooling-for-frequently-spawne/) |
 | 260425-dnx | Add SHIFT+D toggle to switch enemy sprites off and show debug shapes instead | 2026-04-25 | cc1a429 | [260425-dnx-add-shift-d-toggle-to-switch-enemy-sprit](./quick/260425-dnx-add-shift-d-toggle-to-switch-enemy-sprit/) |
 | 260425-eli | Performance fix #1: remove unconditional queue_redraw() from EnemyShip._physics_process | 2026-04-25 | 4005bb4 | [260425-eli-performance-fix-1-remove-unconditional-q](./quick/260425-eli-performance-fix-1-remove-unconditional-q/) |
+| 260426-r2b | Wave spawn groups: per-group spawn_at, position_mode (exact/random distance), stagger, angle (full/arc), cluster_radius, initial_state — perf-test wave restructured to exercise all six | 2026-04-26 | 5f3b3b8 | [260426-r2b-wave-spawn-groups-per-group-spawn-positi](./quick/260426-r2b-wave-spawn-groups-per-group-spawn-positi/) |
 
 ## Session Continuity
 
