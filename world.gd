@@ -36,7 +36,7 @@ var asteroids_large_model = [
 
 var godmode: bool = false
 var camera_follow: bool = true
-var show_enemy_debug: bool = false  # SHIFT+D toggle (quick task 260425-dnx)
+var show_enemy_debug: bool = true  # SHIFT+D toggle (quick task 260425-dnx) — debug visuals default ON
 var death_screen: DeathScreen = null
 var _wave_clear_pending: bool = false
 var _wave_hud: WaveHud = null
