@@ -97,184 +97,230 @@ func _ready():
 	spawn_asteroids(10)
 	$WaveManager.waves = [
 		{
-			"label": "Performance test 2",
+			"label": "Pulsar",
 			"groups": [
-				# Stage 0 — beeliners full circle, immediate (REGRESSION CANARY: all defaults)
-				{ "enemy_scene": beeliner_model, "count": 50, "spawn_at": 0.0 },
-				# Stage 1 — flankers at 4s, layered random distance, dripped over 2s, in a NORTHERN arc (~60°)
-				{ "enemy_scene": flanker_model,  "count": 50, "spawn_at": 4.0, "stagger": 2.0,
-				  "position_mode": "random", "distance_min": 4500.0, "distance_max": 8500.0,
+				{ "enemy_scene": beeliner_model, "count": 7 },
+			]
+		},
+		{
+			"label": "Solar Wind",
+			"groups": [
+				{ "enemy_scene": beeliner_model, "count": 5, "spawn_at": 0.0 },
+				{ "enemy_scene": suicider_model, "count": 3, "spawn_at": 6.0 },
+			]
+		},
+		{
+			"label": "Comet Trail",
+			"groups": [
+				{ "enemy_scene": beeliner_model, "count": 6, "spawn_at": 0.0, "stagger": 4.0 },
+				{ "enemy_scene": flanker_model,  "count": 4, "spawn_at": 6.0 },
+			]
+		},
+		{
+			"label": "Asteroid Belt",
+			"groups": [
+				{ "enemy_scene": beeliner_model, "count": 8,
+				  "position_mode": "exact", "distance": 6500.0,
+				  "angle_mode": "arc", "angle_center": 0.0, "angle_width": PI/2 },
+			]
+		},
+		{
+			"label": "Nebula",
+			"groups": [
+				{ "enemy_scene": swarmer_model,  "count": 10, "spawn_at": 0.0, "stagger": 3.0,
+				  "position_mode": "random", "distance_min": 5500.0, "distance_max": 8500.0 },
+				{ "enemy_scene": flanker_model,  "count": 4,  "spawn_at": 8.0 },
+			]
+		},
+		{
+			"label": "Aurora Borealis",
+			"groups": [
+				{ "enemy_scene": flanker_model,  "count": 5, "spawn_at": 0.0,
 				  "angle_mode": "arc", "angle_center": -PI/2, "angle_width": PI/3 },
-				# Stage 2 — swarmer DROP-POD CLUSTER at 6s, exact close ring, tight cluster
-				{ "enemy_scene": swarmer_model,  "count": 50, "spawn_at": 6.0,
+				{ "enemy_scene": beeliner_model, "count": 8, "spawn_at": 5.0 },
+				{ "enemy_scene": sniper_model,   "count": 5, "spawn_at": 10.0,
+				  "position_mode": "exact", "distance": 8000.0 },
+			]
+		},
+		{
+			"label": "Magnetar",
+			"groups": [
+				{ "enemy_scene": flanker_model,  "count": 6, "spawn_at": 0.0,
+				  "angle_mode": "arc", "angle_center": PI/2, "angle_width": PI/3 },
+				{ "enemy_scene": suicider_model, "count": 6, "spawn_at": 6.0,
+				  "position_mode": "exact", "distance": 5200.0,
+				  "cluster_radius": 700.0 },
+				{ "enemy_scene": sniper_model,   "count": 4, "spawn_at": 12.0,
+				  "position_mode": "exact", "distance": 8200.0 },
+				{ "enemy_scene": beeliner_model, "count": 6, "spawn_at": 14.0 },
+			]
+		},
+		{
+			"label": "Solar Flare",
+			"groups": [
+				{ "enemy_scene": swarmer_model,  "count": 12, "spawn_at": 0.0, "speed_tier": 1.3 },
+				{ "enemy_scene": flanker_model,  "count": 6,  "spawn_at": 8.0 },
+			]
+		},
+		{
+			"label": "Twin Suns",
+			"groups": [
+				{ "enemy_scene": suicider_model, "count": 4, "spawn_at": 0.0,
+				  "position_mode": "exact", "distance": 5500.0,
+				  "cluster_radius": 600.0 },
+				{ "enemy_scene": suicider_model, "count": 4, "spawn_at": 5.0,
+				  "position_mode": "exact", "distance": 5500.0,
+				  "angle_mode": "arc", "angle_center": PI, "angle_width": PI/6,
+				  "cluster_radius": 600.0 },
+				{ "enemy_scene": beeliner_model, "count": 6, "spawn_at": 10.0 },
+			]
+		},
+		{
+			"label": "Neutron Star",
+			"groups": [
+				{ "enemy_scene": beeliner_model, "count": 8, "spawn_at": 0.0 },
+				{ "enemy_scene": flanker_model,  "count": 6, "spawn_at": 5.0,
+				  "position_mode": "exact", "distance": 6000.0 },
+				{ "enemy_scene": sniper_model,   "count": 4, "spawn_at": 11.0,
+				  "position_mode": "exact", "distance": 8500.0 },
+				{ "enemy_scene": suicider_model, "count": 4, "spawn_at": 15.0 },
+			]
+		},
+		{
+			"label": "Wormhole",
+			"groups": [
+				{ "enemy_scene": swarmer_model,  "count": 12, "spawn_at": 0.0, "stagger": 5.0,
+				  "position_mode": "random", "distance_min": 5000.0, "distance_max": 8000.0 },
+				{ "enemy_scene": flanker_model,  "count": 6,  "spawn_at": 6.0,
+				  "angle_mode": "arc", "angle_center": -PI/2, "angle_width": PI/3 },
+				{ "enemy_scene": sniper_model,   "count": 4,  "spawn_at": 12.0,
+				  "angle_mode": "arc", "angle_center": PI/2, "angle_width": PI/3 },
+				{ "enemy_scene": beeliner_model, "count": 4,  "spawn_at": 16.0 },
+			]
+		},
+		{
+			"label": "Quasar",
+			"groups": [
+				{ "enemy_scene": beeliner_model, "count": 10, "spawn_at": 0.0 },
+				{ "enemy_scene": flanker_model,  "count": 6,  "spawn_at": 5.0 },
+				{ "enemy_scene": sniper_model,   "count": 6,  "spawn_at": 10.0,
+				  "position_mode": "exact", "distance": 8500.0,
+				  "initial_state": "SEEKING" },
+				{ "enemy_scene": suicider_model, "count": 6,  "spawn_at": 15.0,
+				  "position_mode": "exact", "distance": 5000.0 },
+				{ "enemy_scene": swarmer_model,  "count": 4,  "spawn_at": 18.0, "speed_tier": 1.4 },
+			]
+		},
+		{
+			"label": "Dark Matter",
+			"groups": [
+				{ "enemy_scene": swarmer_model,  "count": 14, "spawn_at": 0.0,
+				  "position_mode": "random", "distance_min": 5000.0, "distance_max": 9000.0 },
+				{ "enemy_scene": flanker_model,  "count": 6,  "spawn_at": 8.0,
+				  "angle_mode": "arc", "angle_center": 0.0, "angle_width": PI/3 },
+				{ "enemy_scene": beeliner_model, "count": 6,  "spawn_at": 12.0 },
+			]
+		},
+		{
+			"label": "Cosmic Microwave",
+			# Breather: a single dripped swarm, no peaks, no exotic angles — gives the player room to breathe.
+			"groups": [
+				{ "enemy_scene": swarmer_model,  "count": 14, "spawn_at": 0.0, "stagger": 8.0,
+				  "position_mode": "random", "distance_min": 5500.0, "distance_max": 8500.0,
+				  "speed_tier": 0.7 },
+				{ "enemy_scene": beeliner_model, "count": 4,  "spawn_at": 10.0 },
+			]
+		},
+		{
+			"label": "Red Giant",
+			"groups": [
+				{ "enemy_scene": beeliner_model, "count": 8, "spawn_at": 0.0 },
+				{ "enemy_scene": flanker_model,  "count": 8, "spawn_at": 5.0 },
+				{ "enemy_scene": swarmer_model,  "count": 8, "spawn_at": 10.0, "speed_tier": 1.2 },
+				{ "enemy_scene": sniper_model,   "count": 4, "spawn_at": 14.0,
+				  "position_mode": "exact", "distance": 8500.0 },
+			]
+		},
+		{
+			"label": "Black Hole",
+			"groups": [
+				{ "enemy_scene": flanker_model,  "count": 8,  "spawn_at": 0.0,
+				  "angle_mode": "arc", "angle_center": -PI/2, "angle_width": PI/4 },
+				{ "enemy_scene": suicider_model, "count": 8,  "spawn_at": 6.0,
 				  "position_mode": "exact", "distance": 5000.0,
 				  "cluster_radius": 800.0 },
-				# Stage 3 — snipers at 8s, exact far ring, EASTERN arc, spawn already FIGHTING (no warm-up)
-				{ "enemy_scene": sniper_model,   "count": 50, "spawn_at": 8.0,
-				  "position_mode": "exact", "distance": 8000.0,
+				{ "enemy_scene": beeliner_model, "count": 10, "spawn_at": 11.0 },
+				{ "enemy_scene": sniper_model,   "count": 6,  "spawn_at": 16.0,
+				  "position_mode": "exact", "distance": 8500.0 },
+				{ "enemy_scene": swarmer_model,  "count": 4,  "spawn_at": 20.0, "speed_tier": 1.4 },
+			]
+		},
+		{
+			"label": "Singularity",
+			"groups": [
+				{ "enemy_scene": beeliner_model, "count": 12, "spawn_at": 0.0 },
+				{ "enemy_scene": flanker_model,  "count": 10, "spawn_at": 5.0,
+				  "position_mode": "random", "distance_min": 5500.0, "distance_max": 8000.0 },
+				{ "enemy_scene": swarmer_model,  "count": 12, "spawn_at": 10.0, "stagger": 4.0,
+				  "speed_tier": 1.3 },
+				{ "enemy_scene": sniper_model,   "count": 6,  "spawn_at": 15.0,
+				  "initial_state": "FIGHTING" },
+				{ "enemy_scene": suicider_model, "count": 8,  "spawn_at": 20.0 },
+			]
+		},
+		{
+			"label": "Event Horizon",
+			# Mini-breather at a high baseline: fewer groups, but the snipers spawn already SEEKING so it doesn't feel regressive.
+			"groups": [
+				{ "enemy_scene": flanker_model,  "count": 10, "spawn_at": 0.0,
+				  "angle_mode": "arc", "angle_center": PI, "angle_width": PI/3 },
+				{ "enemy_scene": swarmer_model,  "count": 16, "spawn_at": 6.0, "speed_tier": 0.8 },
+				{ "enemy_scene": sniper_model,   "count": 6,  "spawn_at": 14.0,
+				  "position_mode": "exact", "distance": 9000.0,
+				  "initial_state": "SEEKING" },
+				{ "enemy_scene": beeliner_model, "count": 6,  "spawn_at": 18.0 },
+			]
+		},
+		{
+			"label": "Supernova",
+			"groups": [
+				{ "enemy_scene": beeliner_model, "count": 14, "spawn_at": 0.0 },
+				{ "enemy_scene": flanker_model,  "count": 12, "spawn_at": 4.0,
+				  "angle_mode": "arc", "angle_center": -PI/2, "angle_width": PI/3 },
+				{ "enemy_scene": swarmer_model,  "count": 16, "spawn_at": 8.0, "stagger": 4.0,
+				  "position_mode": "random", "distance_min": 4800.0, "distance_max": 8500.0,
+				  "speed_tier": 1.3 },
+				{ "enemy_scene": suicider_model, "count": 10, "spawn_at": 14.0,
+				  "position_mode": "exact", "distance": 5200.0,
+				  "cluster_radius": 900.0 },
+				{ "enemy_scene": sniper_model,   "count": 8,  "spawn_at": 18.0,
+				  "position_mode": "exact", "distance": 9000.0,
+				  "angle_mode": "arc", "angle_center": PI/2, "angle_width": PI/4,
+				  "initial_state": "FIGHTING" },
+				{ "enemy_scene": flanker_model,  "count": 10, "spawn_at": 22.0 },
+			]
+		},
+		{
+			"label": "Heat Death",
+			# Finale: every option exercised — staged, dripped, random, exact, arc, cluster, FIGHTING. Suicider cluster lands BEHIND the player heading at 18s.
+			"groups": [
+				{ "enemy_scene": beeliner_model, "count": 16, "spawn_at": 0.0, "stagger": 4.0 },
+				{ "enemy_scene": flanker_model,  "count": 14, "spawn_at": 5.0,
+				  "angle_mode": "arc", "angle_center": -PI/2, "angle_width": PI/3 },
+				{ "enemy_scene": swarmer_model,  "count": 20, "spawn_at": 9.0, "stagger": 5.0,
+				  "position_mode": "random", "distance_min": 4500.0, "distance_max": 9000.0,
+				  "speed_tier": 1.4 },
+				{ "enemy_scene": sniper_model,   "count": 10, "spawn_at": 14.0,
+				  "position_mode": "exact", "distance": 9000.0,
 				  "angle_mode": "arc", "angle_center": 0.0, "angle_width": PI/4,
 				  "initial_state": "FIGHTING" },
-				# Stage 4 — suiciders at 12s, random tight close band, dripped over 4s, full circle
-				{ "enemy_scene": suicider_model, "count": 50, "spawn_at": 12.0, "stagger": 4.0,
-				  "position_mode": "random", "distance_min": 4000.0, "distance_max": 5500.0 },
-			]
-		},
-		# Wave 1
-		{
-			"label": "Suiciders",
-			"groups": [{ "enemy_scene": suicider_model, "count": 3 }]
-		},
-		# Wave 2
-		{
-			"label": "Beelines",
-			"groups": [{ "enemy_scene": beeliner_model, "count": 4 }]
-		},
-		# Wave 3
-		{
-			"label": "Flankers",
-			"groups": [{ "enemy_scene": flanker_model, "count": 3 }]
-		},
-		# Wave 4
-		{
-			"label": "Suiciders + Beelines",
-			"groups": [
-				{ "enemy_scene": suicider_model, "count": 4 },
-				{ "enemy_scene": beeliner_model, "count": 3 },
-			]
-		},
-		# Wave 5
-		{
-			"label": "Fast Swarm",
-			"groups": [{ "enemy_scene": swarmer_model, "count": 6, "speed_tier": 1.5 }]
-		},
-		# Wave 6
-		{
-			"label": "Snipers",
-			"groups": [{ "enemy_scene": sniper_model, "count": 3 }]
-		},
-		# Wave 7
-		{
-			"label": "Flankers + Suiciders",
-			"groups": [
-				{ "enemy_scene": flanker_model, "count": 4 },
-				{ "enemy_scene": suicider_model, "count": 3 },
-			]
-		},
-		# Wave 8
-		{
-			"label": "Beelines + Swarm",
-			"groups": [
-				{ "enemy_scene": beeliner_model, "count": 6 },
-				{ "enemy_scene": swarmer_model, "count": 4 },
-			]
-		},
-		# Wave 9
-		{
-			"label": "Snipers + Flankers",
-			"groups": [
-				{ "enemy_scene": sniper_model, "count": 4 },
-				{ "enemy_scene": flanker_model, "count": 3 },
-			]
-		},
-		# Wave 10
-		{
-			"label": "Suiciders + Slow Swarm + Beelines",
-			"groups": [
-				{ "enemy_scene": suicider_model, "count": 5 },
-				{ "enemy_scene": swarmer_model, "count": 6, "speed_tier": 0.6 },
-				{ "enemy_scene": beeliner_model, "count": 4 },
-			]
-		},
-		# Wave 11
-		{
-			"label": "Flankers + Snipers",
-			"groups": [
-				{ "enemy_scene": flanker_model, "count": 6 },
-				{ "enemy_scene": sniper_model, "count": 4 },
-			]
-		},
-		# Wave 12
-		{
-			"label": "Slow & Fast Swarm + Suiciders",
-			"groups": [
-				{ "enemy_scene": swarmer_model, "count": 5, "speed_tier": 0.6 },
-				{ "enemy_scene": swarmer_model, "count": 5, "speed_tier": 1.5 },
-				{ "enemy_scene": suicider_model, "count": 4 },
-			]
-		},
-		# Wave 13
-		{
-			"label": "Beelines + Flankers + Snipers",
-			"groups": [
-				{ "enemy_scene": beeliner_model, "count": 8 },
-				{ "enemy_scene": flanker_model, "count": 5 },
-				{ "enemy_scene": sniper_model, "count": 3 },
-			]
-		},
-		# Wave 14
-		{
-			"label": "Suiciders + Swarm",
-			"groups": [
-				{ "enemy_scene": suicider_model, "count": 6 },
-				{ "enemy_scene": swarmer_model, "count": 8 },
-			]
-		},
-		# Wave 15
-		{
-			"label": "Snipers + Flankers + Beelines",
-			"groups": [
-				{ "enemy_scene": sniper_model, "count": 6 },
-				{ "enemy_scene": flanker_model, "count": 6 },
-				{ "enemy_scene": beeliner_model, "count": 6 },
-			]
-		},
-		# Wave 16
-		{
-			"label": "Fast Swarm + Suiciders + Snipers",
-			"groups": [
-				{ "enemy_scene": swarmer_model, "count": 12, "speed_tier": 1.5 },
-				{ "enemy_scene": suicider_model, "count": 6 },
-				{ "enemy_scene": sniper_model, "count": 4 },
-			]
-		},
-		# Wave 17
-		{
-			"label": "Flankers + Beelines + Suiciders",
-			"groups": [
-				{ "enemy_scene": flanker_model, "count": 8 },
-				{ "enemy_scene": beeliner_model, "count": 10 },
-				{ "enemy_scene": suicider_model, "count": 5 },
-			]
-		},
-		# Wave 18
-		{
-			"label": "Snipers + Slow Swarm + Flankers",
-			"groups": [
-				{ "enemy_scene": sniper_model, "count": 8 },
-				{ "enemy_scene": swarmer_model, "count": 14, "speed_tier": 0.6 },
-				{ "enemy_scene": flanker_model, "count": 6 },
-			]
-		},
-		# Wave 19 — Full Assault
-		{
-			"label": "Full Assault",
-			"groups": [
-				{ "enemy_scene": beeliner_model, "count": 8 },
-				{ "enemy_scene": flanker_model, "count": 8 },
-				{ "enemy_scene": swarmer_model, "count": 10 },
-				{ "enemy_scene": sniper_model, "count": 6 },
-				{ "enemy_scene": suicider_model, "count": 6 },
-			]
-		},
-		# Wave 20 — Final Wave
-		{
-			"label": "Final Wave",
-			"groups": [
-				{ "enemy_scene": beeliner_model, "count": 12 },
-				{ "enemy_scene": flanker_model, "count": 10 },
-				{ "enemy_scene": swarmer_model, "count": 16 },
-				{ "enemy_scene": sniper_model, "count": 8 },
-				{ "enemy_scene": suicider_model, "count": 8 },
+				{ "enemy_scene": suicider_model, "count": 14, "spawn_at": 18.0,
+				  "position_mode": "exact", "distance": 5000.0,
+				  "angle_mode": "arc", "angle_center": PI/2, "angle_width": PI/6,
+				  "cluster_radius": 1000.0,
+				  "initial_state": "FIGHTING" },
+				{ "enemy_scene": flanker_model,  "count": 12, "spawn_at": 24.0 },
+				{ "enemy_scene": swarmer_model,  "count": 9,  "spawn_at": 28.0, "speed_tier": 1.5 },
 			]
 		},
 	]
