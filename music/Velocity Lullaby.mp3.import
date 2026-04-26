@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://mqixnahshc2x"
+path="res://.godot/imported/Velocity Lullaby.mp3-da0de60d1225da0965f9f5f31d0553eb.mp3str"
+
+[deps]
+
+source_file="res://music/Velocity Lullaby.mp3"
+dest_files=["res://.godot/imported/Velocity Lullaby.mp3-da0de60d1225da0965f9f5f31d0553eb.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
