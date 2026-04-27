@@ -1,0 +1,51 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://prefabs/ui/music-hud.gd" id="1_musichud"]
+
+[node name="MusicHud" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_musichud")
+
+[node name="Panel" type="Panel" parent="."]
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -52.0
+offset_right = 312.0
+offset_bottom = -12.0
+grow_vertical = 0
+modulate = Color(1, 1, 1, 0.85)
+
+[node name="HBox" type="HBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 4.0
+offset_right = -8.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="TrackLabel" type="Label" parent="Panel/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+clip_text = true
+theme_override_font_sizes/font_size = 14
+text = "—"
+vertical_alignment = 1
+
+[node name="SkipButton" type="Button" parent="Panel/HBox"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+focus_mode = 0
+theme_override_font_sizes/font_size = 14
+tooltip_text = "Skip to next track"
+text = "⏭"

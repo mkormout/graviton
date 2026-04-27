@@ -2,6 +2,8 @@ extends Node
 
 ## Cross-fade music system with wave-based category selection (Phase 16)
 
+signal track_changed(stream: AudioStream)
+
 @export var crossfade_duration: float = 2.0
 @export var music_volume_db: float = -10.5
 @export var combat_wave: int = 6
@@ -55,7 +57,24 @@ func _start_playback() -> void:
 	if track:
 		_player_a.stream = track
 		_player_a.play()
+		track_changed.emit(track)
 		print("[MusicManager] Started playback: ambient")
+
+
+## Currently audible track (the one fading IN if a crossfade is mid-flight, else the steady one).
+func get_current_track() -> AudioStream:
+	if _player_b and _player_b.playing and _player_b.stream:
+		return _player_b.stream
+	if _player_a and _player_a.stream:
+		return _player_a.stream
+	return null
+
+
+## Skip to a fresh track in the current category. Excludes the current track to avoid no-op skips.
+func skip_to_next() -> void:
+	var track := _pick_track(_current_category)
+	if track:
+		_crossfade_to(track)
 
 
 ## Called by world.gd to wire WaveManager signals
@@ -108,6 +127,7 @@ func _crossfade_to(stream: AudioStream) -> void:
 	_player_b.stream = stream
 	_player_b.volume_db = -80.0
 	_player_b.play()
+	track_changed.emit(stream)
 
 	_active_tween = create_tween()
 	_active_tween.set_parallel(true)
@@ -139,4 +159,5 @@ func reset() -> void:
 	if track:
 		_player_a.stream = track
 		_player_a.play()
+		track_changed.emit(track)
 	print("[MusicManager] Reset to ambient")

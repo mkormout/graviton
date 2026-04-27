@@ -18,6 +18,7 @@ var enemy_radar_model = preload("res://prefabs/ui/enemy-radar.tscn")
 var death_screen_model = preload("res://prefabs/ui/death-screen.tscn")
 var controls_hint_model = preload("res://prefabs/ui/controls-hint.tscn")
 var weapon_hud_model = preload("res://prefabs/ui/weapon-hud.tscn")
+var music_hud_model = preload("res://prefabs/ui/music-hud.tscn")
 
 var asteroids_small_model = [
 	preload("res://prefabs/asteroid/asteroid-small-1.tscn"),
@@ -91,6 +92,8 @@ func _ready():
 
 	_controls_hint = controls_hint_model.instantiate()
 	add_child(_controls_hint)
+
+	add_child(music_hud_model.instantiate())
 
 	$ShipCamera.make_current()
 
