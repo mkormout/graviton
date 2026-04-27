@@ -13,10 +13,13 @@ var _catalog: Dictionary = {
 		preload("res://music/Gravity-Drum Choir.mp3"),
 		preload("res://music/Sulfur Orbit.mp3"),
 		preload("res://music/Metonymy Gravity.mp3"),
+		preload("res://music/Metonymy Gravity 2.mp3"),
+		preload("res://music/Graviton Lullaby.mp3"),
 	],
 	"combat": [
 		preload("res://music/Static Lullaby.mp3"),
 		preload("res://music/Gravimetric Dawn.mp3"),
+		preload("res://music/Velocity Lullaby.mp3"),
 	],
 	"high_intensity": [
 		preload("res://music/Vibrato Wrenches.mp3"),
