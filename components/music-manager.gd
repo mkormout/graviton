@@ -20,11 +20,13 @@ var _catalog: Dictionary = {
 		preload("res://music/Static Lullaby.mp3"),
 		preload("res://music/Gravimetric Dawn.mp3"),
 		preload("res://music/Velocity Lullaby.mp3"),
+		preload("res://music/Graviton Grinders.mp3"),
 	],
 	"high_intensity": [
 		preload("res://music/Vibrato Wrenches.mp3"),
 		preload("res://music/Static Lullaby.mp3"),
 		preload("res://music/Gravimetric Dawn.mp3"),
+		preload("res://music/Grit Switchback.mp3"),
 	],
 }
 
